@@ -25,13 +25,24 @@ namespace :tapes do
   end
 
   namespace :ia do
-    desc "Pull the latest Internet Archive data"
+    desc "Fetch the latest Internet Archive uploads"
+    task fetchNew: [ :environment ] do
+      include InternetArchive
+
+      puts "Fetching new Internet Archive uploads..."
+
+      InternetArchive.update(true)
+
+      puts "Done!"
+    end
+
+    desc "Update all Internet Archive data"
     task update: [ :environment ] do
       include InternetArchive
 
-      puts "Updating Internet Archive data..."
+      puts "Updating all Internet Archive data..."
 
-      InternetArchive.update
+      InternetArchive.update(false)
 
       puts "Done!"
     end

@@ -6,10 +6,10 @@ require "faraday"
 module InternetArchive
   @@searchQuery = 'collection:KingGizzardAndTheLizardWizard OR creator:"King Gizzard & The Lizard Wizard" OR subject:"KGLW" OR subject:"kgatlw" OR subject:"king gizzard" OR subject:"king gizzard & the lizard wizard"'
 
-  def update
+  def update(is_create_only)
     identifiers = getUploads
 
-    identifiers.each { |identifier| updateRecording(identifier, true) }
+    identifiers.each { |identifier| updateRecording(identifier, is_create_only) }
   end
 
   def runInternetArchiveSearch(query)
