@@ -4,7 +4,7 @@ export default class extends Controller {
     static targets = ['recording']
 
     connect() {
-        this.showRecording(this.recordingTarget.value);
+        this.showRecording(this.hasRecordingTarget ? this.recordingTarget.value : this.element.querySelector('[data-controller="playlist"]').dataset.playlistId);
     }
 
     selectRecording() {
@@ -12,9 +12,13 @@ export default class extends Controller {
     }
 
     playFullShow() {
-        const recordingId = this.recordingTarget.value;
+        if (this.hasRecordingTarget) {
+            const recordingId = this.recordingTarget.value;
+            this.element.querySelector(`[data-controller="playlist"][data-playlist-id="${recordingId}"] .track`).click();
+            return;
+        }
 
-        this.element.querySelector(`[data-controller="playlist"][data-playlist-id="${recordingId}"] .track`).click();
+        this.element.querySelector(`[data-controller="playlist"] .track`).click();
     }
 
     showRecording(recordingId) {
