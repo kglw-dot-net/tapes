@@ -21,3 +21,7 @@ console_command = '/rails/bin/rails console'
   memory = '512mb'
   cpu_kind = 'shared'
   cpus = 1
+
+[mounts]
+  source="sqlite3"
+  destination="/mnt/sqlite3"
