@@ -118,17 +118,17 @@
             <%# Top row %>
             <div class="flex justify-between items-center pt-4 w-full">
                 <%# Close button %>
-                <button class="btn btn-ghost btn-circle">
+                <button class="btn btn-ghost btn-circle text-black dark:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
-                    class="size-10 text-white" data-action="click->player#hideMobilePlayerUI"
+                    class="size-10" data-action="click->player#hideMobilePlayerUI"
                     >
                         <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                     </svg>
                 </button>              
     
                 <%# Options button %>
-                <button class="btn btn-ghost btn-circle">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10 text-white">
+                <button class="btn btn-ghost btn-circle text-black dark:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                     </svg>                  
                 </button>
@@ -162,7 +162,7 @@
             <%# Transport controls %>
             <div class="flex justify-around items-center w-100">
                 <%# Previous %>
-                <button class="btn btn-ghost btn-circle text-white" data-action="click->player#previousTrack">
+                <button class="btn btn-ghost btn-circle text-black dark:text-white" data-action="click->player#previousTrack">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                         class="size-10">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
@@ -188,7 +188,7 @@
                 </button>
 
                 <%# Next %>
-                <button class="btn btn-ghost btn-circle text-white" data-action="click->player#nextTrack">
+                <button class="btn btn-ghost btn-circle text-black dark:text-white" data-action="click->player#nextTrack">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                         class="size-10">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
