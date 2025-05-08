@@ -9,6 +9,7 @@ Start with `foreman start -f Procfile.dev`
 ## Live instances
 
 * [Gizz Tapes](https://tapes.kglw.net/) (soon!)
+* [Gizz Tapes (dev)](https://gizztapes2.fly.dev/)
 
 ## Rake tasks
 
@@ -16,7 +17,8 @@ Start with `foreman start -f Procfile.dev`
 * `tapes:setDefaults` -- tries to match recordings to shows where possible, and pick a preferred recording format -- not necessary if purely mirroring from a live instance with `tapes:update`
 * `tapes:update` -- fetches recordings settings from a live instance of the website
 * `tapes:ia:loadOverrides["~/path"]` -- loads overrides from GT1
-* `tapes:ia:update` -- fetches latest recordings from the Internet Archive
+* `tapes:ia:update` -- refetches all recordings from the Internet Archive
+* `tapes:ia:fetchNew` -- fetches new recordings from the Internet Archive
 * `tapes:songfish:loadOverrides["~/path"]` -- loads overrides from GT1
 * `tapes:songfish:update` -- fetches latest show, setlist, etc. data from a Songfish instance
 
