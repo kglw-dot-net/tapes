@@ -27,9 +27,9 @@ class ShowsController < ApplicationController
       .order("max_show_date DESC")
   end
 
-  # GET /:id
+  # GET /:slug
   def show
-    @show = Show.find(params[:id])
+    @show = Show.find_by(slug: params[:slug])
 
     if @show.nil?
       raise ActionController::RoutingError.new("Not Found")
@@ -38,13 +38,13 @@ class ShowsController < ApplicationController
 
   # GET /:month
   def month
-    @month = params[:month]
+    @month_name = params[:month]
 
-    @month_name = Date::MONTHNAMES[@month.to_i]
+    @month = Date::MONTHNAMES.compact.index { |m| m.casecmp(@month_name) == 0 } + 1
 
     @dates = Show.where(is_active: true)
       .where("strftime('%m', date) = ?", "%02d" % @month)
-      .select("strftime('%d', date) AS day")
+      .select("ltrim(strftime('%e', date)) AS day")
       .distinct
       .map(&:day)
   end

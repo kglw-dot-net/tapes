@@ -21,33 +21,33 @@ Rails.application.routes.draw do
 
   get "years" => "shows#years"
 
-  years = Show.where(is_active: true).select("strftime('%Y', date) AS year").distinct.map(&:year)
+  get ":year" => "shows#year", constraints: lambda { |request|
+    Show.where(is_active: true).select("strftime('%Y', date) AS year").distinct.map(&:year).include?(request.params[:year])
+  }
 
-  years.each do |year|
-    get year.to_s => "shows#year", year: year
-  end
-
-  Show.where.not(slug: nil).where(is_active: true).each do |show|
-    get show.slug => "shows#show", id: show.id
-  end
+  get ":slug" => "shows#show", constraints: lambda { |request|
+    Show.where.not(slug: nil).where(is_active: true).pluck(:slug).include?(request.params[:slug])
+  }
 
   Date::MONTHNAMES.compact.each_with_index do |month, index|
-    next unless Show.where(is_active: true)
-      .where("strftime('%m', date) = ?", "%02d" % (index + 1))
-      .exists?
+    get ":month" => "shows#month", constraints: lambda { |request|
+      index = Date::MONTHNAMES.compact.index { |m| m.casecmp(request.params[:month]) == 0 }
 
-    get month.downcase => "shows#month", month: index + 1
+      index.present? &&
+      Show.where(is_active: true)
+        .where("strftime('%m', date) = ?", "%02d" % (index + 1))
+        .exists?
+    }
 
-    # Get dates within this month for which there is an active show
-    dates = Show.where(is_active: true)
-      .where("strftime('%m', date) = ?", "%02d" % (index + 1))
-      .select("strftime('%d', date) AS day")
-      .distinct
-      .map(&:day)
+    get ":month/:date" => "shows#date", constraints: lambda { |request|
+      index = Date::MONTHNAMES.compact.index { |m| m.casecmp(request.params[:month]) == 0 }
 
-    dates.each do |day|
-      get "#{month}/#{day}" => "shows#date", month: index + 1, date: day
-    end
+      index.present? &&
+      Show.where(is_active: true)
+        .where("strftime('%m', date) = ?", "%02d" % (index + 1))
+        .where("strftime('%d', date) = ?", "%02d" % request.params[:date])
+        .exists?
+    }
   end
 
   # Discography controller
