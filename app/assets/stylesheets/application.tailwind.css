@@ -10,7 +10,9 @@
     color: #c71585;
     fill: none;
   }
-  :checked ~ label>.favourite-icon {
+
+  :checked ~ label>.favourite-icon,
+  .favourite-icon.active {
     fill: currentColor;
   }
 
@@ -43,6 +45,11 @@
       /* Top bar is 3 rem; top bar margin is 1 rem; own margin is 2rem x2 */
     }
   }
+
+  #show-notes a[href] {
+    @apply link link-hover link-primary;
+  }
+
   /* Bottom player bar */
 
   #progress-bar progress {
@@ -65,6 +72,11 @@
     overflow: hidden;
     scrollbar-gutter: stable;
   }
+
+/* 
+  [data-player-target="mobilePlayer"].translate-y-full {
+    --tw-translate-y: 100dvh;
+  } */
 
   /* Tracklists */
 
@@ -98,6 +110,10 @@
 
   .track>:first-child {
     @apply grow-0 shrink-0 w-8;
+  }
+
+  .track>:last-child {
+    @apply grow-0 shrink-0 w-12 text-right;
   }
 
   /* Footer */

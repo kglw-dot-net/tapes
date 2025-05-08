@@ -2,11 +2,18 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "bootstrap-icons": "^1.11.3",
+    "@hotwired/stimulus": "^3.2.2",
+    "@hotwired/turbo-rails": "^8.0.12",
+    "@types/node": "^22.10.5",
     "daisyui": "^4.12.22",
+    "dexie": "^4.0.10",
     "howler": "^2.2.4",
+    "sortablejs": "^1.15.6",
     "stimulus-use": "^0.52.3",
+    "stimulus-vite-helpers": "^3.1.0",
+    "typescript": "^5.7.2",
     "vite": "^5.0.0",
+    "vite-plugin-rails": "^0.5.0",
     "vite-plugin-ruby": "^5.1.0"
   }
 }

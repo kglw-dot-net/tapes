@@ -31,18 +31,16 @@ class ShowsController < ApplicationController
       .group("tours.id")
       .order("max_show_date DESC")
 
-      # @tours.each do |tour|
-      #   puts "#{tour.name} - #{tour.max_show_date}"
-      # end
+    # @tours.each do |tour|
+    #   puts "#{tour.name} - #{tour.max_show_date}"
+    # end
   end
 
   # GET /:slug
   def show
     @show = Show.find_by(slug: params[:slug], is_active: true)
 
-    if @show.nil?
-      raise ActionController::RoutingError.new("Not Found")
-    end
+    raise ActionController::RoutingError.new("Not Found") if @show.nil?
 
     @total_seconds = @show.setlists
       .joins(:set_songs)
@@ -96,5 +94,22 @@ class ShowsController < ApplicationController
       .where("strftime('%m', date) = ?", "%02d" % @month)
       .where("strftime('%d', date) = ?", "%02d" % @date)
       .order(date: :desc)
+  end
+
+  # GET /:slug/partials/featured
+  def featured
+    @show = Show.find_by(slug: params[:slug], is_active: true)
+
+    raise ActionController::RoutingError.new("Not Found") if @show.nil?
+
+    respond_to do |format|
+      format.turbo_stream {
+         render turbo_stream: turbo_stream.append(
+          "favourites-grid",
+          partial: "featured_show",
+          locals: { show: @show }
+        )
+      }
+    end
   end
 end

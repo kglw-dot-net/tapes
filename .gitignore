@@ -44,3 +44,4 @@ node_modules
 *.local
 
 2
+vite.config.ts.timestamp-*.mjs

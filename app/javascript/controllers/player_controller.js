@@ -1,6 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
 import { Howl, Howler } from 'howler'
 
+Howler.autoSuspend = false;
+
 export default class extends Controller {
   static targets = [
     "container", "currentTime", "duration", "progress", "trackTitle", "trackSubtitle", "isPlaying", "isPlayingMobile",

@@ -102,6 +102,8 @@ GEM
     debug (1.10.0)
       irb (~> 1.10)
       reline (>= 0.3.8)
+    dockerfile-rails (1.6.25)
+      rails (>= 3.0.0)
     dotenv (3.1.7)
     drb (2.2.1)
     dry-cli (1.2.0)
@@ -332,6 +334,9 @@ GEM
     unicode-emoji (4.0.4)
     uri (1.0.2)
     useragent (0.16.11)
+    vite_rails (3.0.19)
+      railties (>= 5.1, < 9)
+      vite_ruby (~> 3.0, >= 3.2.2)
     vite_ruby (3.9.1)
       dry-cli (>= 0.7, < 2)
       logger (~> 1.6)
@@ -360,6 +365,7 @@ DEPENDENCIES
   brakeman
   capybara
   debug
+  dockerfile-rails (>= 1.6)
   faraday (~> 2.12, >= 2.12.2)
   importmap-rails
   jbuilder
@@ -379,7 +385,7 @@ DEPENDENCIES
   thruster
   turbo-rails
   tzinfo-data
-  vite_ruby
+  vite_rails
   web-console
 
 BUNDLED WITH

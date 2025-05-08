@@ -1,3 +1,4 @@
 web: rails server
 css: rails tailwindcss:watch
 vite: bin/vite dev
+tsc: npx tsc --noEmit --watch

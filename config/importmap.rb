@@ -8,3 +8,6 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 pin "howler" # @2.2.4
 pin "stimulus-use" # @0.52.3
 pin "sortablejs" # @1.15.6
+pin "dexie" # @2.0.4
+pin "dexie-relationships" # @1.2.11
+pin "process" # @2.1.0

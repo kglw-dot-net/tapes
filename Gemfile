@@ -43,7 +43,7 @@ gem "kamal", require: false
 gem "thruster", require: false
 
 # Vite Ruby integration
-gem "vite_ruby"
+gem "vite_rails"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
@@ -71,3 +71,5 @@ group :test do
 end
 
 gem "mini_magick", "~> 5.0"
+
+gem "dockerfile-rails", ">= 1.6", group: :development

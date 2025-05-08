@@ -33,6 +33,10 @@ Rails.application.routes.draw do
     Show.where.not(slug: nil).where(is_active: true).pluck(:slug).include?(request.params[:slug])
   }
 
+  get ":slug/partials/featured" => "shows#featured", constraints: lambda { |request|
+    Show.where.not(slug: nil).where(is_active: true).pluck(:slug).include?(request.params[:slug])
+  }
+
   Date::MONTHNAMES.compact.each_with_index do |month, index|
     get ":month" => "shows#month", constraints: lambda { |request|
       index = Date::MONTHNAMES.compact.index { |m| m.casecmp(request.params[:month]) == 0 }
@@ -80,4 +84,8 @@ Rails.application.routes.draw do
   # Settings controller
 
   get "settings" => "settings#index"
+
+  # Favourites controller
+
+  get "favourites" => "favourites#index"
 end
