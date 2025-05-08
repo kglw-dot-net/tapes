@@ -1,0 +1,9 @@
+default:
+  image: ruby:latest
+  before_script:
+    - apt-get update -qq && apt-get install -y curl
+    - curl -L https://fly.io/install.sh | sh
+
+deploy:
+  script:
+    - flyctl deploy
