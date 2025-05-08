@@ -8,9 +8,19 @@ module Songfish
 
   def update
     updateVenues
+    updateCountries
     updateSongs
     updateShows
     updateSetlists
+  end
+
+  def updateCountries
+    puts "\tUpdating countries..."
+
+    Country.where(slug: nil).each do |country|
+      country.slug = country.name.parameterize
+      country.save
+    end
   end
 
   def updateVenues

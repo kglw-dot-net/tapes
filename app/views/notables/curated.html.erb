@@ -3,18 +3,17 @@
         KGLW.net Curated Notable Tracks
     </h2>
     
+    <%= render "notable_links" %>
+    
     <div class="bg-base-100 rounded-xl shadow-xl py-5 px-2">
-      <table class="w-full" data-controller="link-table">
         <% @songs.each do |song| %>
             <%= render "notable_row", set_song: song %>
             
             <% unless song.jamchart_notes.blank? %>
-                <tr>
-                    <td colspan="100%" class="pb-8">
-                        <%=raw song.jamchart_notes %>
-                    </td>
-                </tr>
+                <div class="block mb-8">
+                    <%=raw song.jamchart_notes %>
+                </div>
             <% end %>
         <% end %>
-    </table>
+    </div>
 </div>

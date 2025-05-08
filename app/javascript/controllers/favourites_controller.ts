@@ -21,6 +21,8 @@ export default class extends Controller {
     }
 
     async togglePlayerFavourite(event) {
+        console.log('togglePlayerFavourite');
+
         const button = event.currentTarget;
         const playerElement = button.closest('[data-controller="player"]');
         const slug = playerElement.dataset.slug;

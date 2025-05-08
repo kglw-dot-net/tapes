@@ -1,9 +1,11 @@
 <div class="container mx-auto mt-8 px-5">
-  <div class="flex justify-center mb-8 overflow-x-scroll">
-      <div role="tablist" class="tabs tabs-boxed">
-          <% @months.each_with_index do |month, idx| %>
-              <a href="/<%= month.downcase %>" class="tab <%= 'tab-active' if idx + 1 == @month %>"><%= month %></a>
-          <% end %>
+  <div class="flex mb-8">
+      <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
+          <ul class="menu menu-horizontal justify-center">
+              <% @months.each_with_index do |month, idx| %>
+                  <li><a href="/<%= month.downcase %>" class="<%= 'bg-primary hover:bg-primary text-black' if idx + 1 == @month %>"><%= month %></a></li>
+              <% end %>
+          </ul>
       </div>
   </div>
 

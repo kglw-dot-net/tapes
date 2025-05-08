@@ -1,9 +1,11 @@
 <div class="container mx-auto mt-8 px-5">
-    <div class="flex justify-center mb-8 overflow-x-scroll">
-        <div role="tablist" class="tabs tabs-boxed">
-            <% @years.each do |year| %>
-                <a href="/<%= year %>" class="tab <%= 'tab-active' if year == @year %>"><%= year %></a>
-            <% end %>
+    <div class="flex mb-8">
+        <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
+            <ul class="menu menu-horizontal justify-center">
+                <% @years.each do |year| %>
+                    <li><a href="/<%= year %>" class="<%= 'bg-primary hover:bg-primary text-black' if year == @year %>"><%= year %></a></li>
+                <% end %>
+            </ul>
         </div>
     </div>
 

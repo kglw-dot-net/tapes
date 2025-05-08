@@ -15,7 +15,7 @@
             <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
                 <% albums.each do |album, songs| %>
                     <% next if album.nil? %>
-                    <li><a href="#<%= album.title.parameterize %>"><%= album.year %>: <%= album.title %> <span class="badge badge-neutral"><%= songs.count %></span></a></li>
+                    <li><a href="#<%= album.title.parameterize %>" class="text-black dark:text-white"><%= album.title %> <span class="badge badge-neutral"><%= songs.count %></span></a></li>
                 <% end %>
             </ul>
         </div>
@@ -37,7 +37,7 @@
                     </div>
                 <% end %>
 
-                <% songs.each do |song| %>
+                <% songs.sort_by { |song| album.nil? ? song.name : song.id }.each do |song| %>
                     <% show_count = @song_show_counts.find { |sc| sc.song_id == song.id }.show_count %>
 
                     <a href="/songs/<%= song.slug %>" class="flex justify-between items-center rounded px-2 py-1 transition hover:bg-base-200">

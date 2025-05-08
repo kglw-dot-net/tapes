@@ -1,0 +1,31 @@
+<div class="container mx-auto mt-8 px-5">
+    <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white"><%= @country.name %> Venues</h2>
+    <h3 class="text-2xl font-bold mb-8 text-center">Total Venues: <%= @venues.size %></h3>
+    
+    <div class="flex mb-8">
+        <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
+            <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
+                <li><a href="/venues/" class="text-black dark:text-white">Back to venues index</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-xl mb-5">
+        <div class="card-body pb-0 pt-5 px-3">
+            <div class="responsive-grid text-center pb-3">
+                <% @venues.each do |venue| %>
+                    <a href="/venues/<%= venue.country.slug %>/<%= venue.slug %>" class="featured-item">
+                        <% poster_url = venue.shows.where(is_active: true).where.not(poster_url: nil).order('date DESC').first&.poster_url %>
+
+                        <img src="<%= poster_url.blank? ? asset_path('missing.png') : poster_url %>" class="w-full" />
+
+                        <h4 class="text-primary mt-1"><%= venue.name %></h4>
+                        <% show_count = venue.shows.where(is_active: true).count %>
+
+                        <small><%= show_count %> show<%= 's' unless show_count == 1 %></small>
+                    </a>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

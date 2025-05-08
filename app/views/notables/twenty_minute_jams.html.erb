@@ -2,12 +2,12 @@
   <h2 class="text-3xl font-bold mb-8 text-center text-black dark:text-white">
       20 Minute Jams
   </h2>
+
+  <%= render "notable_links" %>
   
   <div class="bg-base-100 rounded-xl shadow-xl py-5 px-2">
-    <table class="w-full" data-controller="link-table">
-      <% @jams.each do |jam| %>
-        <%= render "notable_row", set_song: jam %>
-      <% end %>
-    </table>
+    <% @jams.each do |jam| %>
+      <%= render "notable_row", set_song: jam %>
+    <% end %>
   </div>
 </div>

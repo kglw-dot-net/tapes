@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 import { IsSlugFavourited } from "../db"
 import { Howl, Howler } from 'howler'
 import { Playlist } from "../interfaces"
+import { parse } from "path";
 
 Howler.autoSuspend = false;
 
@@ -10,7 +11,7 @@ export default class PlayerController extends Controller<HTMLElement> {
     "container", "currentTime", "duration", "progress", "trackTitle", "trackSubtitle", "isPlaying", "isPlayingMobile",
     "thumbnail", "mobilePlayer", "mobilePlayerThumbnail", "mobilePlayerBackdrop", "mobilePlayerTrackTitle", 
     "mobilePlayerTrackSubtitle", "mobilePlayerProgress", "mobilePlayerCurrentTime", "mobilePlayerDuration", 
-    "mobilePlayerIsPlaying", "favouriteIcon", "mobilePlayerFavouriteIcon"
+    "mobilePlayerIsPlaying", "favouriteIcon", "mobilePlayerFavouriteIcon", "volumeControl"
   ];
 
   declare readonly containerTarget: HTMLElement;
@@ -33,6 +34,7 @@ export default class PlayerController extends Controller<HTMLElement> {
   declare readonly mobilePlayerIsPlayingTarget: HTMLInputElement;
   declare readonly favouriteIconTarget: HTMLElement;
   declare readonly mobilePlayerFavouriteIconTarget: HTMLElement;
+  declare readonly volumeControlTarget: HTMLInputElement;
 
   mobileBreakpointPx: number;
   iOS: boolean;
@@ -61,7 +63,7 @@ export default class PlayerController extends Controller<HTMLElement> {
 
   playPlaylist({ detail: { playlist, trackIdx } }: { detail: { playlist: Playlist; trackIdx: number } }) {
     if (this.playlist == null || this.playlist.id !== playlist.id) {
-      this.resetTrack();
+      this.resetAll();
 
       this.playlist = playlist;
 
@@ -130,13 +132,55 @@ export default class PlayerController extends Controller<HTMLElement> {
     window.Turbo.visit(this.playlist.tracks[this.currentTrackIdx].recordingUrl);
   }
 
+  changeVolume(event: InputEvent) {
+    const value = parseInt((event.currentTarget as HTMLInputElement).value) / 100;
+    this.setVolume(value);
+  }
+
+  setVolume(value: number) {
+    this.volumeControlTarget.value = (value * 100).toString();
+    Howler.volume(value);
+  }
+
   // Internal
 
   // Called on initial page load only
   initialize() {
     this.mobileBreakpointPx = 1024;
-    this.iOS = false;
+
+    this.iOS = [
+        'iPad Simulator',
+        'iPhone Simulator',
+        'iPod Simulator',
+        'iPad',
+        'iPhone',
+        'iPod'
+      ].includes(navigator.platform)
+      // iPad on iOS 13 detection
+      || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
+
     this.resetAll();
+
+    this.setVolume(1.0);
+
+    navigator.mediaSession.setActionHandler("play", this.playPause.bind(this));
+  
+    navigator.mediaSession.setActionHandler("pause", this.playPause.bind(this));
+  
+    navigator.mediaSession.setActionHandler("stop", this.resetAll.bind(this));
+  
+    // navigator.mediaSession.setActionHandler("seekbackward", () => {});
+    // navigator.mediaSession.setActionHandler("seekforward", () => {});
+  
+    navigator.mediaSession.setActionHandler("seekto", (x) => {
+      const currentTrack = this.playlist[this.currentTrackIdx].track;
+      if (currentTrack == null) return;
+      currentTrack.seek(x.seekTime);
+      this.updateTrackPosition();
+    });
+  
+    navigator.mediaSession.setActionHandler("previoustrack", this.previousTrack.bind(this));
+    navigator.mediaSession.setActionHandler("nexttrack", this.nextTrack.bind(this));  
   }
 
   // Called on all page loads
@@ -152,6 +196,13 @@ export default class PlayerController extends Controller<HTMLElement> {
 
     this.setTrackTitle("");
 
+    if (this.playlist && this.currentTrackIdx) {
+      const currentTrack = this.playlist.tracks[this.currentTrackIdx].howl;
+
+      if (currentTrack)
+        currentTrack.stop();
+    }
+    
     this.currentTrackIdx = null;
 
     this.setIsPlayingDisplay(false);
@@ -255,6 +306,12 @@ export default class PlayerController extends Controller<HTMLElement> {
   resetAll() {
     this.resetTrack();
 
+    if (this.playlist)
+      this.playlist.tracks.forEach(track => {
+        if (track.howl)
+          track.howl.stop();
+      });
+
     this.playlist = null;
 
     this.element.dataset.id = "";
@@ -268,6 +325,9 @@ export default class PlayerController extends Controller<HTMLElement> {
     // Invisible is used to prevent click events, opacity-0 is used for fade in/out
     this.containerTarget.classList.add('invisible');
     this.containerTarget.classList.add('opacity-0');
+
+    if (navigator.mediaSession)
+  	  navigator.mediaSession.metadata = null;
   }
 
   setImageUrl(url) {
@@ -390,5 +450,13 @@ export default class PlayerController extends Controller<HTMLElement> {
     document.querySelectorAll(`.track[href="${track.url}"]`).forEach(trackElement => {
       trackElement.classList.add('active');
     });
+
+    if (navigator.mediaSession)
+			navigator.mediaSession.metadata = new MediaMetadata({
+				title: track.title,
+				artist: "King Gizzard and the Lizard Wizard",
+				album: this.playlist.title,
+				artwork: [{ src: this.playlist.thumbnail }]
+			});
   }
 }

@@ -1,4 +1,4 @@
-<% location = [@venue.city, @venue.region, @venue.country.name].compact.join(', ') %>
+<% location = [@venue.city, @venue.region, @venue.country.name].reject { |s| s.blank? }.join(', ') %>
 
 <div class="container mx-auto mt-8 px-5">
     <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white">
@@ -12,8 +12,17 @@
     <div class="flex mb-8">
         <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
             <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
-                <li><a href="https://kglw.net/venues/<%= @venue.slug %>">View venue on KGLW.net</a></li>
-                <li><a href="/venues/">Back to index</a></li>
+                <li><a href="https://kglw.net/venues/<%= @venue.slug %>" class="text-black dark:text-white">View venue on KGLW.net</a></li>
+
+                <%
+                    is_only_venue_in_country = @venue.country.venues.joins(:shows).where(shows: {is_active: true}).distinct.count == 1
+                %>
+
+                <% if is_only_venue_in_country %>
+                    <li><a href="/venues/" class="text-black dark:text-white">Back to venues index</a></li>
+                <% else %>
+                    <li><a href="/venues/<%= @venue.country.slug %>" class="text-black dark:text-white">Back to country</a></li>
+                <% end %>
             </ul>
         </div>
     </div>

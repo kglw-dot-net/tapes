@@ -68,7 +68,12 @@ Rails.application.routes.draw do
   # Venues controller
 
   get "venues" => "venues#index"
-  get "venues/:slug" => "venues#venue"
+
+  get "venues/:country" => "venues#country", constraints: lambda { |request|
+    Country.where(slug: request.params[:country]).exists?
+  }
+
+  get "venues/:country/:slug" => "venues#venue"
 
   # Notables controller
 
