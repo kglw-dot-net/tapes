@@ -45,7 +45,7 @@ class ApiController < ApplicationController
           type: recording.recording_type&.name,
           source: recording.source,
           lineage: recording.lineage,
-          taper: recording.taper,
+          taper: recording.taper&.name,
           files_path_prefix: "https://archive.org/download/" + recording.id + "/",
 
           internet_archive: {
