@@ -1,0 +1,161 @@
+---
+openapi: 3.0.1
+info:
+  title: Gizz Tapes API V1
+  version: v1
+paths:
+  "/api/v1/shows.json":
+    get:
+      summary: Retrieves all shows
+      tags:
+      - Shows
+      responses:
+        '200':
+          description: shows found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    date:
+                      type: string
+                    venuename:
+                      type: string
+                    location:
+                      type: string
+                    title:
+                      type: string
+                    order:
+                      type: integer
+                    poster_url:
+                      type: string
+                  required:
+                  - id
+                  - date
+                  - venuename
+                  - location
+                  - order
+  "/api/v1/shows/{id}.json":
+    get:
+      summary: Retrieves a show
+      tags:
+      - Shows
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: show found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  date:
+                    type: string
+                  order:
+                    type: integer
+                  poster_url:
+                    type: string
+                  notes:
+                    type: string
+                  title:
+                    type: string
+                  kglw_net:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      permalink:
+                        type: string
+                    required:
+                    - id
+                    - permalink
+                  venue_id:
+                    type: string
+                  tour_id:
+                    type: string
+                  recordings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        uploaded_at:
+                          type: string
+                        type:
+                          type: string
+                        source:
+                          type: string
+                        lineage:
+                          type: string
+                        taper:
+                          type: string
+                        files_path_prefix:
+                          type: string
+                        internet_archive:
+                          type: object
+                          properties:
+                            is_lma:
+                              type: boolean
+                          required:
+                          - is_lma
+                        files:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              filename:
+                                type: string
+                              length:
+                                type: integer
+                              title:
+                                type: string
+                            required:
+                            - filename
+                            - length
+                      required:
+                      - id
+                      - files_path_prefix
+                      - files
+                required:
+                - id
+                - date
+                - order
+                - recordings
+        '404':
+          description: show not found
+  "/api/v1/hero_photos.json":
+    get:
+      summary: Retrieves hero photos
+      tags:
+      - Misc.
+      responses:
+        '200':
+          description: hero photos found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    credit:
+                      type: string
+                    vPosition:
+                      type: integer
+                    url:
+                      type: string
+                  required:
+                  - credit
+                  - url
