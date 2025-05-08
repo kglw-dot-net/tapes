@@ -21,12 +21,12 @@
             <label class="swap" data-action="click->player#playPause">
                 <input type="checkbox" disabled data-player-target="isPlaying" class="hidden" />
 
-                <!-- Pause icon -->
+                <%# Pause icon %>
                 <svg class="swap-on fill-current size-10 mr-3 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
                 </svg>
                 
-                <!-- Play icon -->
+                <%# Play icon %>
                 <svg class="swap-off fill-current size-10 mr-3 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round"
                     d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
@@ -86,11 +86,11 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
             </svg>
               
-            <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            <%# <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                 class="size-6 ml-3">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
-            </svg> -->
+            </svg> %>
         </div>
 
         <%# Mobile only: Play/Pause button %>
@@ -98,12 +98,12 @@
             <label class="swap" data-action="click->player#playPause">
                 <input type="checkbox" disabled data-player-target="isPlayingMobile" class="hidden" />
 
-                <!-- Pause icon -->
+                <%# Pause icon %>
                 <svg class="swap-on fill-current size-10 mr-3 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
                 </svg>
                 
-                <!-- Play icon -->
+                <%# Play icon %>
                 <svg class="swap-off fill-current size-10 mr-3 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round"
                     d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
@@ -127,7 +127,6 @@
         class="fixed top-0 left-0 w-full h-full transition-transform transform translate-y-full z-30" 
         data-player-target="mobilePlayer"
     >
-        <!-- bg-slate-300/50 backdrop-blur dark:bg-slate-700/50 -->
         <%# Background %>
         <img class="w-full h-full object-cover" data-player-target="mobilePlayerBackdrop" src="#" />
 
@@ -145,11 +144,11 @@
                 </button>              
     
                 <%# Options button %>
-                <!-- <button class="btn btn-ghost btn-circle text-black dark:text-white">
+                <%# <button class="btn btn-ghost btn-circle text-black dark:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                     </svg>                  
-                </button> -->
+                </button> %>
             </div>
 
             <%# Centre image %>
@@ -207,12 +206,12 @@
                         <label class="swap mx-auto">
                             <input type="checkbox" disabled data-player-target="mobilePlayerIsPlaying" class="hidden" />
                             
-                            <!-- Pause icon -->
+                            <%# Pause icon %>
                             <svg class="swap-on fill-current size-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
                             </svg>
                             
-                            <!-- Play icon -->
+                            <%# Play icon %>
                             <svg class="swap-off fill-current size-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />

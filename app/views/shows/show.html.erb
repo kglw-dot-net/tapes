@@ -13,7 +13,6 @@
     <div class="container max-w-6xl mx-auto pt-4 px-5">
         <div class="lg:flex lg:gap-x-8">
             <div class="lg:max-w-md">
-                <!-- bg-base-100 -->
                 <div class="p-4 bg-white dark:bg-neutral bg-opacity-25 dark:bg-opacity-25 rounded-xl mb-3 lg:mb-0">
                     <div class="block sm:flex lg:block items-center">
                         <% if @show.poster_url.present? %>
@@ -53,17 +52,6 @@
                         <span class="align-middle"></span>
                     </button>
 
-                    <!-- <dl class="grid grid-cols-2">
-                        <dt class="font-bold">Tour</dt>
-                        <dd><a href="/<%= @show.date.strftime("%Y") %>#<%= @show.tour.name.parameterize %>" class="link link-hover link-primary"><%= @show.tour.name %></a></dd>
-
-                        <dt class="font-bold">Venue</dt>
-                        <dd><%= @show.venue.name %></dd>
-
-                        <dt class="font-bold">Location</dt>
-                        <dd><%= [ @show.venue.city, @show.venue.region, @show.venue.country.name ].compact.join(', ') %></dd>
-                    </dl> -->
-
                     <% unless @show.notes.blank? %>
                         <div 
                             class="px-3 text-black dark:text-white mb-3 line-clamp-5" 
@@ -100,9 +88,6 @@
             <div class="grow">
                 <div class="flex mb-3">
                     <div class="grow content-center">
-                        <!-- <div class="label">
-                            <label class="label-text text-xs">Select a recording:</label>
-                        </div> -->
                         <% if @show.recordings.where(is_active: true).count == 1 %>
                             <% recording = @show.recordings.where(is_active: true).first %>
                             <% color = case recording.recording_type.name
@@ -143,7 +128,6 @@
                 </div>
                 
                 <% @show.recordings.where(is_active: true).each do |recording| %>
-                        <!-- &bull; <%= @show.venue.name %> &bull; <%= @show.venue.city %>, <%= @show.venue.region %>, <%= @show.venue.country.name %> -->
                     <div 
                         data-controller="playlist" 
                         data-playlist-id="<%= recording.id %>"
