@@ -7,7 +7,7 @@
         data-player-target="container"  
         class="invisible opacity-0 fixed start-0 bottom-0 p-4 h-18 flex lg:grid lg:grid-cols-3 gap-3 
         w-full bg-slate-300/50 backdrop-blur dark:bg-slate-700/50 transition-opacity cursor-pointer 
-        lg:cursor-auto"
+        lg:cursor-auto z-10"
         data-action="click->player#showMobilePlayerUI"
     >
         <%# Desktop only: Previous/Play/Next buttons and timestamp %>
@@ -108,7 +108,7 @@
 
     <%# Mobile only: Full screen player %>
     <div 
-        class="fixed top-0 left-0 w-full h-full transition-transform transform translate-y-full" 
+        class="fixed top-0 left-0 w-full h-full transition-transform transform translate-y-full z-20" 
         data-player-target="mobilePlayer"
     >
         <!-- bg-slate-300/50 backdrop-blur dark:bg-slate-700/50 -->
@@ -141,7 +141,7 @@
             <h1 class="text-3xl font-bold mt-16 mb-2 text-black dark:text-white" data-player-target="mobilePlayerTrackTitle"></h1>
 
             <%# Track subtitle %>
-            <h2 class="text-2xl mb-4 font-bold" data-player-target="mobilePlayerTrackSubtitle"></h2>
+            <h2 class="text-2xl mb-4" data-player-target="mobilePlayerTrackSubtitle"></h2>
 
             <%# Progress bar %>
             <progress 
