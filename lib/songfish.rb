@@ -7,9 +7,9 @@ module Songfish
   @@url = "https://kglw.net"
 
   def update
-    # updateVenues
-    # updateSongs
-    # updateShows
+    updateVenues
+    updateSongs
+    updateShows
     updateSetlists
   end
 
