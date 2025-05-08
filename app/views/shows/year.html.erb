@@ -23,7 +23,8 @@
                 <label class="text-center block mt-3">Jump to:</label>
                 <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
                     <% @tours.each do |tour| %>
-                        <li><a href="#<%= tour.name.parameterize %>"><%= tour.name %></a></li>
+                        <% tour_shows = @shows.filter { |show| show.tour_id == tour.id }.count %>
+                        <li><a href="#<%= tour.name.parameterize %>"><%= tour.name %> <span class="badge badge-neutral"><%= tour_shows %></span></a></li>
                     <% end %>
                 </ul>
             </div>

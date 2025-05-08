@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  songfishID: 1
+  separator: MyString
+
+two:
+  songfishID: 1
+  separator: MyString

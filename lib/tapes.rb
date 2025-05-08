@@ -126,4 +126,24 @@ module Tapes
     # Color will be e.g. 'srgb(103,102,100)' -- we just want 103,102,100
     color.gsub("srgb(", "").gsub(")", "")
   end
+
+  def importAlbums(path)
+    ymlalbums = YAML.load_file(path)
+
+    ymlalbums.each do |ymlalbum|
+      puts "Loading album #{ymlalbum["title"]}..."
+
+      album = Album.find_or_create_by(title: ymlalbum["title"])
+
+      album.update(
+        year: ymlalbum["year"],
+        cover_art_url: ymlalbum["image"],
+      )
+
+      ymlalbum["songs"].each do |ymlsong|
+        song = Song.find_by!(songfishID: ymlsong)
+        song.update(album_id: album.id)
+      end
+    end
+  end
 end

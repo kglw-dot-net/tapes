@@ -1,0 +1,31 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  songfishID: 1
+  set: one
+  song: one
+  position: 1
+  duration: 1.5
+  footnote: MyText
+  is_jamchart: false
+  jamchart_notes: MyText
+  is_reprise: false
+  is_verified: false
+  is_recommended: false
+  is_jam: false
+  transition: one
+
+two:
+  songfishID: 1
+  set: two
+  song: two
+  position: 1
+  duration: 1.5
+  footnote: MyText
+  is_jamchart: false
+  jamchart_notes: MyText
+  is_reprise: false
+  is_verified: false
+  is_recommended: false
+  is_jam: false
+  transition: two

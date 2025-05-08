@@ -24,6 +24,17 @@ namespace :tapes do
     puts "Done!"
   end
 
+  desc "Import GT1 albums list"
+  task :importAlbums, [ :path ] => [ :environment ] do |t, args|
+    include Tapes
+
+    puts "Importing GT1 albums list..."
+
+    Tapes.importAlbums(args[:path])
+
+    puts "Done!"
+  end
+
   namespace :ia do
     desc "Fetch the latest Internet Archive uploads"
     task fetchNew: [ :environment ] do

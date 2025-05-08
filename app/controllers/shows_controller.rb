@@ -43,6 +43,19 @@ class ShowsController < ApplicationController
     if @show.nil?
       raise ActionController::RoutingError.new("Not Found")
     end
+
+    total_seconds = @show.setlists
+      .joins(:set_songs)
+      .pluck(:duration)
+      .sum
+
+    @hours = (total_seconds / 3600).floor
+    @minutes = ((total_seconds % 3600) / 60).floor
+
+    @songs = @show.setlists
+      .joins(:set_songs)
+      .pluck(:song_id)
+      .count
   end
 
   # GET /:month

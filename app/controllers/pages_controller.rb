@@ -8,15 +8,6 @@ class PagesController < ApplicationController
       .order(date: :desc, order: :desc)
       .limit(@shows_per_card)
 
-    # Get n random shows
-    # No real need to exclude posterless shows, just looks nicer on the front page
-    # First impressions and all that
-    @random_shows = Show
-      .where(is_active: true)
-      .where.not(poster_url: nil)
-      .order(Arel.sql("RANDOM()"))
-      .limit(@shows_per_card)
-
     # Get n shows from today's date
     # e.g. if today is 2024-12-26, get all shows with on December 26th regardless of year
     @today_shows = Show
@@ -24,6 +15,19 @@ class PagesController < ApplicationController
       # .where("EXTRACT(MONTH FROM date) = ? AND EXTRACT(DAY FROM date) = ?", Time.current.month, Time.current.day)
       .where("strftime('%m', date) = ? AND strftime('%d', date) = ?", Time.current.month.to_s.rjust(2, "0"), Time.current.day.to_s.rjust(2, "0"))
       .order(date: :desc, order: :desc)
+      .limit(@shows_per_card)
+
+    # Get n random shows
+    # No real need to exclude posterless shows, just looks nicer on the front page
+    # First impressions and all that
+
+    exclude_from_random_shows = @most_recent_shows.pluck(:id) + @today_shows.pluck(:id)
+
+    @random_shows = Show
+      .where(is_active: true)
+      .where.not(poster_url: nil)
+      .where.not(id: exclude_from_random_shows)
+      .order(Arel.sql("RANDOM()"))
       .limit(@shows_per_card)
 
     @latest_year = Show.where(is_active: true).maximum(:date).year

@@ -7,9 +7,10 @@ module Songfish
   @@url = "https://kglw.net"
 
   def update
-    updateVenues
-    updateSongs
-    updateShows
+    # updateVenues
+    # updateSongs
+    # updateShows
+    updateSetlists
   end
 
   def updateVenues
@@ -45,6 +46,94 @@ module Songfish
   end
 
   def updateSongs
+    url = URI.join(@@url, "/api/v2/songs")
+
+    conn = Faraday.new(url) do |f|
+      f.response :json
+    end
+
+    response = conn.get().body
+
+    if response["error"]
+      puts "\tError updating songs: #{response["error_message"]}"
+      return
+    end
+
+    songfish_songs = response["data"]
+
+    songfish_songs.each do |songfish_song|
+      song = Song.find_or_create_by(songfishID: songfish_song["id"])
+
+      song.name = songfish_song["name"]
+      song.slug = songfish_song["slug"]
+      song.is_original = songfish_song["isoriginal"]
+
+      song.save
+    end
+  end
+
+  # Convert string e.g. "1:23" to number of seconds e.g. 83.0
+  def getDuration(time)
+    return nil if time.blank?
+
+    parts = time.split(":")
+    return nil if parts.length != 2
+
+    minutes = parts[0].to_i
+    seconds = parts[1].to_i
+
+    minutes * 60 + seconds
+  end
+
+  def updateSetlists
+    puts "\tUpdating setlists..."
+
+    (2010..Time.current.year).each do |year|
+      puts "\t\tUpdating setlists for #{year}..."
+
+      setlists = getSetlistsForYear(year)
+
+      setlists.each do |setlist|
+        show_id = Show.find_by(songfishID: setlist["show_id"])&.id
+        set = Setlist.find_or_create_by(show_id: show_id, setnumber: setlist["setnumber"])
+
+        set.set_type = SetType.find_or_create_by(name: setlist["settype"])
+
+        set.save!
+
+        song = Song.find_by(songfishID: setlist["song_id"])
+
+        next if song.nil?
+
+        set_song = SetSong.find_or_create_by(songfishID: setlist["uniqueid"])
+
+        set_song.setlist_id = set.id
+        set_song.song = song
+        set_song.position = setlist["position"]
+        set_song.duration = getDuration(setlist["tracktime"])
+        set_song.footnote = setlist["footnote"]
+        set_song.is_jamchart = setlist["isjamchart"]
+        set_song.jamchart_notes = setlist["jamchart_notes"]
+        set_song.is_reprise = setlist["isreprise"]
+        set_song.is_verified = setlist["isverified"]
+        set_song.is_recommended = setlist["isrecommended"]
+        set_song.is_jam = setlist["isjam"]
+
+        transition = Transition.find_or_create_by(songfishID: setlist["transition_id"])
+
+        transition.separator = setlist["transition"]
+
+        transition.save
+
+        set_song.transition = transition
+
+        set_song.save
+
+        # opener	""
+        # soundcheck	""
+        # css_class	null
+      end
+    end
   end
 
   def getUploads
@@ -63,7 +152,6 @@ module Songfish
 
     response["data"]
   end
-
 
   def getSetlistsForYear(year)
     url = URI.join(@@url, "/api/v2/setlists/showyear/#{year}")

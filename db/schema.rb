@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_29_032609) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_30_200545) do
+  create_table "albums", force: :cascade do |t|
+    t.string "title"
+    t.integer "year"
+    t.string "cover_art_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "continents", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -68,6 +76,44 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_29_032609) do
     t.index ["taper_id"], name: "index_recordings_on_taper_id"
   end
 
+  create_table "set_songs", force: :cascade do |t|
+    t.integer "songfishID"
+    t.integer "song_id", null: false
+    t.integer "position"
+    t.float "duration"
+    t.text "footnote"
+    t.boolean "is_jamchart"
+    t.text "jamchart_notes"
+    t.boolean "is_reprise"
+    t.boolean "is_verified"
+    t.boolean "is_recommended"
+    t.boolean "is_jam"
+    t.integer "transition_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "setlist_id", null: false
+    t.index ["setlist_id"], name: "index_set_songs_on_setlist_id"
+    t.index ["song_id"], name: "index_set_songs_on_song_id"
+    t.index ["transition_id"], name: "index_set_songs_on_transition_id"
+  end
+
+  create_table "set_types", force: :cascade do |t|
+    t.integer "songfishID"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "setlists", force: :cascade do |t|
+    t.integer "show_id", null: false
+    t.integer "setnumber"
+    t.integer "set_type_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["set_type_id"], name: "index_setlists_on_set_type_id"
+    t.index ["show_id"], name: "index_setlists_on_show_id"
+  end
+
   create_table "shows", force: :cascade do |t|
     t.date "date"
     t.datetime "created_at", null: false
@@ -87,6 +133,17 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_29_032609) do
     t.index ["venue_id"], name: "index_shows_on_venue_id"
   end
 
+  create_table "songs", force: :cascade do |t|
+    t.integer "songfishID"
+    t.string "name"
+    t.string "slug"
+    t.boolean "is_original"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "album_id"
+    t.index ["album_id"], name: "index_songs_on_album_id"
+  end
+
   create_table "tapers", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -96,6 +153,13 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_29_032609) do
   create_table "tours", force: :cascade do |t|
     t.string "name"
     t.integer "songfishID"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "transitions", force: :cascade do |t|
+    t.integer "songfishID"
+    t.string "separator"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -117,7 +181,13 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_29_032609) do
   add_foreign_key "recordings", "recording_types"
   add_foreign_key "recordings", "shows"
   add_foreign_key "recordings", "tapers"
+  add_foreign_key "set_songs", "setlists"
+  add_foreign_key "set_songs", "songs"
+  add_foreign_key "set_songs", "transitions"
+  add_foreign_key "setlists", "set_types"
+  add_foreign_key "setlists", "shows"
   add_foreign_key "shows", "tours"
   add_foreign_key "shows", "venues"
+  add_foreign_key "songs", "albums"
   add_foreign_key "venues", "countries"
 end

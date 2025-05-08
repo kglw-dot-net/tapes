@@ -55,7 +55,7 @@
                     </div>
                     <% end %>
 
-                    <strong class="block text-center mb-2">x hours, y minutes &bull; z songs</strong>
+                    <strong class="block text-center mb-2"><%= @hours %> hour<%= 's' unless @hours == 1 %>, <%= @minutes %> minute<%= 's' unless @minutes == 1 %> &bull; <%= @songs %> song<%= 's' unless @songs == 1 %></strong>
 
                     <% if @show.songfishPermalink.present? %>
                         <a href="https://kglw.net/setlists/<%= @show.songfishPermalink %>" target="_blank" class="block text-center link link-primary link-hover">View stats on KGLW.net</a>
@@ -123,29 +123,41 @@
                                 </h3>
 
                                 <dl class="columns-2 my-3">
+                                    <div class="break-inside-avoid-column">
+                                        <dt class="text-xs">Identifier</dt>
+                                        <dd class="text-black dark:text-white mb-3">
+                                            <a target="_blank" class="link link-hover link-primary" href="https://archive.org/details/<%= recording.id %>"><%= recording.id %></a>
+                                        </dd>
+                                    </div>
+
                                     <% unless recording.taper.nil? %>
-                                        <dt class="text-xs">Taper</dt>
-                                        <dd class="text-black dark:text-white mb-3"><%= recording.taper.name %></dd>
+                                        <div class="break-inside-avoid-column">
+                                            <dt class="text-xs">Taper</dt>
+                                            <dd class="text-black dark:text-white mb-3"><%= recording.taper.name %></a></dd>
+                                        </div>
                                     <% end %>
-        
+
                                     <%#<dt>Transferer</dt>
                                     <dd> recording.transferer </dd>%>
         
                                     <% unless recording.source.blank? %>
-                                        <dt class="text-xs">Source</dt>
-                                        <dd class="text-black dark:text-white mb-3"><%= recording.source %></dd>
+                                        <div class="break-inside-avoid-column">
+                                            <dt class="text-xs">Source</dt>
+                                            <dd class="text-black dark:text-white mb-3"><%= recording.source %></dd>
+                                        </div>
                                     <% end %>
         
                                     <% unless recording.lineage.blank? %>
-                                        <dt class="text-xs">Lineage</dt>
-                                        <dd class="text-black dark:text-white mb-3"><%= recording.lineage %></dd>
+                                        <div class="break-inside-avoid-column">
+                                            <dt class="text-xs">Lineage</dt>
+                                            <dd class="text-black dark:text-white mb-3"><%= recording.lineage %></dd>
+                                        </div>
                                     <% end %>
         
-                                    <dt class="text-xs">Identifier</dt>
-                                    <dd class="text-black dark:text-white mb-3"><%= recording.id %></dd>
-        
-                                    <dt class="text-xs">Upload Date</dt>
-                                    <dd class="text-black dark:text-white mb-3"><%= recording.uploaded_at %></dd>
+                                    <div class="break-inside-avoid-column">
+                                        <dt class="text-xs">Upload Date</dt>
+                                        <dd class="text-black dark:text-white mb-3"><%= recording.uploaded_at.strftime("%Y-%m-%d") %></dd>
+                                    </div>
                                 </dl>
                             </div>
                         </div>

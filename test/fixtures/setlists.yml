@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  show: one
+  setnumber: 1
+  set_type: one
+
+two:
+  show: two
+  setnumber: 1
+  set_type: two
