@@ -1,2 +1,35 @@
-<%= @month %>
-<%= @date %>
+<div class="container mx-auto mt-8 px-5">
+    <div class="flex justify-center overflow-x-scroll">
+        <div role="tablist" class="tabs tabs-boxed">
+            <% @months.each_with_index do |month, idx| %>
+                <a href="/<%= month.downcase %>" class="tab <%= 'tab-active' if idx + 1 == @month %>"><%= month %></a>
+            <% end %>
+        </div>
+    </div>
+
+    <div class="flex justify-center mb-8 overflow-x-scroll">
+        <div role="tablist" class="tabs tabs-boxed">
+            <% @days.each do |day| %>
+                <a href="/<%= @month_name.downcase %>/<%= day %>" class="tab <%= 'tab-active' if day == @date.to_i %>"><%= day.ordinalize %></a>
+            <% end %>
+        </div>
+    </div>
+
+    <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white">
+        <%= @date %> <%= @month_name.capitalize %>
+    </h2>
+    
+    <h3 class="text-2xl font-bold mb-8 text-center">
+        <%= @shows.length %> show<%= 's' unless @shows.length == 1 %>
+    </h3>
+
+    <div class="card bg-base-100 shadow-xl mb-5">
+        <div class="card-body py-5 px-3">
+            <div class="responsive-grid">
+                <% @shows.each do |show| %>
+                    <%= render "featured_show" , show: show %>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>

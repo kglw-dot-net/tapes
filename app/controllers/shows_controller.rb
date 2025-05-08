@@ -14,17 +14,26 @@ class ShowsController < ApplicationController
 
     @years = Show.where(is_active: true).select("strftime('%Y', date) AS year").distinct.map(&:year)
 
-    @shows = Show
+    all_shows = Show
       .where(is_active: true)
       .where("date >= ? AND date <= ?", "#{@year}-01-01", "#{@year}-12-31")
+
+    @shows = all_shows
+      .includes(venue: :country)
+      # .joins(:recordings)
+      # .select("shows.*, COUNT(recordings.id) AS recording_count")
       .distinct
 
     @tours = Tour
       .joins(:shows)
-      .where(id: @shows.select(:tour_id).distinct)
+      .where("shows.id IN (?)", all_shows.pluck(:id))
       .select("tours.*, MAX(shows.date) AS max_show_date")
       .group("tours.id")
       .order("max_show_date DESC")
+
+      @tours.each do |tour|
+        puts "#{tour.name} - #{tour.max_show_date}"
+      end
   end
 
   # GET /:slug
@@ -40,18 +49,36 @@ class ShowsController < ApplicationController
   def month
     @month_name = params[:month]
 
+    @months = Date::MONTHNAMES.compact
+
     @month = Date::MONTHNAMES.compact.index { |m| m.casecmp(@month_name) == 0 } + 1
 
-    @dates = Show.where(is_active: true)
+    @days = Show.where(is_active: true)
       .where("strftime('%m', date) = ?", "%02d" % @month)
-      .select("ltrim(strftime('%e', date)) AS day")
-      .distinct
-      .map(&:day)
+      .select("cast(strftime('%e', date) as int) AS day, COUNT(*) AS show_count")
+      .group("day")
   end
 
   # GET /:month/:date
   def date
-    @month = params[:month]
+    @month_name = params[:month]
+
+    @months = Date::MONTHNAMES.compact
+
+    @month = Date::MONTHNAMES.compact.index { |m| m.casecmp(@month_name) == 0 } + 1
+
+    @days = Show.where(is_active: true)
+      .where("strftime('%m', date) = ?", "%02d" % @month)
+      .select("cast(strftime('%e', date) as int) AS day")
+      .distinct
+      .map(&:day)
+      .sort!
+
     @date = params[:date]
+
+    @shows = Show.where(is_active: true)
+      .where("strftime('%m', date) = ?", "%02d" % @month)
+      .where("strftime('%d', date) = ?", "%02d" % @date)
+      .order(date: :desc)
   end
 end

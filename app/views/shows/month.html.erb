@@ -1,9 +1,29 @@
-<%= @month_name %>
-<br />
-<%= @month %>
+<div class="container mx-auto mt-8 px-5">
+  <div class="flex justify-center mb-8 overflow-x-scroll">
+      <div role="tablist" class="tabs tabs-boxed">
+          <% @months.each_with_index do |month, idx| %>
+              <a href="/<%= month.downcase %>" class="tab <%= 'tab-active' if idx + 1 == @month %>"><%= month %></a>
+          <% end %>
+      </div>
+  </div>
 
-<hr />
+  <h2 class="text-3xl font-bold mb-8 text-center text-black dark:text-white">
+      <%= @month_name.capitalize %>
+  </h2>
 
-<% @dates.each do |date| %>
-  <a href="/<%= @month_name %>/<%= date %>"><%= date %></a>
-<% end %>
+  <div class="card bg-base-100 shadow-xl mb-5">
+    <div class="card-body p-5">
+      <div class="columns-1 md:columns-3 xl:columns-4">
+        <% @days.each do |day| %>
+          <a 
+            href="/<%= @month_name.downcase %>/<%= day.day %>" 
+            class="flex justify-between items-center py-1 hover:bg-base-100/50"
+          >
+            <span class="text-black dark:text-white"><%= day.day.ordinalize %></span>
+            <span class="text-sm"><%= day.show_count %> show<%= 's' unless day.show_count == 1 %></span>
+          </a>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
