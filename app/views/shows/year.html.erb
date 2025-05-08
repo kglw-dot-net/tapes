@@ -21,7 +21,7 @@
         <div class="flex mb-8">
             <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
                 <label class="text-center block mt-3">Jump to:</label>
-                <ul class="menu menu-vertical lg:menu-horizontal">
+                <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
                     <% @tours.each do |tour| %>
                         <li><a href="#<%= tour.name.parameterize %>"><%= tour.name %></a></li>
                     <% end %>

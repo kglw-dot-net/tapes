@@ -31,7 +31,7 @@
   }
   
   #progress-bar:hover progress {
-    @apply h-2;
+    @apply lg:h-2;
   }
 
   #player svg {
@@ -40,6 +40,11 @@
 
   #player svg:hover {
     @apply text-black dark:text-white;
+  }
+
+  :root:has([data-player-target="mobilePlayer"]:not(.translate-y-full)) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
   }
 
   /* Tracklists */

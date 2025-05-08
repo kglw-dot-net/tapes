@@ -13,11 +13,11 @@
         <div class="lg:flex lg:gap-x-8">
             <div class="lg:max-w-md">
                 <!-- bg-base-100 -->
-                <div class="p-3 bg-white dark:bg-neutral bg-opacity-25 dark:bg-opacity-25 rounded-xl mb-3 lg:mb-0">
+                <div class="p-4 bg-white dark:bg-neutral bg-opacity-25 dark:bg-opacity-25 rounded-xl mb-3 lg:mb-0">
                     <% if @show.poster_url.present? %>
                         <img 
                             src="<%= @show.poster_url %>" 
-                            class="mb-8 cursor-pointer"
+                            class="mb-6 cursor-pointer w-1/2 mx-auto lg:mx-0 lg:w-full"
                             onclick="show_poster_modal.showModal()"
                             />
                     <% end %>
@@ -32,7 +32,7 @@
                     <% end %>
 
                     <a href="/<%= @show.date.strftime("%Y") %>#<%= @show.tour.name.parameterize %>" class="block text-center link link-hover link-primary mb-2"><%= @show.tour.name %></a>
-                    <small class="block text-center mb-8"><%= @show.venue.name %> &bull; <%= @show.venue.city %>, <%= @show.venue.region %>, <%= @show.venue.country.name %></small>
+                    <small class="block text-center mb-6"><%= @show.venue.name %> &bull; <%= @show.venue.city %>, <%= @show.venue.region %>, <%= @show.venue.country.name %></small>
 
                     <!-- <dl class="grid grid-cols-2">
                         <dt class="font-bold">Tour</dt>
@@ -46,13 +46,14 @@
                     </dl> -->
 
                     <% unless @show.notes.blank? %>
-                    <div class="px-3 text-black dark:text-white">
+                    <div class="px-3 text-black dark:text-white mb-6">
                         <%=raw @show.notes %>
                     </div>
                     <% end %>
 
-                    <strong class="block text-center my-3">x hours, y minutes</strong>
-                    <a href="#" class="block text-center my-3 link link-primary link-hover">View stats on KGLW.net</a>
+                    <strong class="block text-center mb-2">x hours, y minutes &bull; z songs</strong>
+
+                    <a href="https://kglw.net/setlists/<%= @show.songfishPermalink %>" class="block text-center link link-primary link-hover">View stats on KGLW.net</a>
                 </div>
             </div>
 

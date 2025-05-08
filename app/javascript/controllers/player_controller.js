@@ -1,10 +1,27 @@
 import { Controller } from "@hotwired/stimulus"
 import { Howl, Howler } from 'howler'
+import { useWindowResize } from 'stimulus-use'
 
 export default class extends Controller {
-  static targets = ["container", "currentTime", "duration", "progress", "trackTitle", "trackSubtitle", "isPlaying", "thumbnail"];
+  static targets = [
+    "container", "currentTime", "duration", "progress", "trackTitle", "trackSubtitle", "isPlaying", "isPlayingMobile",
+    "thumbnail", "mobilePlayer", "mobilePlayerThumbnail", "mobilePlayerBackdrop", "mobilePlayerTrackTitle", 
+    "mobilePlayerTrackSubtitle", "mobilePlayerProgress", "mobilePlayerCurrentTime", "mobilePlayerDuration", 
+    "mobilePlayerIsPlaying"
+  ];
 
   // Events
+
+  showMobilePlayerUI() {
+    // If screen width is wider than 768px, don't show mobile player UI
+    if (window.innerWidth > 768) return;
+
+    this.mobilePlayerTarget.classList.remove('translate-y-full');
+  }
+
+  hideMobilePlayerUI() {
+    this.mobilePlayerTarget.classList.add('translate-y-full');
+  }
 
   playPlaylist({ detail: { playlist, trackIdx } }) {
     if (this.playlist.id !== playlist.id) {
@@ -15,20 +32,22 @@ export default class extends Controller {
       this.containerTarget.classList.remove('invisible');
       this.containerTarget.classList.remove('opacity-0');
 
-      this.trackSubtitleTarget.textContent = `${this.playlist.title}`;
-      this.thumbnailTarget.src = this.playlist.thumbnail;
+      this.setTrackSubtitle(this.playlist.title);
+      this.setImageUrl(this.playlist.thumbnail);
     }
 
     this.playTrack(trackIdx);
   }
 
   seek(event) {
+    const progressBar = event.currentTarget;
+
     const currentTrack = this.playlist.tracks[this.currentTrackIdx].howl;
 
     if (currentTrack == null) return;
 
-    const progressWidth = this.progressTarget.clientWidth;
-    const mouseX = event.clientX - this.progressTarget.getBoundingClientRect().left;
+    const progressWidth = progressBar.clientWidth;
+    const mouseX = event.clientX - progressBar.getBoundingClientRect().left;
 
     const percent = mouseX / progressWidth;
 
@@ -38,7 +57,9 @@ export default class extends Controller {
   }
 
   playPause() {
-    const isPlaying = !(this.isPlayingTarget.checked = !this.isPlayingTarget.checked)
+    const isPlaying = !this.isPlayingTarget.checked;
+
+    this.setIsPlayingDisplay(isPlaying);
 
     const currentTrack = this.playlist.tracks[this.currentTrackIdx].howl;
 
@@ -70,6 +91,12 @@ export default class extends Controller {
     window.Turbo.visit(this.playlist.tracks[this.currentTrackIdx].recordingUrl);
   }
 
+  windowResize({ width, height, event }) {
+    // If screen width is wider than 768px, hide mobile player UI
+    if (width > 768)
+      hideMobilePlayerUI();
+  }
+
   // Internal
 
   // Called on initial page load only
@@ -84,21 +111,63 @@ export default class extends Controller {
   }
 
   resetTrack() {
-    this.progressTarget.removeAttribute("value");
-    this.progressTarget.classList.remove('progress-primary');
+    this.setProgressBar();
 
-    this.currentTimeTarget.textContent = "0:00";
-    this.durationTarget.textContent = "0:00";
+    this.setCurrentTime("0:00");
+    this.setDuration("0:00");
 
-    this.trackTitleTarget.textContent = "";
+    this.setTrackTitle("");
 
     this.currentTrackIdx = null;
 
-    this.isPlayingTarget.checked = false;
+    this.setIsPlayingDisplay(false);
 
     if (this.interval) {
       clearInterval(this.interval);
     }
+  }
+
+  setIsPlayingDisplay(isPlaying) {
+    this.isPlayingTarget.checked = isPlaying;
+    this.isPlayingMobileTarget.checked = isPlaying;
+    this.mobilePlayerIsPlayingTarget.checked = isPlaying
+  }
+
+  setCurrentTime(time) {
+    this.currentTimeTarget.textContent = time;
+    this.mobilePlayerCurrentTimeTarget.textContent = time;
+  }
+
+  setDuration(time) {
+    this.durationTarget.textContent = time;
+    this.mobilePlayerDurationTarget.textContent = time;
+  }
+
+  setProgressBar(value = null) {
+    if (!value) {
+      this.progressTarget.removeAttribute("value");
+      this.progressTarget.classList.remove('progress-primary');
+
+      this.mobilePlayerProgressTarget.removeAttribute("value");
+      this.mobilePlayerProgressTarget.classList.remove('progress-primary');
+    }
+    else {
+      this.progressTarget.setAttribute("value", value);
+      this.progressTarget.classList.add('progress-primary');
+
+      this.mobilePlayerProgressTarget.setAttribute("value", value);
+      this.mobilePlayerProgressTarget.classList.add('progress-primary');
+    }
+  }
+
+  setTrackTitle(title) {
+    this.trackTitleTarget.textContent = title;
+    this.mobilePlayerTrackTitleTarget.textContent = title;
+  }
+
+  setTrackSubtitle(subtitle) {
+    this.trackSubtitleTarget.textContent = subtitle;
+    this.mobilePlayerTrackSubtitleTarget.textContent = subtitle;
   }
 
   resetAll() {
@@ -106,12 +175,18 @@ export default class extends Controller {
 
     this.playlist = {};
 
-    this.trackSubtitleTarget.textContent = "";
-    this.thumbnailTarget.src = "";
+    this.setTrackSubtitle("");
+    this.setImageUrl("");
 
     // Invisible is used to prevent click events, opacity-0 is used for fade in/out
     this.containerTarget.classList.add('invisible');
     this.containerTarget.classList.add('opacity-0');
+  }
+
+  setImageUrl(url) {
+    this.thumbnailTarget.src = url;
+    this.mobilePlayerThumbnailTarget.src = url;
+    this.mobilePlayerBackdropTarget.src = url;//.style.backgroundImage = `url(${url})`;
   }
 
   getFormattedTime(seconds) {
@@ -133,11 +208,11 @@ export default class extends Controller {
 
     if (currentTime > duration) currentTime = duration;
 
-    this.currentTimeTarget.textContent = this.getFormattedTime(currentTime);
+    this.setCurrentTime(this.getFormattedTime(currentTime));
 
     const percentPlayed = currentTime / this.playlist.tracks[this.currentTrackIdx].duration;
 
-    this.progressTarget.setAttribute("value", percentPlayed * 100);
+    this.setProgressBar(percentPlayed * 100);
 
     if (navigator.mediaSession)
       navigator.mediaSession.setPositionState({
@@ -158,9 +233,7 @@ export default class extends Controller {
       },
 
       onplay: () => {
-        // TODO: Reimplement play button state change visibility
-
-        this.isPlayingTarget.checked = true;
+        this.setIsPlayingDisplay(true);
 
         // If there is a next track, load it
         if (this.currentTrackIdx != this.playlist.tracks.length - 1) {
@@ -171,17 +244,15 @@ export default class extends Controller {
             this.playlist.tracks[this.currentTrackIdx + 1].howl.load();
         }
 
-        this.durationTarget.textContent = this.getFormattedTime(track.duration);
+        this.setDuration(this.getFormattedTime(track.duration));
 
         this.updateTrackPosition();
-
-        this.progressTarget.classList.add('progress-primary');
 
         this.interval = setInterval(this.updateTrackPosition.bind(this), 100);
       },
 
       onpause: () => {
-        this.isPlayingTarget.checked = false;
+        this.setIsPlayingDisplay(false);
         if (this.interval) clearInterval(this.interval);
       },
 
@@ -223,7 +294,7 @@ export default class extends Controller {
   }
 
   setTrackActive(track) {
-    this.trackTitleTarget.textContent = track.title;
+    this.setTrackTitle(track.title);
 
     document.querySelectorAll('.track.active').forEach(trackElement => {
       trackElement.classList.remove('active');

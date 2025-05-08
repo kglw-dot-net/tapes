@@ -3,7 +3,13 @@
     data-action="playlist:playTrack@window->player#playPlaylist"
     data-turbo-permanent>
 
-    <div data-player-target="container"  class="invisible opacity-0 fixed start-0 bottom-0 p-4 h-18 flex lg:grid lg:grid-cols-3 gap-3 w-full bg-slate-300/50 backdrop-blur dark:bg-slate-700/50 transition-opacity">
+    <div 
+        data-player-target="container"  
+        class="invisible opacity-0 fixed start-0 bottom-0 p-4 h-18 flex lg:grid lg:grid-cols-3 gap-3 
+        w-full bg-slate-300/50 backdrop-blur dark:bg-slate-700/50 transition-opacity cursor-pointer 
+        lg:cursor-auto"
+        data-action="click->player#showMobilePlayerUI"
+    >
         <%# Desktop only: Previous/Play/Next buttons and timestamp %>
         <div class="hidden lg:flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -12,8 +18,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
             </svg>
 
-            <label class="swap">
-                <input type="checkbox" data-player-target="isPlaying" data-action="player#playPause" class="hidden" />
+            <label class="swap" data-action="click->player#playPause">
+                <input type="checkbox" disabled data-player-target="isPlaying" class="hidden" />
 
                 <!-- Pause icon -->
                 <svg class="swap-on fill-current size-10 mr-3 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -73,21 +79,124 @@
 
         <%# Mobile only: Play/Pause button %>
         <div class="flex lg:hidden grow justify-end items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                class="size-10 cursor-pointer">
-                <path stroke-linecap="round" stroke-linejoin="round"
+            <label class="swap" data-action="click->player#playPause">
+                <input type="checkbox" disabled data-player-target="isPlayingMobile" class="hidden" />
+
+                <!-- Pause icon -->
+                <svg class="swap-on fill-current size-10 mr-3 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
+                </svg>
+                
+                <!-- Play icon -->
+                <svg class="swap-off fill-current size-10 mr-3 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
                     d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
-            </svg>
+                </svg>
+            </label>
         </div>
 
         <%# Progress bar %>
         <div id="progress-bar" class="absolute cursor-pointer block top-0 -left-1 -right-1" style="
-        transform: translateY(-50%);
+            transform: translateY(-50%);
             user-select: none;
         ">
             <div id="sliderContainer" class="cursor-pointer w-full m-0 border-0 bg-transparent relative flex">
                 <progress class="progress progress-primary w-full transition-all" data-player-target="progress" data-action="click->player#seek" value="40" max="100"></progress>
             </div>
+        </div>
+    </div>
+
+    <%# Mobile only: Full screen player %>
+    <div 
+        class="fixed top-0 left-0 w-full h-full transition-transform transform translate-y-full" 
+        data-player-target="mobilePlayer"
+    >
+        <!-- bg-slate-300/50 backdrop-blur dark:bg-slate-700/50 -->
+        <%# Background %>
+        <img class="w-full h-full object-cover" data-player-target="mobilePlayerBackdrop" src="#" />
+        <div class="absolute top-0 left-0 w-full h-full bg-slate-100/50 backdrop-blur-xl dark:bg-slate-900/50 px-8">
+            <%# Top row %>
+            <div class="flex justify-between items-center pt-4 w-full">
+                <%# Close button %>
+                <button class="btn btn-ghost btn-circle">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+                    class="size-10 text-white" data-action="click->player#hideMobilePlayerUI"
+                    >
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </button>              
+    
+                <%# Options button %>
+                <button class="btn btn-ghost btn-circle">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10 text-white">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>                  
+                </button>
+            </div>
+
+            <%# Centre image %>
+            <img class="h-1/2 mx-auto pt-24 rounded-xl" data-player-target="mobilePlayerThumbnail" draggable="false" src="#" />
+
+            <%# Track title %>
+            <h1 class="text-3xl font-bold mt-16 mb-2 text-black dark:text-white" data-player-target="mobilePlayerTrackTitle"></h1>
+
+            <%# Track subtitle %>
+            <h2 class="text-2xl mb-4 font-bold" data-player-target="mobilePlayerTrackSubtitle"></h2>
+
+            <%# Progress bar %>
+            <progress 
+                class="progress progress-primary w-full transition-all mt-4" 
+                data-player-target="mobilePlayerProgress" 
+                data-action="click->player#seek" 
+                value="40"
+                max="100"
+            >
+            </progress>
+
+            <%# Timestamps %>
+            <div class="flex justify-between items-center w-full mb-8">
+                <small data-player-target="mobilePlayerCurrentTime">0:00</small>
+                <small data-player-target="mobilePlayerDuration">0:00</small>
+            </div>
+
+            <%# Transport controls %>
+            <div class="flex justify-around items-center w-100">
+                <%# Previous %>
+                <button class="btn btn-ghost btn-circle text-white" data-action="click->player#previousTrack">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                        class="size-10">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                    </svg>     
+                </button>
+
+                <%# Play/pause %>
+                <button class="btn btn-primary btn-circle text-white btn-lg" data-action="click->player#playPause">
+                    <label class="swap mx-auto">
+                        <input type="checkbox" disabled data-player-target="mobilePlayerIsPlaying" class="hidden" />
+                        
+                        <!-- Pause icon -->
+                        <svg class="swap-on fill-current size-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
+                        </svg>
+                        
+                        <!-- Play icon -->
+                        <svg class="swap-off fill-current size-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+                        </svg>
+                    </label>
+                </button>
+
+                <%# Next %>
+                <button class="btn btn-ghost btn-circle text-white" data-action="click->player#nextTrack">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                        class="size-10">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>              
+                </button>
+            </div>
+
+            <%# Bottom nav %>
         </div>
     </div>
 </div>
