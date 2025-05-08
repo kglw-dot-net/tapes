@@ -26,11 +26,13 @@
                         <span class="label-text [:checked~&]:text-white transition">Rank preferred types</span>
                     </label>
 
-                    <div data-settings-target="rankedRecordingTypes" class="hidden opacity-0 transition-opacity rounded-xl shadow-xl bg-base-200 m-3">
+                    <div 
+                        data-settings-target="rankedRecordingTypes" 
+                        class="hidden opacity-0 transition-opacity rounded-xl shadow-xl bg-base-200 m-3 p-3 max-w-lg mx-auto">
                         <% @recording_types.each do |rec_type| %>
                             <a
                                 href="#" 
-                                class="block w-full p-3 draggable" 
+                                class="block w-full p-3 draggable transition hover:bg-base-300 rounded-xl [&:not(:last-child)]:mb-3" 
                                 data-id="<%= rec_type.name %>"
                             >
                                 <span class="mr-3">
@@ -47,7 +49,7 @@
                 <fieldset class="mb-3">
                     <legend class="font-bold mb-3">Favourite tapers</legend>
 
-                    <div class="columns-1 lg:columns-2 xl:columns-3" data-settings-target="favouriteTapers">
+                    <div class="columns-1 lg:columns-2 xl:columns-3 gap-32" data-settings-target="favouriteTapers">
                         <% @tapers.each do |taper| %>
                             <div>
                                 <input 
@@ -58,14 +60,20 @@
                                     data-action="settings#toggleFavouriteTaper"
                                 />
 
-                                <label for="pref-taper-fav-<%= taper.name.parameterize %>" class="cursor-pointer">
+                                <label 
+                                    for="pref-taper-fav-<%= taper.name.parameterize %>" 
+                                    class="cursor-pointer flex items-center justify-between transition rounded-xl hover:bg-base-200 p-3"
+                                >
+                                    <span>
+                                        <span class="block text-black dark:text-white"><%= taper.name %></span>
+                                        <small class="block"><%= taper.recording_count %> uploads</small>
+                                    </span>
+
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" class="size-6 favourite-icon mr-3 inline">
+                                    stroke="currentColor" class="size-6 favourite-icon ml-3 inline float-end">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                                     </svg>
-                                    <span class="text-black dark:text-white"><%= taper.name %></span>
-                                    <small class="float-end"><%= taper.recording_count %> uploads</small>
                                 </label>
                             </div>
                         <% end %>

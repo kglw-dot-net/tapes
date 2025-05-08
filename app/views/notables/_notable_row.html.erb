@@ -12,17 +12,32 @@
  %>
 
 <a 
-    class="flex cursor-pointer justify-between mb-1 hover:bg-base-200 transition rounded items-center" 
+    class="
+    flex 
+    cursor-pointer 
+    justify-between 
+    mb-3 lg:mb-1 
+    py-1 lg:py-0
+    hover:bg-base-200 transition 
+    rounded 
+    items-center" 
     href="/<%= set_song.setlist.show.slug %>" 
 >
-  <span class="w-16 align-middle pl-3"><%= set_song.position %>.&nbsp;</span>
+  <span class="w-16 align-middle pl-3 text-sm"><%= set_song.position %>&nbsp;</span>
 
-  <span class="align-middle w-2/5 text-lg text-black dark:text-white"><%= set_song.song.name %></span>
+  <span class="align-middle w-4/5 lg:w-2/5">
+    <span class="text-lg text-black dark:text-white"><%= set_song.song.name %></span>
+    <span class="lg:hidden">
+      <br />
+      <span class="text-sm"><%= show.date.strftime("%Y-%m-%d") %><%=raw '&mdash;' unless show.title.blank? %><%= show.title %></span>
+      <span class="text-sm"><%= [venue.name, venue.city, venue.region, venue.country.name].reject(&:blank?).join(', ') %></span>
+    </span>
+  </span>
   
-  <span class="pr-8 py-2 w-2/5 whitespace-nowrap">
+  <span class="pr-8 py-2 w-2/5 whitespace-nowrap hidden lg:block">
     <span class="block text-black dark:text-white"><%= show.date.strftime("%Y-%m-%d") %><%=raw '&mdash;' unless show.title.blank? %><%= show.title %></span>
     <span class="block text-sm"><%= [venue.name, venue.city, venue.region, venue.country.name].reject(&:blank?).join(', ') %></span>
   </span>
   
-  <span class="w-16 align-middle text-end text-black dark:text-white pr-3"><%= format('%02d', minutes) %>:<%= format('%02d', seconds) %></span>
+  <span class="w-16 align-middle text-sm text-end pr-3"><%= format('%02d', minutes) %>:<%= format('%02d', seconds) %></span>
 </a>
