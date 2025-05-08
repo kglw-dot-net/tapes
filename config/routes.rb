@@ -97,4 +97,5 @@ Rails.application.routes.draw do
   # API
   get "api/v1/shows.json" => "api#shows"
   get "api/v1/shows/:slug.json" => "api#show"
+  get "api/v1/hero_photos.json" => "pages#hero_photos"
 end
