@@ -6,6 +6,13 @@
 
 @layer base {
   /* Global utilities */
+  .favourite-icon {
+    color: #c71585;
+    fill: none;
+  }
+  :checked ~ label>.favourite-icon {
+    fill: currentColor;
+  }
 
   .overflow-x-scroll a.tab {
     user-drag: none;

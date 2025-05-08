@@ -7,3 +7,4 @@ pin "@hotwired/stimulus-loading", to: "stimulus-loading.js"
 pin_all_from "app/javascript/controllers", under: "controllers"
 pin "howler" # @2.2.4
 pin "stimulus-use" # @0.52.3
+pin "sortablejs" # @1.15.6

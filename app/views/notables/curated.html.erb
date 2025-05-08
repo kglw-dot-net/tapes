@@ -1,0 +1,20 @@
+<div class="container mx-auto mt-8 px-5">
+    <h2 class="text-3xl font-bold mb-8 text-center text-black dark:text-white">
+        KGLW.net Curated Notable Tracks
+    </h2>
+    
+    <div class="bg-base-100 rounded-xl shadow-xl py-5 px-2">
+      <table class="w-full" data-controller="link-table">
+        <% @songs.each do |song| %>
+            <%= render "notable_row", set_song: song %>
+            
+            <% unless song.jamchart_notes.blank? %>
+                <tr>
+                    <td colspan="100%" class="pb-8">
+                        <%=raw song.jamchart_notes %>
+                    </td>
+                </tr>
+            <% end %>
+        <% end %>
+    </table>
+</div>

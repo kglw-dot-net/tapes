@@ -1,0 +1,29 @@
+<% 
+    show = set_song.setlist.show
+    venue = set_song.setlist.show.venue
+
+    minutes = 0
+    seconds = 0
+
+    unless set_song.duration.nil?
+        minutes = (set_song.duration / 60).floor
+        seconds = set_song.duration % 60
+    end
+ %>
+
+<tr 
+    class="table-row cursor-pointer justify-between mb-1 hover:bg-base-200 transition rounded" 
+    data-link-table-url-param="/<%= set_song.setlist.show.slug %>" 
+    data-action="click->link-table#navigate"
+>
+  <td class="table-cell align-middle pl-3"><%= set_song.position %>.&nbsp;</td>
+
+  <td class="table-cell align-middle w-2/5 text-lg text-black dark:text-white"><%= set_song.song.name %></td>
+  
+  <td class="table-cell pr-8 py-2 min-w-max-content whitespace-nowrap">
+    <span class="block text-black dark:text-white"><%= show.date.strftime("%Y-%m-%d") %><%=raw '&mdash;' unless show.title.blank? %><%= show.title %></span>
+    <span class="block text-sm"><%= [venue.name, venue.city, venue.region, venue.country.name].reject(&:blank?).join(', ') %></span>
+  </td>
+  
+  <td class="table-cell align-middle text-end text-black dark:text-white pr-3"><%= format('%02d', minutes) %>:<%= format('%02d', seconds) %></td>
+</tr>

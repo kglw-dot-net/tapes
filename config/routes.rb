@@ -76,4 +76,8 @@ Rails.application.routes.draw do
   # get "notables/shortest-shows" => "notables#shortest_shows"
   # get "notables/most-songs" => "notables#most_songs"
   # get "notables/least-songs" => "notables#least_songs"
+
+  # Settings controller
+
+  get "settings" => "settings#index"
 end

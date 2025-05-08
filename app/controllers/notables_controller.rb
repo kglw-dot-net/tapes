@@ -18,8 +18,8 @@ class NotablesController < ApplicationController
     @songs = SetSong
       .includes(:song)
       .includes(setlist: { show: { venue: :country } })
-      .where(is_jamchart: true)
       .where(setlist: { shows: { is_active: true } })
-      .order(shows: :date)
+      .where(is_jamchart: true)
+      .order("shows.date DESC")
   end
 end
