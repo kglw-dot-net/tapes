@@ -12,12 +12,12 @@
   </h2>
 
   <div class="card bg-base-100 shadow-xl mb-5">
-    <div class="card-body p-5">
+    <div class="card-body py-5 px-3">
       <div class="columns-1 md:columns-3 xl:columns-4">
         <% @days.each do |day| %>
           <a 
             href="/<%= @month_name.downcase %>/<%= day.day %>" 
-            class="flex justify-between items-center py-1 hover:bg-base-100/50"
+            class="flex justify-between items-center px-2 py-1 hover:bg-base-200 transition rounded"
           >
             <span class="text-black dark:text-white"><%= day.day.ordinalize %></span>
             <span class="text-sm"><%= day.show_count %> show<%= 's' unless day.show_count == 1 %></span>

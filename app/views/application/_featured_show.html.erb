@@ -4,9 +4,22 @@
         <span class="indicator-item badge badge-secondary shadow" style="margin-right: 15%;margin-top: 20%;">7 tapes</span>
         <span class="indicator-item badge badge-neutral shadow" style="margin-right: 15%;margin-top: 32%;">SBD</span> %>
 
-        <span class="indicator-item badge badge-neutral bg-opacity-60 backdrop-blur shadow transform-none m-3">
+        <span class="indicator-item badge badge-primary bg-opacity-60 backdrop-blur shadow transform-none mr-3 mt-3">
             <%= show.recordings.where(is_active: true).count %> tape<%= 's' unless show.recordings.where(is_active: true).count == 1 %>
         </span>
+
+        <% seconds = show.setlists.map { |setlist| setlist.set_songs.sum(:duration) }.sum %>
+
+        <% if seconds > 0 %>
+            <span 
+                class="indicator-item badge badge-neutral bg-opacity-60 backdrop-blur shadow transform-none mr-3"
+                style="margin-top:calc(0.5rem + 1.25rem + 0.5rem) !important;"
+            >
+                <% minutes = (seconds / 60).floor %>
+                <% hours = (minutes / 60).floor %>
+                <%= format('%01d', hours) %>hr<%= format('%02d', minutes % 60) %>
+            </span>
+        <% end %>
         
         <img class="rounded-xl" src="<%= show.poster_url || (asset_path 'missing.png') %>" />
     </div>

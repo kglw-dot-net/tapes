@@ -55,7 +55,11 @@
                     </div>
                     <% end %>
 
-                    <strong class="block text-center mb-2"><%= @hours %> hour<%= 's' unless @hours == 1 %>, <%= @minutes %> minute<%= 's' unless @minutes == 1 %> &bull; <%= @songs %> song<%= 's' unless @songs == 1 %></strong>
+                    <strong class="block text-center mb-2">
+                        <% if @total_seconds > 0 %><%= @hours %> hour<%= 's' unless @hours == 1 %>, <%= @minutes %> minute<%= 's' unless @minutes == 1 %><% end %>
+                        <% if @total_seconds > 0 and @songs > 0 %> &bull; <% end %>
+                        <% if @songs > 0 %><%= @songs %> song<%= 's' unless @songs == 1 %><% end %>
+                    </strong>
 
                     <% if @show.songfishPermalink.present? %>
                         <a href="https://kglw.net/setlists/<%= @show.songfishPermalink %>" target="_blank" class="block text-center link link-primary link-hover">View stats on KGLW.net</a>

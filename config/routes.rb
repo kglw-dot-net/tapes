@@ -11,6 +11,10 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  # Application controller
+
+  get "feed.xml" => "application#feed", defaults: { format: "xml" }
+
   # Pages controller
 
   root "pages#home"
@@ -52,11 +56,24 @@ Rails.application.routes.draw do
 
   # Discography controller
 
-  get "songs" => "discography#index"
-  get "songs/:slug" => "discography#song", as: :song
+  get "songs" => "songs#index"
+  get "songs/:slug" => "songs#song", constraints: lambda { |request|
+    Song.where(slug: request.params[:slug]).exists?
+  }
 
   # Venues controller
 
   get "venues" => "venues#index"
   get "venues/:slug" => "venues#venue"
+
+  # Notables controller
+
+  get "notables/20-minute-jams" => "notables#twenty_minute_jams"
+  get "notables/curated" => "notables#curated"
+
+  # get "notables" => "notables#index"
+  # get "notables/longest-shows" => "notables#longest_shows"
+  # get "notables/shortest-shows" => "notables#shortest_shows"
+  # get "notables/most-songs" => "notables#most_songs"
+  # get "notables/least-songs" => "notables#least_songs"
 end

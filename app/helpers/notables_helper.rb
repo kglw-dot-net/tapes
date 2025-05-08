@@ -1,0 +1,2 @@
+module NotablesHelper
+end

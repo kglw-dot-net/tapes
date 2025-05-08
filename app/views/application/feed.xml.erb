@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+    <generator uri="https://gitlab.com/kglw/gizztapes2" version="2.0.0">Gizz Tapes 2</generator>
+
+    <link href="<%= request.base_url %>/feed.xml" rel="self" type="application/atom+xml"/>
+    <link href="<%= request.base_url %>/" rel="alternate" type="text/html"/>
+
+    <updated><%= Time.now.iso8601 %></updated>
+
+    <id><%= request.base_url %>/feed.xml</id>
+    
+    <title type="html">Gizz Tapes</title>
+
+    <subtitle>
+        Totally unofficial repository of live recordings of King Gizzard and the Lizard Wizard!
+    </subtitle>
+
+    <% @shows.each do |show| %>
+        <% location = [show.venue.name, show.venue.city, show.venue.region, show.venue.country.name].reject {|x| x.blank?}.join(', ') %>
+        <% title = "#{show.date.strftime('%Y-%m-%d')}#{', ' unless show.title.blank?}#{show.title}: #{location}" %>
+
+        <entry>
+            <title type="html">
+                <%= title %>
+            </title>
+
+            <link href="<%= request.base_url %>/<%= show.slug %>/" rel="alternate" type="text/html" title="<%= title %>"/>
+            
+            <published><%= DateTime.parse(show.oldest_upload).iso8601 %></published>
+            <updated><%= DateTime.parse(show.latest_upload).iso8601 %></updated>
+
+            <id><%= request.base_url %>/<%= show.slug %></id>
+            
+            <summary type="html">
+                <%= title %> is now available on Gizz Tapes!
+            </summary>
+
+            <media:thumbnail url="<%= show.poster_url %>"/>
+            <media:content medium="image" url="<%= show.poster_url %>"/>
+        </entry>
+    <% end %>
+</feed>

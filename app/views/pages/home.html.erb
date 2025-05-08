@@ -1,4 +1,7 @@
-<div class="hero bg-fixed bg-center bg-cover bg-no-repeat" style="background-image: url('<%= @hero_photo[:url] %>');background-position: 50% <%= @hero_photo[:vPosition] %>%;">
+<div 
+  class="hero bg-fixed bg-center bg-cover bg-no-repeat" 
+  style="background-image: url('<%= @hero_photo[:url] %>');background-position: 50% <%= @hero_photo[:vPosition] %>%;"
+>
   <div class="hero-overlay bg-opacity-60"></div>
   <div class="hero-content text-neutral-content text-center px-0 py-0">
     <div class="max-w-md">
@@ -46,7 +49,7 @@
         </div>
       </div>
 
-      <small class="mb-0 opacity-90">Photo by <%= @hero_photo[:credit] %></small>
+      <small class="mb-0 opacity-90">Photo by <%=raw @hero_photo[:credit] %></small>
     </div>
   </div>
 </div>
@@ -154,8 +157,8 @@
     <div class="card bg-base-100 shadow-xl mb-5">
       <div class="card-body pb-0 pt-5 px-3">
         <h3 class="card-title mb-2 text-black dark:text-white flex px-2">
-          <span class="grow">Today in Gizztory&mdash;December 26</span>
-          <a href="#" class="text-end text-primary">&raquo; View all</a>
+          <span class="grow">Today in Gizztory&mdash;<%= Date.today.strftime("%B %d") %></span>
+          <a href="<%= Date.today.strftime("/%B/%d").downcase %>" class="text-end text-primary">&raquo; View all</a>
         </h3>
 
         <div class="responsive-grid text-center pb-3">

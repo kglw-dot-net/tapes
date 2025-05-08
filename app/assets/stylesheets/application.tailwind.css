@@ -25,9 +25,17 @@
   }
 
   #mobilePlayerImage {
-    @apply h-full mx-auto portrait:my-8 landscape:mx-8 rounded-xl grow object-contain;
+    @apply portrait:h-full portrait:my-8 portrait:grow portrait:mx-auto
+      landscape:mx-8 landscape:grow-0 landscape:my-8
+      rounded-xl object-contain;
   }
 
+  @media (orientation: landscape) {
+    #mobilePlayerImage {
+      height: calc(100% - 3rem - 1rem - 2rem - 2rem);
+      /* Top bar is 3 rem; top bar margin is 1 rem; own margin is 2rem x2 */
+    }
+  }
   /* Bottom player bar */
 
   #progress-bar progress {

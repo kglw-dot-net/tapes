@@ -31,9 +31,9 @@ class ShowsController < ApplicationController
       .group("tours.id")
       .order("max_show_date DESC")
 
-      @tours.each do |tour|
-        puts "#{tour.name} - #{tour.max_show_date}"
-      end
+      # @tours.each do |tour|
+      #   puts "#{tour.name} - #{tour.max_show_date}"
+      # end
   end
 
   # GET /:slug
@@ -44,13 +44,12 @@ class ShowsController < ApplicationController
       raise ActionController::RoutingError.new("Not Found")
     end
 
-    total_seconds = @show.setlists
+    @total_seconds = @show.setlists
       .joins(:set_songs)
-      .pluck(:duration)
-      .sum
+      .sum(:duration)
 
-    @hours = (total_seconds / 3600).floor
-    @minutes = ((total_seconds % 3600) / 60).floor
+    @hours = (@total_seconds / 3600).floor
+    @minutes = ((@total_seconds % 3600) / 60).floor
 
     @songs = @show.setlists
       .joins(:set_songs)
@@ -80,7 +79,8 @@ class ShowsController < ApplicationController
 
     @month = Date::MONTHNAMES.compact.index { |m| m.casecmp(@month_name) == 0 } + 1
 
-    @days = Show.where(is_active: true)
+    @days = Show
+      .where(is_active: true)
       .where("strftime('%m', date) = ?", "%02d" % @month)
       .select("cast(strftime('%e', date) as int) AS day")
       .distinct
@@ -89,7 +89,10 @@ class ShowsController < ApplicationController
 
     @date = params[:date]
 
-    @shows = Show.where(is_active: true)
+    @shows = Show
+      .includes(venue: :country)
+      .includes(:recordings)
+      .where(is_active: true)
       .where("strftime('%m', date) = ?", "%02d" % @month)
       .where("strftime('%d', date) = ?", "%02d" % @date)
       .order(date: :desc)

@@ -91,8 +91,9 @@ module Tapes
       .where("recordings.is_active = ?", true)
       .distinct
       .find_each do |show|
-      show.is_active = true
-      show.save
+      shows_with_same_slug = Show.where(slug: show.slug).count
+      next if shows_with_same_slug > 1
+      show.update(is_active: true)
     end
   end
 

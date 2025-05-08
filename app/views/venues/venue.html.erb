@@ -1,1 +1,30 @@
-venue
+<% location = [@venue.city, @venue.region, @venue.country.name].compact.join(', ') %>
+
+<div class="container mx-auto mt-8 px-5">
+    <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white">
+        <%= @venue.name %>&mdash;<%= location %>
+    </h2>
+    
+    <h3 class="text-2xl font-bold mb-8 text-center">
+        <%= @shows.length %> show<%= 's' unless @shows.length == 1 %>
+    </h3>
+
+    <div class="flex mb-8">
+        <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
+            <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
+                <li><a href="https://kglw.net/venues/<%= @venue.slug %>">View venue on KGLW.net</a></li>
+                <li><a href="/venues/">Back to index</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card bg-base-100 shadow-xl mb-5">
+        <div class="card-body py-5 px-3">
+            <div class="responsive-grid">
+                <% @shows.each do |show| %>
+                    <%= render "featured_show" , show: show %>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</div>
