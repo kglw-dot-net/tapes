@@ -13,7 +13,7 @@
         <div class="lg:flex lg:gap-x-8">
             <div class="lg:max-w-md">
                 <!-- bg-base-100 -->
-                <div class="p-3 bg-white dark:bg-neutral bg-opacity-25 rounded-xl mb-3 lg:mb-0">
+                <div class="p-3 bg-white dark:bg-neutral bg-opacity-25 dark:bg-opacity-25 rounded-xl mb-3 lg:mb-0">
                     <% if @show.poster_url.present? %>
                         <img 
                             src="<%= @show.poster_url %>" 
@@ -56,7 +56,7 @@
                 </div>
             </div>
 
-            <div class="grow">       
+            <div class="grow">
                 <div class="flex mb-3">
                     <div class="grow content-center">
                         <!-- <div class="label">
@@ -70,6 +70,7 @@
                             <select 
                                 class="select w-full" 
                                 data-action="show#selectRecording"
+                                data-show-target="recording"
                                 <%= @show.recordings.where(is_active: true).count == 1 ? 'disabled' : '' %>
                             >
                                 <% @show.recordings.where(is_active: true).each do |recording| %>
@@ -79,7 +80,7 @@
                         <% end %>
                     </div>
                     <div class="flex items-center pl-6 px-3">
-                        <button class="btn btn-primary btn-circle" title="Play Full Show">
+                        <button class="btn btn-primary btn-circle" data-action="show#playFullShow" title="Play full show">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
                                 <path fill-rule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clip-rule="evenodd" />
                             </svg>                                                 
@@ -97,7 +98,11 @@
                         class="hidden"
                     >
                         <% recording.recording_files.where("name LIKE :ext", ext: "%#{recording.preferred_format}").each_with_index do |file, idx| %>
-                            <a class="track" data-action="playlist#playTrack" data-track-title="<%= (file.title || file.name).gsub('->', '→') %>" href="<%=raw file.url %>">
+                            <a class="track" 
+                                data-action="playlist#playTrack" 
+                                data-track-title="<%= (file.title || file.name).gsub('->', '→') %>" 
+                                data-recording-url="/<%= @show.slug %>#<%= recording.id %>"
+                                href="<%=raw file.url %>">
                                 <small><%= idx + 1 %></small>
                                 <span><%= (file.title || file.name).gsub('->', '→') %></span>
                                 <small><%= Time.at(file.length).strftime("%-M:%S") %></small>

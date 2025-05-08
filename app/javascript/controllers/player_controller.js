@@ -38,7 +38,8 @@ export default class extends Controller {
   }
 
   playPause() {
-    const isPlaying = (this.isPlayingTarget.checked = !this.isPlayingTarget.checked);
+    const isPlaying = !(this.isPlayingTarget.checked = !this.isPlayingTarget.checked)
+
     const currentTrack = this.playlist.tracks[this.currentTrackIdx].howl;
 
     if (currentTrack == null) return;
@@ -48,6 +49,25 @@ export default class extends Controller {
 
     if (!isPlaying && currentTrack.playing())
       currentTrack.pause();
+  }
+
+  nextTrack() {
+    if (this.currentTrackIdx == this.playlist.tracks.length - 1) return;
+
+    this.playTrack(this.currentTrackIdx + 1);
+  }
+
+  previousTrack() {
+    if (this.currentTrackIdx == 0) return;
+
+    this.playTrack(this.currentTrackIdx - 1);
+  }
+
+  goToCurrentTrackRecording() {
+    if (!this.currentTrackIdx) return;
+
+    // window.location.href = this.playlist.tracks[this.currentTrackIdx].recordingUrl;
+    window.Turbo.visit(this.playlist.tracks[this.currentTrackIdx].recordingUrl);
   }
 
   // Internal
@@ -142,15 +162,14 @@ export default class extends Controller {
 
         this.isPlayingTarget.checked = true;
 
-        // TODO: Reimplement this
         // If there is a next track, load it
-        // if (currentTrackIdx != playlist.length - 1) {
-        //   if (playlist[currentTrackIdx + 1].track == null)
-        //     loadTrack(currentTrackIdx + 1, true);
+        if (this.currentTrackIdx != this.playlist.tracks.length - 1) {
+          if (this.playlist.tracks[this.currentTrackIdx + 1].howl == null)
+            this.loadTrack(this.playlist.tracks[this.currentTrackIdx + 1], true);
 
-        //   if (playlist[currentTrackIdx + 1].track.state() == 'unloaded')
-        //     playlist[currentTrackIdx + 1].track.load();
-        // }
+          if (this.playlist.tracks[this.currentTrackIdx + 1].howl.state() == 'unloaded')
+            this.playlist.tracks[this.currentTrackIdx + 1].howl.load();
+        }
 
         this.durationTarget.textContent = this.getFormattedTime(track.duration);
 
@@ -167,7 +186,10 @@ export default class extends Controller {
       },
 
       onend: () => {
-        this.playTrack(this.currentTrackIdx + 1, true);
+        if (this.currentTrackIdx == this.playlist.tracks.length - 1)
+          this.resetAll();
+        else
+          this.playTrack(this.currentTrackIdx + 1, true);
       }
     });
   }

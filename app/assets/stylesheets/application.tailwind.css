@@ -7,8 +7,21 @@
 @layer base {
   /* Global utilities */
 
+  .overflow-x-scroll a.tab {
+    user-drag: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+  }
+
   .responsive-grid {
     @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3;
+  }
+
+  .featured-item {
+    @apply basis-0 grow hover:bg-white/5 transition py-3 px-2 rounded-xl text-center h-fit;
   }
 
   /* Bottom player bar */

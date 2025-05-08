@@ -10,6 +10,7 @@ export default class extends Controller {
             url: window.location.href,
             tracks: [...this.element.querySelectorAll(`[data-action="playlist#playTrack"]`)].map(track => ({
                 url: decodeURIComponent(track.href),
+                recordingUrl: track.dataset.recordingUrl,
                 title: track.dataset.trackTitle
             }))
         };

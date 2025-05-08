@@ -7,7 +7,8 @@
         <%# Desktop only: Previous/Play/Next buttons and timestamp %>
         <div class="hidden lg:flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                class="size-6 mr-3 cursor-pointer">
+                class="size-6 mr-3 cursor-pointer"
+                data-action="click->player#previousTrack">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
             </svg>
 
@@ -27,13 +28,14 @@
             </label>
 
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                class="size-6 cursor-pointer">
+                class="size-6 cursor-pointer"
+                data-action="click->player#nextTrack">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
             </svg>
 
             <small class="mt-2/3 ml-3">
-                <span data-player-target="currentTime">0:51</span> / 
-                <span data-player-target="duration">3:55</span>
+                <span data-player-target="currentTime">0:00</span> / 
+                <span data-player-target="duration">0:00</span>
             </small>
         </div>
 
@@ -42,8 +44,8 @@
             <img data-player-target="thumbnail" class="h-10 mr-3 cursor-pointer" draggable="false" src="#">
 
             <div class="grow mr-3">
-                <small class="font-bold block cursor-pointer" data-player-target="trackTitle"></small>
-                <small class="cursor-pointer" data-player-target="trackSubtitle"></small>
+                <small class="font-bold block cursor-pointer" data-player-target="trackTitle" data-action="click->player#goToCurrentTrackRecording"></small>
+                <small class="cursor-pointer" data-player-target="trackSubtitle" data-action="click->player#goToCurrentTrackRecording"></small>
             </div>
 
             <div class="hidden lg:block">
@@ -62,11 +64,11 @@
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
             </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                 class="size-6 ml-3">
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
-            </svg>
+            </svg> -->
         </div>
 
         <%# Mobile only: Play/Pause button %>

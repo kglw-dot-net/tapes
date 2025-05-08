@@ -1,5 +1,5 @@
 <div class="container mx-auto mt-8 px-5">
-    <div class="flex justify-center mb-8">
+    <div class="flex justify-center mb-8 overflow-x-scroll">
         <div role="tablist" class="tabs tabs-boxed">
             <% @years.each do |year| %>
                 <a href="/<%= year %>" class="tab <%= 'tab-active' if year == @year %>"><%= year %></a>
@@ -7,7 +7,7 @@
         </div>
     </div>
 
-    <h2 class="text-3xl font-bold mb-3 text-center text-white">
+    <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white">
         Year of <%= @year %>
     </h2>
     
@@ -37,7 +37,7 @@
             <div class="card-body pb-4 pt-5 px-3">
                 <h2 class="card-title mb-2 text-black dark:text-white flex px-2" id="<%= tour.name.parameterize %>">
                     <span class="grow"><%= tour.name %> </span>
-                    <span class="text-end opacity-50"><%= tour_shows.length %> show<%= 's' unless tour_shows.length == 1 %></a>
+                    <span class="text-end opacity-50"><%= tour_shows.length %>&nbsp;show<%= 's' unless tour_shows.length == 1 %></a>
                 </h2>
 
                 <div class="responsive-grid">
