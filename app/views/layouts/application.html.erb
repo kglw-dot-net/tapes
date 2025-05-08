@@ -28,7 +28,10 @@
   <body>
     <%= render "application/navbar" %>
 
-    <main data-controller="favourites">
+    <main 
+      data-controller="favourites"
+      data-action="player:toggleFavourite@window->favourites#togglePlayerFavourite"
+    >
       <%= yield %>
     </main>
 

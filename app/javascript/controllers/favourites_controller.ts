@@ -20,13 +20,7 @@ export default class extends Controller {
             this.updateShowFavoriteButton(this.showFavouriteButtonTarget);
     }
 
-    async togglePlayerFavourite(event) {
-        console.log('togglePlayerFavourite');
-
-        const button = event.currentTarget;
-        const playerElement = button.closest('[data-controller="player"]');
-        const slug = playerElement.dataset.slug;
-
+    async togglePlayerFavourite({ detail: { slug } }) {
         const isFavourite = await IsSlugFavourited(slug);
         const listId = await GetFavouritesListId();
 
@@ -35,10 +29,13 @@ export default class extends Controller {
         else
             await db.listShows.add({ listId, slug });
 
-        playerElement.controller.updateFavouriteIcon();
+        const playerElement = document.querySelector('#player') as HTMLElement;
+        const playerController = this.application.getControllerForElementAndIdentifier(playerElement, 'player') as PlayerController;
+        
+        await playerController.updateFavouriteIcon();
 
         if (this.hasShowFavouriteButtonTarget)
-            this.updateShowFavoriteButton(this.showFavouriteButtonTarget);
+            await this.updateShowFavoriteButton(this.showFavouriteButtonTarget);
     }
 
     async toggleShowFavourite(event) {

@@ -142,6 +142,11 @@ export default class PlayerController extends Controller<HTMLElement> {
     Howler.volume(value);
   }
 
+  toggleFavourite() {
+    const slug = this.getCurrentPlaylistSlug();
+    this.dispatch('toggleFavourite', { detail: { slug } });
+   }
+
   // Internal
 
   // Called on initial page load only
