@@ -6,4 +6,4 @@ default:
 
 deploy:
   script:
-    - flyctl deploy
+    - /root/.fly/bin/flyctl deploy
