@@ -84,7 +84,7 @@ module InternetArchive
       recording_file.format = file["format"]
       recording_file.length = getFileLength(file["length"])
       recording_file.original = file["original"]
-      recording_file.title = file["title"]
+      recording_file.title = getTitleForFile(file, response["files"])
       recording_file.track_no = file["track"]
       recording_file.is_private = file["private"]
       recording_file.creator = file["creator"]
@@ -93,6 +93,25 @@ module InternetArchive
 
       recording_file.save
     end
+  end
+
+  def getTitleForFile(file, files)
+    return file["title"] unless file["title"].nil?
+
+    return processPathAsTitle(file["name"]) if file["original"].nil?
+
+    ogFile = files.find { |f| f["name"] == file["original"] }
+
+    if ogFile.nil?
+      puts "\t#{file["name"]} references original file #{file["original"]} but it doesn't exist in the upload data!"
+      return processPathAsTitle(file["name"])
+    end
+
+    ogFile["title"].nil? ? processPathAsTitle(file["name"]) : ogFile["title"]
+  end
+
+  def processPathAsTitle(path)
+    File.basename(path, ".*").split(".")[0]
   end
 
   def getFileLength(x)

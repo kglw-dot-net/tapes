@@ -88,4 +88,8 @@ Rails.application.routes.draw do
   # Favourites controller
 
   get "favourites" => "favourites#index"
+
+  # API
+  get "api/v1/shows.json" => "api#shows"
+  get "api/v1/shows/:slug.json" => "api#show"
 end
