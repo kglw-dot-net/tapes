@@ -19,3 +19,10 @@ Start with `foreman start -f Procfile.dev`
 * `tapes:ia:update` -- fetches latest recordings from the Internet Archive
 * `tapes:songfish:loadOverrides["~/path"]` -- loads overrides from GT1
 * `tapes:songfish:update` -- fetches latest show, setlist, etc. data from a Songfish instance
+
+## Fly.io
+
+* `fly deploy`
+* `fly status`
+* `fly ssh sftp shell`
+* `fly ssh console`

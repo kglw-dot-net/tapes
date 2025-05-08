@@ -1,5 +1,5 @@
 <div class="container mx-auto mt-8 px-5">
-    <div class="flex justify-center mb-16">
+    <div class="flex justify-center mb-8">
         <div role="tablist" class="tabs tabs-boxed">
             <% @years.each do |year| %>
                 <a href="/<%= year %>" class="tab <%= 'tab-active' if year == @year %>"><%= year %></a>
@@ -7,12 +7,18 @@
         </div>
     </div>
 
-    <h2 class="text-3xl font-bold mb-16 text-center">Year of <%= @year %> &mdash; <%= @shows.length %> show<%= 's' unless @shows.length == 1 %></h2>
+    <h2 class="text-3xl font-bold mb-3 text-center text-white">
+        Year of <%= @year %>
+    </h2>
+    
+    <h3 class="text-2xl font-bold mb-8 text-center">
+        <%= @shows.length %> show<%= 's' unless @shows.length == 1 %>
+    </h3>
 
     <!-- <a href="/years">back to index</a> -->
 
     <% if @tours.length > 1 %>
-        <div class="flex mb-16">
+        <div class="flex mb-8">
             <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
                 <label class="text-center block mt-3">Jump to:</label>
                 <ul class="menu menu-vertical lg:menu-horizontal">
@@ -28,8 +34,8 @@
         <% tour_shows = @shows.filter { |show| show.tour_id == tour.id }.sort_by(&:date).reverse %>
 
         <div class="card bg-base-100 shadow-xl mb-5">
-            <div class="card-body pb-0 pt-5">
-                <h2 class="card-title mb-2 text-black dark:text-white flex" id="<%= tour.name.parameterize %>">
+            <div class="card-body pb-4 pt-5 px-3">
+                <h2 class="card-title mb-2 text-black dark:text-white flex px-2" id="<%= tour.name.parameterize %>">
                     <span class="grow"><%= tour.name %> </span>
                     <span class="text-end opacity-50"><%= tour_shows.length %> show<%= 's' unless tour_shows.length == 1 %></a>
                 </h2>
