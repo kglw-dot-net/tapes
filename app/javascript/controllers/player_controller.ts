@@ -11,7 +11,7 @@ export default class PlayerController extends Controller<HTMLElement> {
     "container", "currentTime", "duration", "progress", "trackTitle", "trackSubtitle", "isPlaying", "isPlayingMobile",
     "thumbnail", "mobilePlayer", "mobilePlayerThumbnail", "mobilePlayerBackdrop", "mobilePlayerTrackTitle", 
     "mobilePlayerTrackSubtitle", "mobilePlayerProgress", "mobilePlayerCurrentTime", "mobilePlayerDuration", 
-    "mobilePlayerIsPlaying", "favouriteIcon", "mobilePlayerFavouriteIcon", "volumeControl"
+    "mobilePlayerIsPlaying", "favouriteIcon", "mobilePlayerFavouriteIcon", "volumeControl", "isMuted"
   ];
 
   declare readonly containerTarget: HTMLElement;
@@ -35,6 +35,7 @@ export default class PlayerController extends Controller<HTMLElement> {
   declare readonly favouriteIconTarget: HTMLElement;
   declare readonly mobilePlayerFavouriteIconTarget: HTMLElement;
   declare readonly volumeControlTarget: HTMLInputElement;
+  declare readonly isMutedTarget: HTMLInputElement
 
   mobileBreakpointPx: number;
   iOS: boolean;
@@ -145,7 +146,22 @@ export default class PlayerController extends Controller<HTMLElement> {
   toggleFavourite() {
     const slug = this.getCurrentPlaylistSlug();
     this.dispatch('toggleFavourite', { detail: { slug } });
-   }
+  }
+
+  toggleMuted() {
+    const isMuted = !this.isMutedTarget.checked;
+    this.setIsMuted(isMuted);
+  }
+
+  setIsMuted(isMuted: boolean) {
+    this.isMutedTarget.checked = isMuted;
+    
+    Howler.mute(isMuted);
+
+    this.volumeControlTarget.disabled = isMuted;
+    this.volumeControlTarget.classList.toggle('cursor-not-allowed', isMuted);
+    this.volumeControlTarget.classList.toggle('opacity-50', isMuted);
+  }
 
   // Internal
 
