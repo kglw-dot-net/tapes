@@ -1,51 +1,85 @@
 <div class="container mx-auto mt-8 px-5">
-    <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white">
-        All Songs by Album
-    </h2>
+  <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white">
+    All Songs by Album
+  </h2>
 
-    <h3 class="text-2xl font-bold mb-8 text-center">
-        <%= @songs.count %> song<%= 's' unless @songs.count == 1 %> in total
-    </h3>
+  <h3 class="text-2xl font-bold mb-8 text-center">
+    <%= @songs.count %> song<%= 's' unless @songs.count == 1 %> in total
+  </h3>
 
-    <% albums = @songs.group_by(&:album).sort_by { |album, _| [album&.year || Float::INFINITY, album.nil? ? 1 : 0] }.to_h %>
+  <% albums = @songs.group_by(&:album).sort_by { |album, _| [album&.release_date || Float::INFINITY, album.nil? ? 1 : 0] }.to_h %>
 
-    <div class="flex mb-8">
-        <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
-            <label class="text-center block mt-3">Jump to:</label>
-            <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
-                <% albums.each do |album, songs| %>
-                    <% next if album.nil? %>
-                    <li><a href="#<%= album.title.parameterize %>" class="text-black dark:text-white"><%= album.title %> <span class="badge badge-neutral"><%= songs.count %></span></a></li>
-                <% end %>
-            </ul>
-        </div>
+  <div class="flex mb-8">
+    <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
+
+      <div class="block lg:hidden">
+        <label class="text-center block mt-3" for="album_select">Jump to:</label>
+        <select class="select w-[calc(100%-1.5rem)] ml-3 my-3"
+                id="album_select"
+                data-controller="jump-to-anchor"
+                data-jump-to-anchor-target="source"
+                data-action="jump-to-anchor#jump"
+        >
+          <option selected>Select an album</option>
+          <% albums.each do |album, songs| %>
+            <% next if album.nil? %>
+            <option value="<%= album.title.parameterize %>"><%= album.title %></option>
+          <% end %>
+          <option value="miscellaneous">Miscellaneous</option>
+        </select>
+      </div>
+
+      <div class="hidden lg:block">
+        <label class="text-center block mt-3">Jump to:</label>
+        <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
+          <% albums.each do |album, songs| %>
+            <% next if album.nil? %>
+            <li>
+              <a href="#<%= album.title.parameterize %>" class="text-black dark:text-white">
+                <%= album.title %> <span class="badge badge-neutral"><%= songs.count %></span>
+              </a>
+            </li>
+          <% end %>
+
+          <% misc_songs = @songs.where(album_id: nil) %>
+
+          <li>
+            <a href="#miscellaneous" class="text-black dark:text-white">
+              Miscellaneous <span class="badge badge-neutral"><%= misc_songs.count %></span>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
+  </div>
 
-    <div class="columns-1 lg:columns-2 xl:columns-3">
-        <% albums.each do |album, songs| %>
-            <div class="bg-base-100 shadow-xl rounded-xl px-3 py-5 break-inside-avoid-column mb-4" id="<%= album.nil? ? 'no-album' : album.title.parameterize %>">
-                <% if album.nil? %>
-                    <h4 class="text-xl px-2 text-black dark:text-white mb-3">Non-Album Songs</h4>
-                <% else %>
-                    <div class="flex items-center mb-3 px-2">
-                        <img src="<%= album.cover_art_url.blank? ? asset_path('missing.png') : album.cover_art_url %>" class="h-16 mr-3" />
+  <div class="columns-1 lg:columns-2 xl:columns-3">
+    <% albums.each do |album, songs| %>
+      <div class="bg-base-100 shadow-xl rounded-xl px-3 py-5 break-inside-avoid-column mb-4" id="<%= album.nil? ? 'miscellaneous' : album.title.parameterize %>">
+        <% if album.nil? %>
+          <h4 class="text-xl px-2 text-black dark:text-white mb-3">Miscellaneous</h4>
+        <% else %>
+          <div class="flex items-center mb-3 px-2">
+            <% if album.cover_art_url.present? %>
+              <img src="<%= album.cover_art_url %>" class="h-16 mr-3"/>
+            <% end %>
 
-                        <div class="block">
-                            <h4 class="text-xl text-black dark:text-white"><%= album.title %></h4>
-                            <h5 class="text-xl"><%= album.year %></h5>
-                        </div>
-                    </div>
-                <% end %>
-
-                <% songs.sort_by { |song| album.nil? ? song.name : song.id }.each do |song| %>
-                    <% show_count = @song_show_counts.find { |sc| sc.song_id == song.id }.show_count %>
-
-                    <a href="/songs/<%= song.slug %>" class="flex justify-between items-center rounded px-2 py-1 transition hover:bg-base-200">
-                        <span class="text-black dark:text-white"><%= song.name %></span>
-                        <span class="text-sm"><%= show_count %> show<%= 's' unless show_count == 1 %></span>
-                    </a>
-                <% end %>
+            <div class="block">
+              <h4 class="text-xl text-black dark:text-white"><%= album.title %></h4>
+              <h5 class="text-xl"><%= album.subtitle.blank? ? album.release_date&.strftime("%Y") : album.subtitle %></h5>
             </div>
+          </div>
         <% end %>
-    </div>
+
+        <% songs.sort_by { |song| album.nil? or song.track_number.nil? ? song.name : song.track_number }.each do |song| %>
+          <% show_count = @song_show_counts.find { |sc| sc.song_id == song.id }.show_count %>
+
+          <a href="/songs/<%= song.slug %>" class="flex justify-between items-center rounded px-2 py-1 transition hover:bg-base-200">
+            <span class="text-black dark:text-white"><%= song.name %></span>
+            <span class="text-sm"><%= show_count %> show<%= 's' unless show_count == 1 %></span>
+          </a>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 </div>

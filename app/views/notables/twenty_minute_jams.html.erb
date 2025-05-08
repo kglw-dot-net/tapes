@@ -3,7 +3,7 @@
       20 Minute Jams
   </h2>
 
-  <%= render "notable_links" %>
+  <%= render "notable_links", current: 'twenty_minute_jams' %>
   
   <div class="bg-base-100 rounded-xl shadow-xl py-5 px-2">
     <% @jams.each do |jam| %>

@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_18_183522) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_19_122712) do
   create_table "albums", force: :cascade do |t|
     t.string "title"
-    t.integer "year"
     t.string "cover_art_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "subtitle"
+    t.date "release_date"
   end
 
   create_table "continents", force: :cascade do |t|
@@ -142,6 +143,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_18_183522) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "album_id"
+    t.integer "track_number"
     t.index ["album_id"], name: "index_songs_on_album_id"
   end
 
@@ -149,6 +151,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_18_183522) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "parent_id"
+    t.boolean "is_anon", default: false, null: false
+    t.index ["parent_id"], name: "index_tapers_on_parent_id"
   end
 
   create_table "tours", force: :cascade do |t|
@@ -190,5 +195,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_18_183522) do
   add_foreign_key "shows", "tours"
   add_foreign_key "shows", "venues"
   add_foreign_key "songs", "albums"
+  add_foreign_key "tapers", "tapers", column: "parent_id"
   add_foreign_key "venues", "countries"
 end

@@ -1,212 +1,226 @@
-<div 
-    data-controller="show"
-    class="transition" 
-    data-slug="<%= @show.slug %>"
-    <% if @show.color.present? %>
-        style="background-image: linear-gradient(
-            rgba(<%= @show.color %>, 0.75),
-            transparent 50%,
-            transparent
-        );"
-    <% end %>
->
-    <div class="container max-w-6xl mx-auto pt-4 px-5">
-        <div class="lg:flex lg:gap-x-8">
-            <div class="lg:max-w-md">
-                <div class="p-4 bg-white dark:bg-neutral bg-opacity-25 dark:bg-opacity-25 rounded-xl mb-3 lg:mb-0">
-                    <div class="block sm:flex lg:block items-center">
-                        <% if @show.poster_url.present? %>
-                            <img 
-                                src="<%= @show.poster_url %>" 
-                                class="mb-6 cursor-pointer mx-auto sm:mx-0 max-h-72 md:max-h-96 lg:max-h-none lg:w-full"
-                                onclick="show_poster_modal.showModal()"
-                            />
-                        <% end %>
-                        
-                        <div class="flex flex-col mx-auto">
-                            <h2 class="text-3xl font-bold text-center mb-2">
-                                <a href="/<%= @show.date.strftime("%B/%-d").downcase %>" class="link link-hover link-primary"><%= @show.date.strftime("%-d %B") %></a>, 
-                                <a href="/<%= @show.date.strftime("%Y") %>" class="link link-hover link-primary"><%= @show.date.strftime("%Y") %></a>
-                            </h2>
-                            
-                            <% unless @show.title.blank? %>
-                                <h3 class="text-2xl font-bold text-center text-black dark:text-white mb-2"><%= @show.title %></h3>
-                            <% end %>
-                            
-                            <a href="/<%= @show.date.strftime("%Y") %>#<%= @show.tour.name.parameterize %>" class="block text-center link link-hover link-primary mb-2"><%= @show.tour.name %></a>
-                            <small class="block text-center mb-4"><%= @show.venue.name %> &bull; <%= [ @show.venue.city, @show.venue.region, @show.venue.country&.name ].reject{|s|s.blank?}.join(', ') %></small>
-                        </div>
-                    </div>
-
-                    <button 
-                        class="hidden btn btn-ghost btn-lg block mx-auto mb-4"
-                        data-favourites-target="showFavouriteButton"
-                        data-action="favourites#toggleShowFavourite"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-        stroke="currentColor" class="size-6 favourite-icon inline mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                        </svg>
-
-                        <span class="align-middle"></span>
-                    </button>
-
-                    <% unless @show.notes.blank? %>
-                        <div 
-                            class="px-3 text-black dark:text-white mb-3 line-clamp-5" 
-                            id="show-notes"
-                            data-show-target="showNotes"
-                        >
-                            <%=raw @show.notes.gsub("\n", "<br />") %>
-                        </div>
-
-                        <button 
-                            type="button" 
-                            class="btn btn-ghost btn-sm block mx-auto mb-3" 
-                            data-show-target="showNotesMoreButton" 
-                            data-action="show#toggleNotes"
-                        >
-                            Read more
-                        </button>
-                    <% end %>
-
-                    <% unless @total_seconds == 0 and @songs == 0 %>
-                        <strong class="block text-center mb-2 mt-8">
-                            <% if @total_seconds > 0 %><%= @hours %> hour<%= 's' unless @hours == 1 %>, <%= @minutes %> minute<%= 's' unless @minutes == 1 %><% end %>
-                            <% if @total_seconds > 0 and @songs > 0 %> &bull; <% end %>
-                            <% if @songs > 0 %><%= @songs %> song<%= 's' unless @songs == 1 %><% end %>
-                        </strong>
-                    <% end %>
-
-                    <% if @show.songfishPermalink.present? %>
-                        <a href="https://kglw.net/setlists/<%= @show.songfishPermalink %>" target="_blank" class="block text-center link link-primary link-hover">View stats on KGLW.net</a>
-                    <% end %>
-                </div>
-            </div>
-
-            <div class="grow">
-                <div class="flex mb-3">
-                    <div class="grow content-center">
-                        <% if @show.recordings.where(is_active: true).count == 1 %>
-                            <% recording = @show.recordings.where(is_active: true).first %>
-                            <% color = case recording.recording_type.name
-                                when 'SBD' then 'primary'
-                                when 'AUD' then 'secondary'
-                                when 'MTX' then 'accent'
-                                else 'neutral'
-                            end
-                            %>
-                            <span class="badge badge-<%= color %> mr-2"><%= recording.recording_type.name %><%= ' by ' + (recording.taper&.name || 'unknown') unless recording.recording_type.name == 'SBD' %></span> 
-                            <span class=""><%= recording.id %></span>
-                        <% else %>
-                            <select 
-                                class="select w-full" 
-                                data-action="show#selectRecording"
-                                data-show-target="recording"
-                                <%= @show.recordings.where(is_active: true).count == 1 ? 'disabled' : '' %>
-                            >
-                                <% @show.recordings.where(is_active: true).each do |recording| %>
-                                    <option 
-                                        value="<%= recording.id %>"
-                                        data-taper="<%= recording.taper&.name %>"
-                                        data-type="<%= recording.recording_type.name %>"
-                                    >
-                                        <%= recording.recording_type.name %><%= ' by ' + (recording.taper&.name || 'unknown') unless recording.recording_type.name == 'SBD' %>: <%= recording.id %>
-                                    </option>
-                                <% end %>
-                            </select>
-                        <% end %>
-                    </div>
-                    <div class="flex items-center pl-6 px-3">
-                        <button class="btn btn-primary btn-circle" data-action="show#playFullShow" title="Play full show">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                                <path fill-rule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clip-rule="evenodd" />
-                            </svg>                                                 
-                        </button>
-                    </div>
-                </div>
-                
-                <% @show.recordings.where(is_active: true).each do |recording| %>
-                    <div 
-                        data-controller="playlist" 
-                        data-playlist-id="<%= recording.id %>"
-                        data-playlist-title="<%= @show.date %><%=raw '&mdash;' if @show.title.present? %><%= @show.title %>"
-                        data-playlist-thumbnail="<%= @show.poster_url %>"
-                        class="hidden"
-                    >
-                        <% recording.recording_files.where("name LIKE :ext", ext: "%#{recording.preferred_format}").each_with_index do |file, idx| %>
-                            <a class="track" 
-                                data-action="playlist#playTrack" 
-                                data-track-title="<%= (file.title || file.name).gsub('->', '→') %>" 
-                                data-recording-url="/<%= @show.slug %>#<%= recording.id %>"
-                                href="<%=raw file.url %>">
-                                <small><%= idx + 1 %></small>
-                                <span><%= (file.title || file.name).gsub('->', '→') %></span>
-                                <small><%= Time.at(file.length).strftime("%-M:%S") %></small>
-                            </a>
-                        <% end %>
-
-                        <div class="card bg-white dark:bg-neutral bg-opacity-25 dark:bg-opacity-25 mt-5">
-                            <div class="card-body pb-0 pt-5 px-5">
-                                <h3 class="card-title mb-2 mx-auto text-black dark:text-white">
-                                    <%= recording.is_lma ? 'Live Music Archive' : 'Community Audio' %> Upload Details
-                                </h3>
-
-                                <dl class="columns-1 md:columns-2 my-3">
-                                    <div class="break-inside-avoid-column">
-                                        <dt class="text-xs">Identifier</dt>
-                                        <dd class="text-black dark:text-white mb-3">
-                                            <a target="_blank" class="link link-hover link-primary" href="https://archive.org/details/<%= recording.id %>"><%= recording.id %></a>
-                                        </dd>
-                                    </div>
-
-                                    <% unless recording.taper.nil? %>
-                                        <div class="break-inside-avoid-column">
-                                            <dt class="text-xs">Taper</dt>
-                                            <dd class="text-black dark:text-white mb-3"><%= recording.taper.name %></a></dd>
-                                        </div>
-                                    <% end %>
-
-                                    <%#<dt>Transferer</dt>
+<div
+	data-controller="show"
+	class="transition"
+	data-slug="<%= @show.slug %>"
+	<% if @show.color.present? %>
+	style="background-image: linear-gradient(
+		rgba(<%= @show.color %>, 0.75),
+			transparent 50%,
+			transparent
+		);"
+	<% end %>
+	>
+	<div class="container max-w-6xl mx-auto pt-4 px-5">
+		<div class="lg:flex lg:gap-x-8">
+			<div class="lg:max-w-md">
+				<div class="p-4 bg-white dark:bg-neutral bg-opacity-25 dark:bg-opacity-25 rounded-xl mb-3 lg:mb-0">
+					<div class="block sm:flex lg:block items-center">
+						<% if @show.poster_url.present? %>
+							<img
+								src="<%= @show.poster_url %>"
+								class="mb-6 cursor-pointer mx-auto sm:mx-0 max-h-72 md:max-h-96 lg:max-h-none lg:w-full"
+								/>
+							<!--								onclick="show_poster_modal.showModal()"-->
+						<% end %>
+						
+						<div class="flex flex-col mx-auto">
+							<h2 class="text-3xl font-bold text-center mb-2">
+								<a href="/<%= @show.date.strftime("%B/%-d").downcase %>" class="link link-hover link-primary"><%= @show.date.strftime("%-d %B") %></a>,
+								<a href="/<%= @show.date.strftime("%Y") %>" class="link link-hover link-primary"><%= @show.date.strftime("%Y") %></a>
+							</h2>
+							
+							<% unless @show.title.blank? %>
+								<h3 class="text-2xl font-bold text-center text-black dark:text-white mb-2"><%= @show.title %></h3>
+							<% end %>
+							
+							<a href="/<%= @show.date.strftime("%Y") %>#<%= @show.tour.name.parameterize %>" class="block text-center link link-hover link-primary mb-2"><%= @show.tour.name %></a>
+							<small class="block text-center mb-4"><%= @show.venue.name %> &bull; <%= [@show.venue.city, @show.venue.region, @show.venue.country&.name].reject { |s| s.blank? }.join(', ') %></small>
+						</div>
+					</div>
+					
+					<button
+						class="hidden btn btn-ghost btn-lg block mx-auto mb-4"
+						data-favourites-target="showFavouriteButton"
+						data-action="favourites#toggleShowFavourite"
+					>
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+								 stroke="currentColor" class="size-6 favourite-icon inline mr-2">
+							<path stroke-linecap="round" stroke-linejoin="round"
+										d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/>
+						</svg>
+						
+						<span class="align-middle"></span>
+					</button>
+					
+					<% unless @show.notes.blank? %>
+						<div
+							class="px-3 text-black dark:text-white mb-3 line-clamp-5"
+							id="show-notes"
+							data-show-target="showNotes"
+						>
+							<%= raw @show.notes.gsub("\n", "<br />") %>
+						</div>
+						
+						<button
+							type="button"
+							class="btn btn-ghost btn-sm block mx-auto mb-3"
+							data-show-target="showNotesMoreButton"
+							data-action="show#toggleNotes"
+						>
+							Read more
+						</button>
+					<% end %>
+					
+					<% unless @total_seconds == 0 and @songs == 0 %>
+						<strong class="block text-center mb-2 mt-8">
+							<% if @total_seconds > 0 %><%= @hours %> hour<%= 's' unless @hours == 1 %>, <%= @minutes %>
+								minute<%= 's' unless @minutes == 1 %>
+							<% end %>
+							<% if @total_seconds > 0 and @songs > 0 %> &bull;
+							<% end %>
+							<% if @songs > 0 %><%= @songs %> song<%= 's' unless @songs == 1 %>
+							<% end %>
+						</strong>
+					<% end %>
+					
+					<% if @show.songfishPermalink.present? %>
+						<a href="https://kglw.net/setlists/<%= @show.songfishPermalink %>" target="_blank" class="block text-center link link-primary link-hover">View
+							stats on KGLW.net</a>
+					<% end %>
+				</div>
+			</div>
+			
+			<div class="grow">
+				<div class="flex mb-3">
+					<div class="grow content-center">
+						<% if @show.recordings.where(is_active: true).count == 1 %>
+							<% recording = @show.recordings.where(is_active: true).first %>
+							<% taper = recording.taper&.parent_id.nil? ? recording.taper : recording.taper.parent %>
+							<% taper = nil if taper.is_anon? %>
+							
+							<% color = case recording.recording_type.name
+												 when 'SBD' then 'primary'
+												 when 'AUD' then 'secondary'
+												 when 'MTX' then 'accent'
+												 else 'neutral'
+												 end
+							%>
+							<span class="badge badge-<%= color %> mr-2"><%= recording.recording_type.name %><%= ' by ' + (taper&.name || 'unknown') unless recording.recording_type.name == 'SBD' %></span>
+							<span class=""><%= recording.id %></span>
+						<% else %>
+							<select
+								class="select w-full"
+								data-action="show#selectRecording"
+								data-show-target="recording"
+								<%= @show.recordings.where(is_active: true).count == 1 ? 'disabled' : '' %>
+							>
+								<% @show.recordings.where(is_active: true).each do |recording| %>
+									<% taper = recording.taper&.parent_id.nil? ? recording.taper : recording.taper.parent %>
+									<% taper = nil if taper.is_anon? %>
+									<option
+										value="<%= recording.id %>"
+										data-taper="<%= taper&.name %>"
+										data-type="<%= recording.recording_type.name %>"
+									>
+										<%= recording.recording_type.name %><%= ' by ' + (taper&.name || 'unknown') unless recording.recording_type.name == 'SBD' %>
+										: <%= recording.id %>
+									</option>
+								<% end %>
+							</select>
+						<% end %>
+					</div>
+					<div class="flex items-center pl-6 px-3">
+						<button class="btn btn-primary btn-circle" data-action="show#playFullShow" title="Play full show">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+								<path fill-rule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clip-rule="evenodd"/>
+							</svg>
+						</button>
+					</div>
+				</div>
+				
+				<% @show.recordings.where(is_active: true).each do |recording| %>
+					<% taper = recording.taper&.parent_id.nil? ? recording.taper : recording.taper.parent %>
+					<% taper = nil if taper.is_anon? %>
+					
+					<div
+						data-controller="playlist"
+						data-playlist-id="<%= recording.id %>"
+						data-playlist-title="<%= @show.date %><%= raw '&mdash;' if @show.title.present? %><%= @show.title %>"
+						data-playlist-thumbnail="<%= @show.poster_url %>"
+						class="hidden"
+					>
+						<% recording.recording_files.where("name LIKE :ext", ext: "%#{recording.preferred_format}").each_with_index do |file, idx| %>
+							<a class="track"
+								 data-action="playlist#playTrack"
+								 data-track-title="<%= (file.title || file.name).gsub('->', '→') %>"
+								 data-recording-url="/<%= @show.slug %>#<%= recording.id %>"
+								 href="<%= raw file.url %>">
+								<small><%= idx + 1 %></small>
+								<span><%= (file.title || file.name).gsub('->', '→') %></span>
+								<small><%= Time.at(file.length).strftime("%-M:%S") %></small>
+							</a>
+						<% end %>
+						
+						<div class="card bg-white dark:bg-neutral bg-opacity-25 dark:bg-opacity-25 mt-5">
+							<div class="card-body pb-0 pt-5 px-5">
+								<h3 class="card-title mb-2 mx-auto text-black dark:text-white">
+									<%= recording.is_lma ? 'Live Music Archive' : 'Community Audio' %> Upload Details
+								</h3>
+								
+								<dl class="columns-1 md:columns-2 my-3">
+									<div class="break-inside-avoid-column">
+										<dt class="text-xs">Identifier</dt>
+										<dd class="text-black dark:text-white mb-3">
+											<a target="_blank" class="link link-hover link-primary" href="https://archive.org/details/<%= recording.id %>"><%= recording.id %></a>
+										</dd>
+									</div>
+									
+									<% unless taper.nil? %>
+										<div class="break-inside-avoid-column">
+											<dt class="text-xs">Taper</dt>
+											<dd class="text-black dark:text-white mb-3"><%= taper.name %></a></dd>
+										</div>
+									<% end %>
+									
+									<%#<dt>Transferer</dt>
                                     <dd> recording.transferer </dd>%>
-        
-                                    <% unless recording.source.blank? %>
-                                        <div class="break-inside-avoid-column">
-                                            <dt class="text-xs">Source</dt>
-                                            <dd class="text-black dark:text-white mb-3"><%= recording.source %></dd>
-                                        </div>
-                                    <% end %>
-        
-                                    <% unless recording.lineage.blank? %>
-                                        <div class="break-inside-avoid-column">
-                                            <dt class="text-xs">Lineage</dt>
-                                            <dd class="text-black dark:text-white mb-3"><%= recording.lineage %></dd>
-                                        </div>
-                                    <% end %>
-        
-                                    <div class="break-inside-avoid-column">
-                                        <dt class="text-xs">Upload Date</dt>
-                                        <dd class="text-black dark:text-white mb-3"><%= recording.uploaded_at.strftime("%Y-%m-%d") %></dd>
-                                    </div>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                <% end %>
-            </div>
-        </div>
-    </div>
+									
+									<% unless recording.source.blank? %>
+										<div class="break-inside-avoid-column">
+											<dt class="text-xs">Source</dt>
+											<dd class="text-black dark:text-white mb-3"><%= recording.source %></dd>
+										</div>
+									<% end %>
+									
+									<% unless recording.lineage.blank? %>
+										<div class="break-inside-avoid-column">
+											<dt class="text-xs">Lineage</dt>
+											<dd class="text-black dark:text-white mb-3"><%= recording.lineage %></dd>
+										</div>
+									<% end %>
+									
+									<div class="break-inside-avoid-column">
+										<dt class="text-xs">Upload Date</dt>
+										<dd class="text-black dark:text-white mb-3"><%= recording.uploaded_at.strftime("%Y-%m-%d") %></dd>
+									</div>
+								</dl>
+							</div>
+						</div>
+					</div>
+				<% end %>
+			</div>
+		</div>
+	</div>
 </div>
 
 <dialog id="show_poster_modal" class="modal">
-    <div class="modal-box p-3 h-full w-full"> 
-        <form method="dialog">
-          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-        </form>
-        <img src="<%= @show.poster_url %>" class="h-full cursor-pointer" onclick="show_poster_modal.showModal()" />
-    </div>
-    <form method="dialog" class="modal-backdrop">
-      <button>close</button>
-    </form>
-  </dialog>
+	<div class="modal-box p-3 h-full w-full">
+		<form method="dialog">
+			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+		</form>
+		<img src="<%= @show.poster_url %>" class="h-full cursor-pointer" onclick="show_poster_modal.showModal()"/>
+	</div>
+	<form method="dialog" class="modal-backdrop">
+		<button>close</button>
+	</form>
+</dialog>

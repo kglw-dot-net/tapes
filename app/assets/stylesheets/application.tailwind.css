@@ -25,7 +25,8 @@
   }
 
   #mobilePlayerImage {
-    @apply portrait:h-full portrait:my-8 portrait:grow portrait:mx-auto
+    /* portrait:h-full */
+    @apply portrait:h-0 portrait:my-8 portrait:grow portrait:mx-auto
       landscape:mx-8 landscape:grow-0 landscape:my-8
       rounded-xl object-contain;
   }
@@ -116,5 +117,17 @@
   footer > :not(:first-child)::before {
     content: "•";
     margin-right: .75rem;
+  }
+
+  /* Hero */
+
+  .hero .link-primary {
+    color: oklch(65.69% 0.196 275.75);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .hero .link-primary {
+      color: var(--fallback-p, oklch(var(--p)));
+    }
   }
 }

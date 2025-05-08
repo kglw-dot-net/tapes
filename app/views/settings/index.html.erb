@@ -1,95 +1,95 @@
 <% content_for :head do %>
-<meta name="turbo-cache-control" content="no-cache">
+	<meta name="turbo-cache-control" content="no-cache">
 <% end %>
 
 <div class="container mx-auto mt-8 px-5">
-    <h2 class="text-3xl font-bold mb-8 text-center text-black dark:text-white">
-        Settings
-    </h2>
-
-    <div class="card bg-base-100 shadow-xl mb-5">
-        <div class="card-body pb-0 pt-5 px-3">
-            <form busy data-controller="settings">
-                <%#<select class="select select-bordered w-full max-w-xs" data-action="settings#changeTheme" data-settings-target="theme">
+	<h2 class="text-3xl font-bold mb-8 text-center text-black dark:text-white">
+		Settings
+	</h2>
+	
+	<div class="card bg-base-100 shadow-xl mb-5">
+		<div class="card-body pb-0 pt-5 px-3">
+			<form busy data-controller="settings">
+				<%#<select class="select select-bordered w-full max-w-xs" data-action="settings#changeTheme" data-settings-target="theme">
                     <option selected value="auto">Default</option>
                     <option value="light">Light</option>
                     <option value="dark">Dark</option>
                     <option value="black">Black</option>
                   </select>%>
-
-                <fieldset class="mb-3">
-                    <legend class="font-bold mb-3">Preferred recording type</legend>
-
-                    <label class="label cursor-pointer max-w-sm mx-auto">
-                        <span class="label-text">No preference</span>
-                        <input type="checkbox" class="toggle checked:toggle-primary" checked="checked" data-settings-target="isRankedRecordingTypes" data-action="settings#toggleRecordingTypesRanking" />
-                        <span class="label-text transition">Rank preferred types</span>
-                    </label>
-
-                    <div 
-                        data-settings-target="rankedRecordingTypes" 
-                        class="hidden opacity-0 transition-opacity rounded-xl shadow-xl bg-base-200 m-3 p-3 max-w-lg mx-auto">
-                        <% @recording_types.each do |rec_type| %>
-                            <a
-                                href="#" 
-                                class="block w-full p-3 draggable transition hover:bg-base-300 rounded-xl [&:not(:last-child)]:mb-3" 
-                                data-id="<%= rec_type.name %>"
-                            >
-                                <span class="mr-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 inline">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5" />
-                                    </svg>
-                                </span>
-                                <span class="text-black dark:text-white"><%= rec_type.name %></span>
-                            </a>
-                        <% end %>
-                    </div>
-                </fieldset>
-
-                <fieldset class="mb-3">
-                    <legend class="font-bold mb-3">Favourite tapers</legend>
-
-                    <div class="columns-1 lg:columns-2 xl:columns-3 gap-32" data-settings-target="favouriteTapers">
-                        <% @tapers.each do |taper| %>
-                            <div>
-                                <input 
-                                    type="checkbox" 
-                                    class="hidden" 
-                                    id="pref-taper-fav-<%= taper.name.parameterize %>"
-                                    value="<%= taper.name %>" 
-                                    data-action="settings#toggleFavouriteTaper"
-                                />
-
-                                <label 
-                                    for="pref-taper-fav-<%= taper.name.parameterize %>" 
-                                    class="cursor-pointer flex items-center justify-between transition rounded-xl hover:bg-base-200 p-3"
-                                >
-                                    <span>
-                                        <span class="block text-black dark:text-white"><%= taper.name %></span>
-                                        <small class="block"><%= taper.recording_count %> uploads</small>
-                                    </span>
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" class="size-6 favourite-icon ml-3 inline float-end">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
-                                    </svg>
-                                </label>
-                            </div>
-                        <% end %>
-                    </div>
-                </fieldset>
-            </form>
-
-            <div
-                class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-gray-100 bg-opacity-25 dark:bg-gray-900 dark:bg-opacity-25 opacity-0 [[busy]~&]:opacity-100 backdrop-blur transition-opacity"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="size-6 animate-spin">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-                </svg>
-            </div>
-        </div>
-    </div>
+				
+				<fieldset class="mb-3">
+					<legend class="font-bold mb-3">Preferred recording type</legend>
+					
+					<label class="label cursor-pointer max-w-sm mx-auto">
+						<span class="label-text">No preference</span>
+						<input type="checkbox" class="toggle checked:toggle-primary" checked="checked" data-settings-target="isRankedRecordingTypes" data-action="settings#toggleRecordingTypesRanking"/>
+						<span class="label-text transition">Rank preferred types</span>
+					</label>
+					
+					<div
+						data-settings-target="rankedRecordingTypes"
+						class="hidden opacity-0 transition-opacity rounded-xl shadow-xl bg-base-200 m-3 p-3 max-w-lg mx-auto">
+						<% @recording_types.each do |rec_type| %>
+							<a
+								href="#"
+								class="block w-full p-3 draggable transition hover:bg-base-300 rounded-xl [&:not(:last-child)]:mb-3"
+								data-id="<%= rec_type.name %>"
+							>
+                <span class="mr-3">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 inline">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9h16.5m-16.5 6.75h16.5"/>
+									</svg>
+                </span>
+								<span class="text-black dark:text-white"><%= rec_type.name %></span>
+							</a>
+						<% end %>
+					</div>
+				</fieldset>
+				
+				<fieldset class="mb-3">
+					<legend class="font-bold mb-3">Favourite tapers</legend>
+					
+					<div class="columns-1 lg:columns-2 xl:columns-3 gap-32" data-settings-target="favouriteTapers">
+						<% @tapers.each do |taper| %>
+							<div>
+								<input
+									type="checkbox"
+									class="hidden"
+									id="pref-taper-fav-<%= taper.name.parameterize %>"
+									value="<%= taper.name %>"
+									data-action="settings#toggleFavouriteTaper"
+									/>
+								
+								<label
+									for="pref-taper-fav-<%= taper.name.parameterize %>"
+									class="cursor-pointer flex items-center justify-between transition rounded-xl hover:bg-base-200 p-3"
+								>
+									<span>
+										<span class="block text-black dark:text-white"><%= taper.name %></span>
+										<small class="block"><%= taper.recording_count %> uploads</small>
+									</span>
+									
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5"
+											 stroke="currentColor" class="size-6 favourite-icon ml-3 inline float-end">
+										<path stroke-linecap="round" stroke-linejoin="round"
+													d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/>
+									</svg>
+								</label>
+							</div>
+						<% end %>
+					</div>
+				</fieldset>
+			</form>
+			
+			<div
+				class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-gray-100 bg-opacity-25 dark:bg-gray-900 dark:bg-opacity-25 opacity-0 [[busy]~&]:opacity-100 backdrop-blur transition-opacity"
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+						 stroke="currentColor" class="size-6 animate-spin">
+					<path stroke-linecap="round" stroke-linejoin="round"
+								d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/>
+				</svg>
+			</div>
+		</div>
+	</div>
 </div>

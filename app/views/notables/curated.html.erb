@@ -3,7 +3,7 @@
         KGLW.net Curated Notable Tracks
     </h2>
     
-    <%= render "notable_links" %>
+    <%= render "notable_links", current: 'curated' %>
     
     <div class="bg-base-100 rounded-xl shadow-xl py-5 px-2">
         <% @songs.each do |song| %>

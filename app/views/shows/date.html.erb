@@ -3,7 +3,7 @@
         <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
             <ul class="menu menu-horizontal justify-center">
                 <% @months.each_with_index do |month, idx| %>
-                    <li><a href="/<%= month.downcase %>" class="<%= 'bg-primary hover:bg-primary text-black' if idx + 1 == @month %>"><%= month %></a></li>
+                    <li><a href="/<%= month.downcase %>" class="<%= 'bg-primary hover:bg-primary text-white dark:text-black' if idx + 1 == @month %>"><%= month %></a></li>
                 <% end %>
             </ul>
         </div>
@@ -13,7 +13,7 @@
         <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
             <ul class="menu menu-horizontal justify-center">
                 <% @days.each do |day| %>
-                    <li><a href="/<%= @month_name.downcase %>/<%= day %>" class="<%= 'bg-primary hover:bg-primary text-black' if day == @date.to_i %>"><%= day.ordinalize %></a></li>
+                    <li><a href="/<%= @month_name.downcase %>/<%= day %>" class="<%= 'bg-primary hover:bg-primary text-white dark:text-black' if day == @date.to_i %>"><%= day.ordinalize %></a></li>
                 <% end %>
             </ul>
         </div>

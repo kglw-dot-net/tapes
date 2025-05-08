@@ -1,8 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import { IsSlugFavourited } from "../db"
 import { Howl, Howler } from 'howler'
-import { Playlist } from "../interfaces"
-import { parse } from "path";
+import {Playlist, Track} from "../interfaces"
 
 Howler.autoSuspend = false;
 
@@ -46,7 +45,6 @@ export default class PlayerController extends Controller<HTMLElement> {
   interval: number | null; // Used to update timestamp and progress bar
 
   // Events
-
   showMobilePlayerUIIfMobile() {
     // If screen width is wider than mobileBreakpointPx, don't show mobile player UI
     if (window.innerWidth > this.mobileBreakpointPx) return;
@@ -185,9 +183,7 @@ export default class PlayerController extends Controller<HTMLElement> {
     this.setVolume(1.0);
 
     navigator.mediaSession.setActionHandler("play", this.playPause.bind(this));
-  
     navigator.mediaSession.setActionHandler("pause", this.playPause.bind(this));
-  
     navigator.mediaSession.setActionHandler("stop", this.resetAll.bind(this));
   
     // navigator.mediaSession.setActionHandler("seekbackward", () => {});
@@ -281,18 +277,18 @@ export default class PlayerController extends Controller<HTMLElement> {
     }
   }
 
-  setIsPlayingDisplay(isPlaying) {
+  setIsPlayingDisplay(isPlaying: boolean) {
     this.isPlayingTarget.checked = isPlaying;
     this.isPlayingMobileTarget.checked = isPlaying;
     this.mobilePlayerIsPlayingTarget.checked = isPlaying
   }
 
-  setCurrentTime(time) {
+  setCurrentTime(time: string) {
     this.currentTimeTarget.textContent = time;
     this.mobilePlayerCurrentTimeTarget.textContent = time;
   }
 
-  setDuration(time) {
+  setDuration(time: string) {
     this.durationTarget.textContent = time;
     this.mobilePlayerDurationTarget.textContent = time;
   }
@@ -314,12 +310,12 @@ export default class PlayerController extends Controller<HTMLElement> {
     }
   }
 
-  setTrackTitle(title) {
+  setTrackTitle(title: string) {
     this.trackTitleTarget.textContent = title;
     this.mobilePlayerTrackTitleTarget.textContent = title;
   }
 
-  setTrackSubtitle(subtitle) {
+  setTrackSubtitle(subtitle: string) {
     this.trackSubtitleTarget.textContent = subtitle;
     this.mobilePlayerTrackSubtitleTarget.textContent = subtitle;
   }
@@ -351,13 +347,13 @@ export default class PlayerController extends Controller<HTMLElement> {
   	  navigator.mediaSession.metadata = null;
   }
 
-  setImageUrl(url) {
+  setImageUrl(url: string) {
     this.thumbnailTarget.src = url;
     this.mobilePlayerThumbnailTarget.src = url;
     this.mobilePlayerBackdropTarget.src = url;//.style.backgroundImage = `url(${url})`;
   }
 
-  getFormattedTime(seconds) {
+  getFormattedTime(seconds: number) {
     return `${Math.floor(seconds / 60)}:${seconds % 60 < 10 ? '0' : ''}${Math.floor(seconds % 60)}`;
   }
 
@@ -390,11 +386,11 @@ export default class PlayerController extends Controller<HTMLElement> {
       });
   }
 
-  loadTrack(track, isSubsequentPlay) {
+  loadTrack(track: Track, isSubsequentPlay: boolean) {
     track.howl = new Howl({
       src: [track.url],
       preload: true,
-      html5: !(this.iOS && isSubsequentPlay),
+      html5: !isSubsequentPlay,
 
       onload: () => {
         track.duration = track.howl.duration();
@@ -433,7 +429,7 @@ export default class PlayerController extends Controller<HTMLElement> {
     });
   }
 
-  playTrack(index, isSubsequentPlay = false) {
+  playTrack(index: number, isSubsequentPlay = false) {
     this.playlist.tracks.forEach(track => {
       if (track.howl) {
         track.howl.stop();
@@ -461,7 +457,7 @@ export default class PlayerController extends Controller<HTMLElement> {
     this.setTrackActive(currentTrack);
   }
 
-  setTrackActive(track) {
+  setTrackActive(track: Track) {
     this.setTrackTitle(track.title);
 
     document.querySelectorAll('.track.active').forEach(trackElement => {
