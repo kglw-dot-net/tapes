@@ -33,6 +33,14 @@ module Tapes
     puts "Setting default recording formats..."
     Recording.where(preferred_format: [ nil, "" ])
       .where(is_active: nil)
+      .joins(:recording_files)
+      .where("LOWER(recording_files.name) LIKE ?", "%.mp3")
+      .or(
+        Recording.where(preferred_format: [ nil, "" ])
+          .where(is_active: nil)
+          .joins(:recording_files)
+          .where("LOWER(recording_files.name) LIKE ?", "%.m4a")
+      )
       .find_each do |recording|
       if RecordingFile.any? { |f| f.recording_id == recording.id and f.name.downcase.end_with? "mp3" }
         puts "\tSetting default recording format for recording #{recording.id} to MP3..."
