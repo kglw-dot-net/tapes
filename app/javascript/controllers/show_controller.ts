@@ -1,14 +1,47 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ['recording']
+    static targets = ['recording', 'showNotes', 'showNotesMoreButton']
+
+    declare readonly recordingTarget: HTMLSelectElement;
+    declare readonly hasRecordingTarget: boolean;
+
+    declare readonly showNotesTarget: HTMLElement;
+    declare readonly hasShowNotesTarget: boolean;
+
+    declare readonly showNotesMoreButtonTarget: HTMLElement;
 
     connect() {
         if (this.hasRecordingTarget)
             this.recordingTarget.value = this.selectRecordingFromPreferences();
 
         // TODO: If currently playing, show the currently playing recording + set current track active
-        this.showRecording(this.hasRecordingTarget ? this.recordingTarget.value : this.element.querySelector('[data-controller="playlist"]').dataset.playlistId);
+        this.showRecording(
+            this.hasRecordingTarget 
+                ? this.recordingTarget.value 
+                : (this.element.querySelector('[data-controller="playlist"]') as HTMLElement).dataset.playlistId
+        );
+
+        if (this.hasShowNotesTarget) {
+            const showNotesOffsetHeight = this.showNotesTarget.offsetHeight;
+            const showNotesScrollHeight = this.showNotesTarget.scrollHeight;
+
+            const isTruncated = showNotesOffsetHeight < showNotesScrollHeight;
+
+            if (isTruncated)
+                this.showNotesMoreButtonTarget.classList.remove('hidden');
+            else
+                this.showNotesMoreButtonTarget.classList.add('hidden');
+        }
+    }
+
+    toggleNotes() {
+        this.showNotesTarget.classList.toggle('line-clamp-5');
+        
+        if (this.showNotesTarget.classList.contains('line-clamp-5'))
+            this.showNotesMoreButtonTarget.innerText = 'Read more';
+        else
+            this.showNotesMoreButtonTarget.innerText = 'Read less';
     }
 
     selectRecordingFromPreferences() {
@@ -42,11 +75,11 @@ export default class extends Controller {
     playFullShow() {
         if (this.hasRecordingTarget) {
             const recordingId = this.recordingTarget.value;
-            this.element.querySelector(`[data-controller="playlist"][data-playlist-id="${recordingId}"] .track`).click();
+            (this.element.querySelector(`[data-controller="playlist"][data-playlist-id="${recordingId}"] .track`) as HTMLElement).click();
             return;
         }
 
-        this.element.querySelector(`[data-controller="playlist"] .track`).click();
+        (this.element.querySelector(`[data-controller="playlist"] .track`) as HTMLElement).click();
     }
 
     showRecording(recordingId) {

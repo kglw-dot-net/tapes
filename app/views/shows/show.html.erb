@@ -42,7 +42,7 @@
                     <button 
                         class="hidden btn btn-ghost btn-lg block mx-auto mb-4"
                         data-favourites-target="showFavouriteButton"
-                        data-action="favourites#toggleFavourite"
+                        data-action="favourites#toggleShowFavourite"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
         stroke="currentColor" class="size-6 favourite-icon inline mr-2">
@@ -65,16 +65,31 @@
                     </dl> -->
 
                     <% unless @show.notes.blank? %>
-                    <div class="px-3 text-black dark:text-white mb-6" id="show-notes">
-                        <%=raw @show.notes.gsub("\n", "<br />") %>
-                    </div>
+                        <div 
+                            class="px-3 text-black dark:text-white mb-3 line-clamp-5" 
+                            id="show-notes"
+                            data-show-target="showNotes"
+                        >
+                            <%=raw @show.notes.gsub("\n", "<br />") %>
+                        </div>
+
+                        <button 
+                            type="button" 
+                            class="btn btn-ghost btn-sm block mx-auto mb-3" 
+                            data-show-target="showNotesMoreButton" 
+                            data-action="show#toggleNotes"
+                        >
+                            Read more
+                        </button>
                     <% end %>
 
-                    <strong class="block text-center mb-2">
-                        <% if @total_seconds > 0 %><%= @hours %> hour<%= 's' unless @hours == 1 %>, <%= @minutes %> minute<%= 's' unless @minutes == 1 %><% end %>
-                        <% if @total_seconds > 0 and @songs > 0 %> &bull; <% end %>
-                        <% if @songs > 0 %><%= @songs %> song<%= 's' unless @songs == 1 %><% end %>
-                    </strong>
+                    <% unless @total_seconds == 0 and @songs == 0 %>
+                        <strong class="block text-center mb-2 mt-8">
+                            <% if @total_seconds > 0 %><%= @hours %> hour<%= 's' unless @hours == 1 %>, <%= @minutes %> minute<%= 's' unless @minutes == 1 %><% end %>
+                            <% if @total_seconds > 0 and @songs > 0 %> &bull; <% end %>
+                            <% if @songs > 0 %><%= @songs %> song<%= 's' unless @songs == 1 %><% end %>
+                        </strong>
+                    <% end %>
 
                     <% if @show.songfishPermalink.present? %>
                         <a href="https://kglw.net/setlists/<%= @show.songfishPermalink %>" target="_blank" class="block text-center link link-primary link-hover">View stats on KGLW.net</a>

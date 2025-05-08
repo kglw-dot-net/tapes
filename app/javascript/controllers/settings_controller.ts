@@ -2,8 +2,12 @@ import { Controller } from "@hotwired/stimulus"
 import Sortable from 'sortablejs';
 
 export default class extends Controller {
-    // static targets = ['theme']
-    static targets = ['rankedRecordingTypes', 'isRankedRecordingTypes', 'favouriteTapers']
+    static targets = ['rankedRecordingTypes', 'isRankedRecordingTypes', 'favouriteTapers', 'theme']
+
+    declare readonly rankedRecordingTypesTarget: HTMLElement;
+    declare readonly isRankedRecordingTypesTarget: HTMLInputElement;
+    declare readonly favouriteTapersTarget: HTMLElement;
+    declare readonly themeTarget: HTMLSelectElement;
 
     initialize() {
         // In case Turbo ignores the cache ignoring setting, which it is wont to do
@@ -68,20 +72,21 @@ export default class extends Controller {
     }
 
     toggleFavouriteTaper() {
-        const favouriteTapers = [...this.favouriteTapersTarget.querySelectorAll('input:checked')].map((input) => input.value);
+        const favouriteTapers = [...this.favouriteTapersTarget.querySelectorAll('input:checked')].map((input: HTMLInputElement) => input.value);
+        
 
         this.saveSettings({ favouriteTapers });
     }
 
-    changeTheme() {
-        const theme = this.themeTarget.value;
+    // changeTheme() {
+    //     const theme = this.themeTarget.value;
 
-        this.saveSettings({ theme });
+    //     this.saveSettings({ theme });
 
-        // Call setTheme on the body controller
-        const bodyController = this.application.getControllerForElementAndIdentifier(document.querySelector('body'), 'body');
-        bodyController.setTheme(theme);
-    }
+    //     // Call setTheme on the body controller
+    //     const bodyController = this.application.getControllerForElementAndIdentifier(document.querySelector('body'), 'body');
+    //     bodyController.setTheme(theme);
+    // }
 
     saveSettings(newSettings) { 
         let existingSettings = this.loadSettings();

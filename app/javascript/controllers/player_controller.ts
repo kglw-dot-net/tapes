@@ -1,15 +1,46 @@
 import { Controller } from "@hotwired/stimulus"
+import { IsSlugFavourited } from "../db"
 import { Howl, Howler } from 'howler'
+import { Playlist } from "../interfaces"
 
 Howler.autoSuspend = false;
 
-export default class extends Controller {
+export default class PlayerController extends Controller<HTMLElement> {
   static targets = [
     "container", "currentTime", "duration", "progress", "trackTitle", "trackSubtitle", "isPlaying", "isPlayingMobile",
     "thumbnail", "mobilePlayer", "mobilePlayerThumbnail", "mobilePlayerBackdrop", "mobilePlayerTrackTitle", 
     "mobilePlayerTrackSubtitle", "mobilePlayerProgress", "mobilePlayerCurrentTime", "mobilePlayerDuration", 
-    "mobilePlayerIsPlaying"
+    "mobilePlayerIsPlaying", "favouriteIcon", "mobilePlayerFavouriteIcon"
   ];
+
+  declare readonly containerTarget: HTMLElement;
+  declare readonly currentTimeTarget: HTMLElement;
+  declare readonly durationTarget: HTMLElement;
+  declare readonly progressTarget: HTMLProgressElement;
+  declare readonly trackTitleTarget: HTMLElement;
+  declare readonly trackSubtitleTarget: HTMLElement;
+  declare readonly isPlayingTarget: HTMLInputElement;
+  declare readonly isPlayingMobileTarget: HTMLInputElement;
+  declare readonly thumbnailTarget: HTMLImageElement;
+  declare readonly mobilePlayerTarget: HTMLElement;
+  declare readonly mobilePlayerThumbnailTarget: HTMLImageElement;
+  declare readonly mobilePlayerBackdropTarget: HTMLImageElement;
+  declare readonly mobilePlayerTrackTitleTarget: HTMLElement;
+  declare readonly mobilePlayerTrackSubtitleTarget: HTMLElement;
+  declare readonly mobilePlayerProgressTarget: HTMLProgressElement;
+  declare readonly mobilePlayerCurrentTimeTarget: HTMLElement;
+  declare readonly mobilePlayerDurationTarget: HTMLElement;
+  declare readonly mobilePlayerIsPlayingTarget: HTMLInputElement;
+  declare readonly favouriteIconTarget: HTMLElement;
+  declare readonly mobilePlayerFavouriteIconTarget: HTMLElement;
+
+  mobileBreakpointPx: number;
+  iOS: boolean;
+
+  playlist: Playlist | null;
+
+  currentTrackIdx: number | null;
+  interval: number | null; // Used to update timestamp and progress bar
 
   // Events
 
@@ -28,17 +59,22 @@ export default class extends Controller {
     this.mobilePlayerTarget.classList.add('translate-y-full');
   }
 
-  playPlaylist({ detail: { playlist, trackIdx } }) {
-    if (this.playlist.id !== playlist.id) {
+  playPlaylist({ detail: { playlist, trackIdx } }: { detail: { playlist: Playlist; trackIdx: number } }) {
+    if (this.playlist == null || this.playlist.id !== playlist.id) {
       this.resetTrack();
 
       this.playlist = playlist;
 
+      this.element.dataset.id = playlist.id;
+      this.element.dataset.slug = this.getCurrentPlaylistSlug();
+
       this.containerTarget.classList.remove('invisible');
       this.containerTarget.classList.remove('opacity-0');
 
-      this.setTrackSubtitle(this.playlist.title);
-      this.setImageUrl(this.playlist.thumbnail);
+      this.setTrackSubtitle(playlist.title);
+      this.setImageUrl(playlist.thumbnail);
+
+      this.updateFavouriteIcon();
     }
 
     this.playTrack(trackIdx);
@@ -91,8 +127,6 @@ export default class extends Controller {
 
   goToCurrentTrackRecording() {
     if (!this.currentTrackIdx) return;
-
-    // window.location.href = this.playlist.tracks[this.currentTrackIdx].recordingUrl;
     window.Turbo.visit(this.playlist.tracks[this.currentTrackIdx].recordingUrl);
   }
 
@@ -124,6 +158,54 @@ export default class extends Controller {
 
     if (this.interval) {
       clearInterval(this.interval);
+    }
+  }
+
+  getCurrentPlaylistSlug() {
+    if (!this.playlist) return null;
+
+    return this.playlist.url
+      .split('/').pop()
+      .split('?')[0]
+      .split('#')[0];
+  }
+
+  async updateFavouriteIcon() {
+    this.setFavouriteIcon(null);
+
+    if (!this.playlist) return;
+
+    const slug = this.getCurrentPlaylistSlug();
+    const isFavourite = await IsSlugFavourited(slug);
+
+    this.setFavouriteIcon(isFavourite);
+  }
+
+  setFavouriteIcon(isFavourite: boolean | null) {
+    switch(isFavourite) {
+      case true: {
+        this.favouriteIconTarget.classList.add('active');
+        this.mobilePlayerFavouriteIconTarget.classList.add('active');
+        
+        this.favouriteIconTarget.classList.remove('hidden');
+        this.mobilePlayerFavouriteIconTarget.classList.remove('hidden');
+        break;
+      }
+
+      case false: {
+        this.favouriteIconTarget.classList.remove('active');
+        this.mobilePlayerFavouriteIconTarget.classList.remove('active');
+        
+        this.favouriteIconTarget.classList.remove('hidden');
+        this.mobilePlayerFavouriteIconTarget.classList.remove('hidden');
+        break;
+      }
+
+      case null: {
+        this.favouriteIconTarget.classList.add('hidden');
+        this.mobilePlayerFavouriteIconTarget.classList.add('hidden');
+        break;
+      }
     }
   }
 
@@ -173,10 +255,15 @@ export default class extends Controller {
   resetAll() {
     this.resetTrack();
 
-    this.playlist = {};
+    this.playlist = null;
+
+    this.element.dataset.id = "";
+    this.element.dataset.slug = "";
 
     this.setTrackSubtitle("");
     this.setImageUrl("");
+
+    this.setFavouriteIcon(null);
 
     // Invisible is used to prevent click events, opacity-0 is used for fade in/out
     this.containerTarget.classList.add('invisible');
@@ -248,7 +335,7 @@ export default class extends Controller {
 
         this.updateTrackPosition();
 
-        this.interval = setInterval(this.updateTrackPosition.bind(this), 100);
+        this.interval = window.setInterval(this.updateTrackPosition.bind(this), 100);
       },
 
       onpause: () => {

@@ -33,5 +33,14 @@ db.on("populate", (tx) => {
     });
 });
 
+export async function GetFavouritesListId() : Promise<number> {
+    return (await db.lists.where({ isFavourites: 1 }).first()).id;
+}
+
+export async function IsSlugFavourited(slug: string) : Promise<boolean> {
+    const listId = await GetFavouritesListId();
+    return (await db.listShows.where({ listId, slug }).first()) !== undefined;
+}
+
 export type { List, ListShow };
 export { db };

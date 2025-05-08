@@ -1,6 +1,9 @@
 import { Controller } from "@hotwired/stimulus"
+import { Playlist } from "../interfaces"
 
-export default class extends Controller {
+export default class extends Controller<HTMLElement> {
+    declare playlist: Playlist;
+
     connect() {
         this.playlist = {
             // TODO: There's a stimulus way of doing this I'm sure
@@ -8,10 +11,14 @@ export default class extends Controller {
             title: this.element.dataset.playlistTitle,
             thumbnail: this.element.dataset.playlistThumbnail,
             url: window.location.href,
-            tracks: [...this.element.querySelectorAll(`[data-action="playlist#playTrack"]`)].map(track => ({
+            tracks: [...this.element.querySelectorAll(`[data-action="playlist#playTrack"]`)].map((track: HTMLAnchorElement) => ({
+                title: track.dataset.trackTitle,
+                
                 url: decodeURIComponent(track.href),
                 recordingUrl: track.dataset.recordingUrl,
-                title: track.dataset.trackTitle
+
+                howl: null,
+                duration: null
             }))
         };
     }

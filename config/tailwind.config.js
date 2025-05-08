@@ -18,9 +18,8 @@ module.exports = {
     // require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
     require('@tailwindcss/container-queries'),
-    require('daisyui'),
+    require('daisyui')
   ],
-
   daisyui: {
     themes: ['light', 'dark'],
     //darkMode: ['selector', '[data-theme="dark"]']

@@ -53,7 +53,7 @@
   /* Bottom player bar */
 
   #progress-bar progress {
-    @apply h-0.5;
+    @apply h-1;
   }
   
   #progress-bar:hover progress {

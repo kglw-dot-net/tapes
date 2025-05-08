@@ -7,9 +7,9 @@ class ApplicationController < ActionController::Base
       .joins(:recordings)
       .includes(venue: :country)
       .where(is_active: true, recordings: { is_active: true })
-      .select('shows.*, MIN(recordings.uploaded_at) AS oldest_upload, MAX(recordings.uploaded_at) AS latest_upload')
-      .group('shows.id')
-      .order('oldest_upload DESC')
+      .select("shows.*, MIN(recordings.uploaded_at) AS oldest_upload, MAX(recordings.uploaded_at) AS latest_upload")
+      .group("shows.id")
+      .order("oldest_upload DESC")
       .limit(25)
       .all
 
