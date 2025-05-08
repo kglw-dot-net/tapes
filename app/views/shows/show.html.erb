@@ -122,8 +122,7 @@
 										data-taper="<%= taper&.name %>"
 										data-type="<%= recording.recording_type.name %>"
 									>
-										<%= recording.recording_type.name %><%= ' by ' + (taper&.name || 'unknown') unless recording.recording_type.name == 'SBD' %>
-										: <%= recording.id %>
+										<%= recording.recording_type.name %><%= ' by ' + (taper&.name || 'unknown') unless recording.recording_type.name == 'SBD' %>: <%= recording.id %>
 									</option>
 								<% end %>
 							</select>
