@@ -24,7 +24,7 @@ namespace :tapes do
     puts "Done!"
   end
 
-  namespace :internet_archive do
+  namespace :ia do
     desc "Pull the latest Internet Archive data"
     task update: [ :environment ] do
       include InternetArchive
