@@ -54,4 +54,9 @@ Rails.application.routes.draw do
 
   get "songs" => "discography#index"
   get "songs/:slug" => "discography#song", as: :song
+
+  # Venues controller
+
+  get "venues" => "venues#index"
+  get "venues/:slug" => "venues#venue"
 end

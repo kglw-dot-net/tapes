@@ -24,6 +24,10 @@
     @apply basis-0 grow hover:bg-white/5 transition py-3 px-2 rounded-xl text-center h-fit;
   }
 
+  #mobilePlayerImage {
+    @apply h-full mx-auto portrait:my-8 landscape:mx-8 rounded-xl grow object-contain;
+  }
+
   /* Bottom player bar */
 
   #progress-bar progress {

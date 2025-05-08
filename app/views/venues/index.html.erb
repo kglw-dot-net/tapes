@@ -1,0 +1,37 @@
+<div class="container mx-auto mt-16 px-5">
+    <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white">All Venues by Initial</h2>
+    <h3 class="text-2xl font-bold mb-16 text-center">Total Venues: <%= @venues.count %>
+    </h3>
+
+    <% @venues.map { |venue| venue.name[0].upcase }.uniq.sort.each do |initial| %>
+        <div class="card bg-base-100 shadow-xl mb-5">
+            <div class="card-body pb-0 pt-5 px-3">
+                <h3 class="card-title mb-2 text-black dark:text-white flex px-2">
+                    <span class="grow"><%= initial %></span>
+                    <a href="#top" class="text-end text-primary">Back to top</a>
+                </h3>
+
+                <div class="responsive-grid text-center pb-3">
+                    <% @venues.select { |venue| venue.name[0].upcase == initial }.sort_by(&:name).each do |venue| %>
+                        <a href="/venues/<%= venue.slug %>" class="featured-item">
+                            <div class="indicator w-full">
+                                <span class="indicator-item badge badge-neutral bg-opacity-60 backdrop-blur shadow transform-none m-3">
+                                    <% show_count = venue.shows.where(is_active: true).count %>
+                                    <%= show_count %> show<%= 's' unless show_count == 1 %>
+                                </span>
+
+                                <% poster_url = venue.shows.where.not(poster_url: nil).first&.poster_url %>
+
+                                <img src="<%= poster_url.blank? ? asset_path('missing.png') : poster_url %>" />
+                            </div>
+
+
+                            <h4 class="text-primary mt-1"><%= venue.name %></h4>
+                            <small><%= [venue.city,venue.region, venue.country&.name].reject{|s|s.blank?}.join(', ') %></small>
+                        </a>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    <% end %>
+</div>

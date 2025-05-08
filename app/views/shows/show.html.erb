@@ -34,7 +34,7 @@
                             <% end %>
                             
                             <a href="/<%= @show.date.strftime("%Y") %>#<%= @show.tour.name.parameterize %>" class="block text-center link link-hover link-primary mb-2"><%= @show.tour.name %></a>
-                            <small class="block text-center mb-6"><%= @show.venue.name %> &bull; <%= @show.venue.city %>, <%= @show.venue.region %>, <%= @show.venue.country.name %></small>
+                            <small class="block text-center mb-6"><%= @show.venue.name %> &bull; <%= [ @show.venue.city, @show.venue.region, @show.venue.country&.name ].reject{|s|s.blank?}.join(', ') %></small>
                         </div>
                     </div>
 

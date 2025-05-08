@@ -38,7 +38,7 @@ class ShowsController < ApplicationController
 
   # GET /:slug
   def show
-    @show = Show.find_by(slug: params[:slug])
+    @show = Show.find_by(slug: params[:slug], is_active: true)
 
     if @show.nil?
       raise ActionController::RoutingError.new("Not Found")

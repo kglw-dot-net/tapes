@@ -1,5 +1,24 @@
 module Tapes
   def setDefaults
+    puts "For each show without a slug, if there is only one show with the same date, set the slug to date in YYYY-MM-DD format"
+    Show.where(slug: [ nil, "" ])
+      .where(is_active: nil)
+      .find_each do |show|
+      next if Show.where(date: show.date).count > 1
+      show.update(slug: show.date.strftime("%Y-%m-%d"))
+    end
+
+    puts "If there are multiple active shows with the same slug, set them both to is_active: nil"
+    Show.where.not(slug: [ nil, "" ])
+      .where(is_active: true)
+      .group(:slug)
+      .having("COUNT(*) > 1")
+      .find_each do |show|
+      Show.where(slug: show.slug)
+        .where(is_active: true)
+        .update_all(is_active: nil)
+    end
+
     puts "Matching recordings to shows based on dates..."
     Recording.where(show_id: nil)
       .where(is_active: nil)
@@ -15,11 +34,12 @@ module Tapes
     Recording.where(preferred_format: [ nil, "" ])
       .where(is_active: nil)
       .find_each do |recording|
-      puts "\tSetting default recording format for recording #{recording.id}..."
       if RecordingFile.any? { |f| f.recording_id == recording.id and f.name.downcase.end_with? "mp3" }
+        puts "\tSetting default recording format for recording #{recording.id} to MP3..."
         recording.update(preferred_format: "MP3")
       else
         if RecordingFile.any? { |f| f.recording_id == recording.id and f.name.downcase.end_with? "m4a" }
+          puts "\tSetting default recording format for recording #{recording.id} to M4A..."
           recording.update(preferred_format: "M4A")
         end
       end

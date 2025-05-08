@@ -1,6 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
 import { Howl, Howler } from 'howler'
-import { useWindowResize } from 'stimulus-use'
 
 export default class extends Controller {
   static targets = [
@@ -10,14 +9,16 @@ export default class extends Controller {
     "mobilePlayerIsPlaying"
   ];
 
-  static mobileBreakpointPx = 1024;
-
   // Events
 
-  showMobilePlayerUI() {
+  showMobilePlayerUIIfMobile() {
     // If screen width is wider than mobileBreakpointPx, don't show mobile player UI
     if (window.innerWidth > this.mobileBreakpointPx) return;
 
+    this.showMobilePlayerUI();
+  }
+  
+  showMobilePlayerUI() {
     this.mobilePlayerTarget.classList.remove('translate-y-full');
   }
 
@@ -93,16 +94,11 @@ export default class extends Controller {
     window.Turbo.visit(this.playlist.tracks[this.currentTrackIdx].recordingUrl);
   }
 
-  windowResize({ width, height, event }) {
-    // If screen width is wider than mobileBreakpointPx, hide mobile player UI
-    if (width > this.mobileBreakpointPx)
-      hideMobilePlayerUI();
-  }
-
   // Internal
 
   // Called on initial page load only
   initialize() {
+    this.mobileBreakpointPx = 1024;
     this.iOS = false;
     this.resetAll();
   }

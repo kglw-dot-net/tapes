@@ -130,9 +130,6 @@ module Songfish
         show.title = songfish_show["showtitle"].empty? ? nil : songfish_show["showtitle"]
         show.order = songfish_show["showorder"]
 
-        # If show slug is not yet set, set it to the date in YYYY-MM-DD format
-        show.slug = songfish_show["showdate"] if show.slug.nil? or show.slug.empty?
-
         setlist = setlists.find { |s| s["show_id"] == songfish_show["show_id"] }
 
         if setlist
