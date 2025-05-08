@@ -1,5 +1,5 @@
 <div class="container mx-auto mt-8 px-5">
-    <div class="flex justify-center mb-8">
+    <div class="flex justify-center mb-8 overflow-x-scroll">
         <div role="tablist" class="tabs tabs-boxed">
             <% @years.order(:year).reverse.each do |year| %>
                 <a href="/<%= year.year %>" class="tab"><%= year.year %></a>

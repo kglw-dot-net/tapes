@@ -7,7 +7,7 @@ export default class extends Controller {
         if (this.hasRecordingTarget)
             this.recordingTarget.value = this.selectRecordingFromPreferences();
 
-        // TODO: If currently playing, show the currently playing recording
+        // TODO: If currently playing, show the currently playing recording + set current track active
         this.showRecording(this.hasRecordingTarget ? this.recordingTarget.value : this.element.querySelector('[data-controller="playlist"]').dataset.playlistId);
     }
 
