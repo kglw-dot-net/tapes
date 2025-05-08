@@ -14,25 +14,29 @@
             <div class="lg:max-w-md">
                 <!-- bg-base-100 -->
                 <div class="p-4 bg-white dark:bg-neutral bg-opacity-25 dark:bg-opacity-25 rounded-xl mb-3 lg:mb-0">
-                    <% if @show.poster_url.present? %>
-                        <img 
-                            src="<%= @show.poster_url %>" 
-                            class="mb-6 cursor-pointer w-1/2 mx-auto lg:mx-0 lg:w-full"
-                            onclick="show_poster_modal.showModal()"
+                    <div class="block sm:flex lg:block items-center">
+                        <% if @show.poster_url.present? %>
+                            <img 
+                                src="<%= @show.poster_url %>" 
+                                class="mb-6 cursor-pointer mx-auto sm:mx-0 max-h-72 md:max-h-96 lg:max-h-none lg:w-full"
+                                onclick="show_poster_modal.showModal()"
                             />
-                    <% end %>
-
-                    <h2 class="text-3xl font-bold text-center mb-2">
-                        <a href="/<%= @show.date.strftime("%B/%-d").downcase %>" class="link link-hover link-primary"><%= @show.date.strftime("%-d %B") %></a>, 
-                        <a href="/<%= @show.date.strftime("%Y") %>" class="link link-hover link-primary"><%= @show.date.strftime("%Y") %></a>
-                    </h2>
-
-                    <% unless @show.title.blank? %>
-                        <h3 class="text-2xl font-bold text-center mb-2"><%= @show.title %></h3>
-                    <% end %>
-
-                    <a href="/<%= @show.date.strftime("%Y") %>#<%= @show.tour.name.parameterize %>" class="block text-center link link-hover link-primary mb-2"><%= @show.tour.name %></a>
-                    <small class="block text-center mb-6"><%= @show.venue.name %> &bull; <%= @show.venue.city %>, <%= @show.venue.region %>, <%= @show.venue.country.name %></small>
+                        <% end %>
+                        
+                        <div class="flex flex-col mx-auto">
+                            <h2 class="text-3xl font-bold text-center mb-2">
+                                <a href="/<%= @show.date.strftime("%B/%-d").downcase %>" class="link link-hover link-primary"><%= @show.date.strftime("%-d %B") %></a>, 
+                                <a href="/<%= @show.date.strftime("%Y") %>" class="link link-hover link-primary"><%= @show.date.strftime("%Y") %></a>
+                            </h2>
+                            
+                            <% unless @show.title.blank? %>
+                            <h3 class="text-2xl font-bold text-center mb-2"><%= @show.title %></h3>
+                            <% end %>
+                            
+                            <a href="/<%= @show.date.strftime("%Y") %>#<%= @show.tour.name.parameterize %>" class="block text-center link link-hover link-primary mb-2"><%= @show.tour.name %></a>
+                            <small class="block text-center mb-6"><%= @show.venue.name %> &bull; <%= @show.venue.city %>, <%= @show.venue.region %>, <%= @show.venue.country.name %></small>
+                        </div>
+                    </div>
 
                     <!-- <dl class="grid grid-cols-2">
                         <dt class="font-bold">Tour</dt>
@@ -67,7 +71,7 @@
                         </div> -->
                         <% if @show.recordings.where(is_active: true).count == 1 %>
                             <% recording = @show.recordings.where(is_active: true).first %>
-                            <span class="badge badge-primary"><%= recording.recording_type.name %><%= ' by ' unless recording.recording_type.name == 'SBD' %></span> 
+                            <span class="badge badge-primary"><%= recording.recording_type.name %><%= ' by ' + (recording.taper&.name || 'unknown') unless recording.recording_type.name == 'SBD' %></span> 
                             <span class=""><%= recording.id %></span>
                         <% else %>
                             <select 
@@ -77,7 +81,7 @@
                                 <%= @show.recordings.where(is_active: true).count == 1 ? 'disabled' : '' %>
                             >
                                 <% @show.recordings.where(is_active: true).each do |recording| %>
-                                    <option value="<%= recording.id %>"><%= recording.recording_type.name %><%= ' by ' unless recording.recording_type.name == 'SBD' %>: <%= recording.id %></option>
+                                    <option value="<%= recording.id %>"><%= recording.recording_type.name %><%= ' by ' + (recording.taper&.name || 'unknown') unless recording.recording_type.name == 'SBD' %>: <%= recording.id %></option>
                                 <% end %>
                             </select>
                         <% end %>
@@ -119,10 +123,12 @@
                                 </h3>
 
                                 <dl class="columns-2 my-3">
-                                    <%#<dt>Taper</dt>
-                                    <dd> recording.taper </dd>
+                                    <% unless recording.taper.nil? %>
+                                        <dt>Taper</dt>
+                                        <dd><%= recording.taper.name %></dd>
+                                    <% end %>
         
-                                    <dt>Transferer</dt>
+                                    <%#<dt>Transferer</dt>
                                     <dd> recording.transferer </dd>%>
         
                                     <% unless recording.source.blank? %>

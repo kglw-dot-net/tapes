@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_27_020419) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_29_032609) do
   create_table "continents", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -62,8 +62,10 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_27_020419) do
     t.boolean "is_active"
     t.integer "show_id"
     t.integer "recording_type_id"
+    t.integer "taper_id"
     t.index ["recording_type_id"], name: "index_recordings_on_recording_type_id"
     t.index ["show_id"], name: "index_recordings_on_show_id"
+    t.index ["taper_id"], name: "index_recordings_on_taper_id"
   end
 
   create_table "shows", force: :cascade do |t|
@@ -83,6 +85,12 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_27_020419) do
     t.string "color"
     t.index ["tour_id"], name: "index_shows_on_tour_id"
     t.index ["venue_id"], name: "index_shows_on_venue_id"
+  end
+
+  create_table "tapers", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tours", force: :cascade do |t|
@@ -108,6 +116,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_27_020419) do
   add_foreign_key "recording_files", "recordings"
   add_foreign_key "recordings", "recording_types"
   add_foreign_key "recordings", "shows"
+  add_foreign_key "recordings", "tapers"
   add_foreign_key "shows", "tours"
   add_foreign_key "shows", "venues"
   add_foreign_key "venues", "countries"

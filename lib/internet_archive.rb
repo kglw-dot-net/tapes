@@ -71,6 +71,10 @@ module InternetArchive
 
     recording.is_lma = response&.dig("metadata", "mediatype")&.downcase == "etree"
 
+    taper = response&.dig("metadata", "taper")
+
+    recording.taper = taper.present? ? Taper.find_or_create_by(name: taper) : nil
+
     recording.save
 
     response["files"].each do |file|
