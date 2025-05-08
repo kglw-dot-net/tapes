@@ -1,0 +1,45 @@
+<div class="container mx-auto mt-8 px-5">
+    <div class="flex justify-center mb-16">
+        <div role="tablist" class="tabs tabs-boxed">
+            <% @years.each do |year| %>
+                <a href="/<%= year %>" class="tab <%= 'tab-active' if year == @year %>"><%= year %></a>
+            <% end %>
+        </div>
+    </div>
+
+    <h2 class="text-3xl font-bold mb-16 text-center">Year of <%= @year %> &mdash; <%= @shows.length %> show<%= 's' unless @shows.length == 1 %></h2>
+
+    <!-- <a href="/years">back to index</a> -->
+
+    <% if @tours.length > 1 %>
+        <div class="flex mb-16">
+            <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
+                <label class="text-center block mt-3">Jump to:</label>
+                <ul class="menu menu-vertical lg:menu-horizontal">
+                    <% @tours.each do |tour| %>
+                        <li><a href="#<%= tour.name.parameterize %>"><%= tour.name %></a></li>
+                    <% end %>
+                </ul>
+            </div>
+        </div>
+    <% end %>
+
+    <% @tours.each do |tour| %>
+        <% tour_shows = @shows.filter { |show| show.tour_id == tour.id }.sort_by(&:date).reverse %>
+
+        <div class="card bg-base-100 shadow-xl mb-5">
+            <div class="card-body pb-0 pt-5">
+                <h2 class="card-title mb-2 text-black dark:text-white flex" id="<%= tour.name.parameterize %>">
+                    <span class="grow"><%= tour.name %> </span>
+                    <span class="text-end opacity-50"><%= tour_shows.length %> show<%= 's' unless tour_shows.length == 1 %></a>
+                </h2>
+
+                <div class="responsive-grid">
+                    <% tour_shows.each do |show| %>
+                        <%= render "featured_show" , show: show %>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    <% end %>
+</div>

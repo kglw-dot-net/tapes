@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  source: MyString
+  format: MyString
+  length: 1.5
+  original: MyString
+  title: MyString
+  track_no: 1
+  is_private: false
+  creator: MyString
+  album: MyString
+
+two:
+  source: MyString
+  format: MyString
+  length: 1.5
+  original: MyString
+  title: MyString
+  track_no: 1
+  is_private: false
+  creator: MyString
+  album: MyString

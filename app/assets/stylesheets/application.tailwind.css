@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
+@layer base {
+  /* Global utilities */
+
+  .responsive-grid {
+    @apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3;
+  }
+
+  /* Bottom player bar */
+
+  #progress-bar progress {
+    @apply h-0.5;
+  }
+  
+  #progress-bar:hover progress {
+    @apply h-2;
+  }
+
+  #player svg {
+    @apply transition-all cursor-pointer;
+  }
+
+  #player svg:hover {
+    @apply text-black dark:text-white;
+  }
+
+  /* Tracklists */
+
+  .track {
+    @apply flex transition p-3 items-center rounded;
+  }
+
+  .track:not(.active) {
+    @apply dark:hover:bg-white/5 hover:bg-black/5;
+  }
+
+  .track.active {
+    @apply bg-primary;
+  }
+
+  .track.active>:first-child, .track.active>:last-child {
+    @apply text-white;
+  }
+
+  .track>:nth-child(2) {
+    @apply grow;
+  }
+
+  .track.active>:nth-child(2) {
+    @apply text-white;
+  }
+
+  .track:not(.active)>:nth-child(2) {
+    @apply text-black dark:text-white;
+  }
+
+  .track>:first-child {
+    @apply grow-0 shrink-0 w-8;
+  }
+
+  /* Footer */
+
+  footer > :not(:first-child) {
+    margin-left: .75rem;
+  }
+
+  footer > :not(:first-child)::before {
+    content: "•";
+    margin-right: .75rem;
+  }
+}

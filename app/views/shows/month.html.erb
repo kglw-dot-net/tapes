@@ -1,0 +1,5 @@
+<%= @month_name %>
+
+<% @dates.each do |date| %>
+  <a href="/<%= @month_name %>/<%= date %>"><%= date %></a>
+<% end %>

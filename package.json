@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "bootstrap-icons": "^1.11.3",
+    "daisyui": "^4.12.22",
+    "howler": "^2.2.4",
+    "vite": "^5.0.0",
+    "vite-plugin-ruby": "^5.1.0"
+  }
+}
