@@ -114,7 +114,8 @@
         <!-- bg-slate-300/50 backdrop-blur dark:bg-slate-700/50 -->
         <%# Background %>
         <img class="w-full h-full object-cover" data-player-target="mobilePlayerBackdrop" src="#" />
-        <div class="absolute top-0 left-0 w-full h-full bg-slate-100/50 backdrop-blur-xl dark:bg-slate-900/50 px-8">
+
+        <div class="absolute top-0 left-0 w-full h-full bg-slate-100/50 backdrop-blur-xl dark:bg-slate-900/50 px-8 flex flex-col">
             <%# Top row %>
             <div class="flex justify-between items-center pt-4 w-full">
                 <%# Close button %>
@@ -127,15 +128,15 @@
                 </button>              
     
                 <%# Options button %>
-                <button class="btn btn-ghost btn-circle text-black dark:text-white">
+                <!-- <button class="btn btn-ghost btn-circle text-black dark:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                     </svg>                  
-                </button>
+                </button> -->
             </div>
 
             <%# Centre image %>
-            <img class="h-1/2 mx-auto pt-24 rounded-xl" data-player-target="mobilePlayerThumbnail" draggable="false" src="#" />
+            <img class="h-1/2 mx-auto my-8 rounded-xl grow" data-player-target="mobilePlayerThumbnail" draggable="false" src="#" />
 
             <%# Track title %>
             <h1 class="text-3xl font-bold mt-16 mb-2 text-black dark:text-white" data-player-target="mobilePlayerTrackTitle"></h1>
@@ -160,7 +161,7 @@
             </div>
 
             <%# Transport controls %>
-            <div class="flex justify-around items-center w-100">
+            <div class="flex justify-around items-center w-100 mb-8">
                 <%# Previous %>
                 <button class="btn btn-ghost btn-circle text-black dark:text-white" data-action="click->player#previousTrack">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"

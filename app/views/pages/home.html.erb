@@ -15,7 +15,7 @@
           class="link link-hover link-primary">KGLW.net</a>.</p>
 
       <div class="flex justify-center mb-20">
-        <div class="stats shadow mx-auto">
+        <div class="bg-base-100 rounded-xl inline-grid grid-cols-3 shadow mx-auto">
           <div class="stat place-items-center">
             <div class="stat-title">Shows</div>
             <div class="stat-value">
@@ -30,8 +30,10 @@
             <div class="stat-value text-primary">
               <%= @total_recordings %>
             </div>
-            <div class="stat-desc text-primary/50"><%= @aud_count %> <abbr title="audience recordings">AUD</abbr>, <%= @sbd_count %> <abbr
-                title="soundboard recordings">SBD</abbr></div>
+            <div class="stat-desc text-primary/50">
+              <%= @aud_count %> <abbr title="audience recordings">AUD</abbr>,
+              <%= @sbd_count %> <abbr title="soundboard recordings">SBD</abbr>
+            </div>
           </div>
 
           <div class="stat place-items-center">

@@ -53,7 +53,9 @@
 
                     <strong class="block text-center mb-2">x hours, y minutes &bull; z songs</strong>
 
-                    <a href="https://kglw.net/setlists/<%= @show.songfishPermalink %>" class="block text-center link link-primary link-hover">View stats on KGLW.net</a>
+                    <% if @show.songfishPermalink.present? %>
+                        <a href="https://kglw.net/setlists/<%= @show.songfishPermalink %>" target="_blank" class="block text-center link link-primary link-hover">View stats on KGLW.net</a>
+                    <% end %>
                 </div>
             </div>
 
@@ -110,33 +112,37 @@
                             </a>
                         <% end %>
 
-                        <h4 class="text-xl font-bold my-8 text-center">
-                            <%= recording.is_lma ? 'Live Music Archive' : 'Community Audio' %> Upload Details
-                        </h4>
+                        <div class="card bg-white dark:bg-neutral bg-opacity-25 dark:bg-opacity-25 mt-5">
+                            <div class="card-body pb-0 pt-5 px-5">
+                                <h3 class="card-title mb-2 mx-auto text-black dark:text-white">
+                                    <%= recording.is_lma ? 'Live Music Archive' : 'Community Audio' %> Upload Details
+                                </h3>
 
-                        <dl class="columns-2">
-                            <%#<dt>Taper</dt>
-                            <dd> recording.taper </dd>
-
-                            <dt>Transferer</dt>
-                            <dd> recording.transferer </dd>%>
-
-                            <% unless recording.source.blank? %>
-                                <dt class="font-bold">Source</dt>
-                                <dd class="mb-3"><%= recording.source %></dd>
-                            <% end %>
-
-                            <% unless recording.lineage.blank? %>
-                                <dt class="font-bold">Lineage</dt>
-                                <dd class="mb-3"><%= recording.lineage %></dd>
-                            <% end %>
-
-                            <dt class="font-bold">Identifier</dt>
-                            <dd class="mb-3"><%= recording.id %></dd>
-
-                            <dt class="font-bold">Upload Date</dt>
-                            <dd class="mb-3"><%= recording.uploaded_at %></dd>
-                        </dl>
+                                <dl class="columns-2 my-3">
+                                    <%#<dt>Taper</dt>
+                                    <dd> recording.taper </dd>
+        
+                                    <dt>Transferer</dt>
+                                    <dd> recording.transferer </dd>%>
+        
+                                    <% unless recording.source.blank? %>
+                                        <dt class="text-xs">Source</dt>
+                                        <dd class="text-black dark:text-white mb-3"><%= recording.source %></dd>
+                                    <% end %>
+        
+                                    <% unless recording.lineage.blank? %>
+                                        <dt class="text-xs">Lineage</dt>
+                                        <dd class="text-black dark:text-white mb-3"><%= recording.lineage %></dd>
+                                    <% end %>
+        
+                                    <dt class="text-xs">Identifier</dt>
+                                    <dd class="text-black dark:text-white mb-3"><%= recording.id %></dd>
+        
+                                    <dt class="text-xs">Upload Date</dt>
+                                    <dd class="text-black dark:text-white mb-3"><%= recording.uploaded_at %></dd>
+                                </dl>
+                            </div>
+                        </div>
                     </div>
                 <% end %>
             </div>
