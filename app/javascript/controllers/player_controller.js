@@ -10,11 +10,13 @@ export default class extends Controller {
     "mobilePlayerIsPlaying"
   ];
 
+  static mobileBreakpointPx = 1024;
+
   // Events
 
   showMobilePlayerUI() {
-    // If screen width is wider than 768px, don't show mobile player UI
-    if (window.innerWidth > 768) return;
+    // If screen width is wider than mobileBreakpointPx, don't show mobile player UI
+    if (window.innerWidth > this.mobileBreakpointPx) return;
 
     this.mobilePlayerTarget.classList.remove('translate-y-full');
   }
@@ -92,8 +94,8 @@ export default class extends Controller {
   }
 
   windowResize({ width, height, event }) {
-    // If screen width is wider than 768px, hide mobile player UI
-    if (width > 768)
+    // If screen width is wider than mobileBreakpointPx, hide mobile player UI
+    if (width > this.mobileBreakpointPx)
       hideMobilePlayerUI();
   }
 
