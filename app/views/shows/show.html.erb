@@ -96,7 +96,7 @@
 						<% if @show.recordings.where(is_active: true).count == 1 %>
 							<% recording = @show.recordings.where(is_active: true).first %>
 							<% taper = recording.taper&.parent_id.nil? ? recording.taper : recording.taper.parent %>
-							<% taper = nil if taper.is_anon? %>
+							<% taper = nil if taper&.is_anon? %>
 							
 							<% color = case recording.recording_type.name
 												 when 'SBD' then 'primary'
@@ -116,7 +116,7 @@
 							>
 								<% @show.recordings.where(is_active: true).each do |recording| %>
 									<% taper = recording.taper&.parent_id.nil? ? recording.taper : recording.taper.parent %>
-									<% taper = nil if taper.is_anon? %>
+									<% taper = nil if taper&.is_anon? %>
 									<option
 										value="<%= recording.id %>"
 										data-taper="<%= taper&.name %>"
@@ -139,7 +139,7 @@
 				
 				<% @show.recordings.where(is_active: true).each do |recording| %>
 					<% taper = recording.taper&.parent_id.nil? ? recording.taper : recording.taper.parent %>
-					<% taper = nil if taper.is_anon? %>
+					<% taper = nil if taper&.is_anon? %>
 					
 					<div
 						data-controller="playlist"
