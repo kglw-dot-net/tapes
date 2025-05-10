@@ -12,7 +12,7 @@
     <div class="flex mb-8">
         <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
             <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
-                <li><a href="https://kglw.net/venues/<%= @venue.slug %>" class="text-black dark:text-white">View venue on KGLW.net</a></li>
+                <li><a href="https://kglw.net/venues/<%= @venue.slug %>" target="_blank" class="text-black dark:text-white">View venue on KGLW.net</a></li>
 
                 <%
                     is_only_venue_in_country = @venue.country.venues.joins(:shows).where(shows: {is_active: true}).distinct.count == 1
