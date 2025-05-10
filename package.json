@@ -7,7 +7,7 @@
     "@types/howler": "^2.2.12",
     "@types/node": "^22.10.5",
     "daisyui": "^4.12.22",
-    "dexie": "^4.0.10",
+    "dexie": "^4.0.11",
     "howler": "^2.2.4",
     "sortablejs": "^1.15.6",
     "stimulus-use": "^0.52.3",
