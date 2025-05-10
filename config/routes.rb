@@ -1,8 +1,8 @@
 require "date"
 
 Rails.application.routes.draw do
-  mount Scalar::UI, at: '/api/docs'
-  mount Rswag::Api::Engine => '/swagger'
+  mount Scalar::UI, at: "/api/docs"
+  mount Rswag::Api::Engine => "/swagger"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

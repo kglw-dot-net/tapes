@@ -19,7 +19,7 @@ RSpec.describe 'API', type: :request do
               order: { type: :integer },
               poster_url: { type: :string }
             },
-            required: [ 'id', 'date', 'venuename', 'location', 'order' ]
+            required: %w[id date venuename location order]
           }
 
         run_test!
@@ -49,7 +49,7 @@ RSpec.describe 'API', type: :request do
                 id: { type: :string },
                 permalink: { type: :string }
               },
-              required: [ 'id', 'permalink' ]
+              required: %w[id permalink]
             },
             venue_id: { type: :string },
             tour_id: { type: :string },
@@ -70,7 +70,7 @@ RSpec.describe 'API', type: :request do
                     properties: {
                       is_lma: { type: :boolean }
                     },
-                    required: [ 'is_lma' ]
+                    required: %w[is_lma]
                   },
                   files: {
                     type: :array,
@@ -81,15 +81,15 @@ RSpec.describe 'API', type: :request do
                         length: { type: :integer },
                         title: { type: :string }
                       },
-                      required: [ 'filename', 'length' ]
+                      required: %w[filename length]
                     }
                   }
                 },
-                required: [ 'id', 'files_path_prefix', 'files' ]
+                required: %w[id files_path_prefix files]
               }
             }
           },
-          required: [ 'id', 'date', 'order', 'recordings' ]
+          required: %w[id date order recordings]
 
         let(:id) { Show.where(is_active: true).order(date: :desc).first.slug }
 
@@ -97,7 +97,7 @@ RSpec.describe 'API', type: :request do
       end
 
       response '404', 'show not found' do
-        let (:id) { 'invalid' }
+        let(:id) { 'invalid' }
         run_test!
       end
     end
@@ -118,7 +118,7 @@ RSpec.describe 'API', type: :request do
               vPosition: { type: :integer },
               url: { type: :string }
             },
-            required: [ 'credit', 'url' ]
+            required: %w[credit url]
           }
 
         run_test!

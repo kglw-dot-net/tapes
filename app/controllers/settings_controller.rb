@@ -12,7 +12,7 @@ class SettingsController < ApplicationController
                 .joins("INNER JOIN shows ON recordings.show_id = shows.id")
                 .where(tapers: { parent_id: nil })
                 .where(recordings: { is_active: true }, shows: { is_active: true })
-                .where.not(tapers: { name: [nil, ""] })
+                .where.not(tapers: { name: [ nil, "" ] })
                 .where.not("LOWER(tapers.name) LIKE ?", "%sam joseph%")
                 .where.not(tapers: { is_anon: true })
                 .select("tapers.*, COUNT(recordings.id) AS recording_count")
