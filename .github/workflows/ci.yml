@@ -29,14 +29,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
+      - name: Set up NPM
+        run: npm install
 
       - name: Scan for security vulnerabilities in JavaScript dependencies
-        run: bundle exec importmap audit
+        run: npm audit
 
   lint:
     runs-on: ubuntu-latest
