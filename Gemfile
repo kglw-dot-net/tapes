@@ -76,6 +76,6 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "mini_magick", "~> 5.0"
+gem "mini_magick", "~> 5.2"
 
 gem "dockerfile-rails", ">= 1.6", group: :development
