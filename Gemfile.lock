@@ -112,7 +112,7 @@ GEM
     erubi (1.13.1)
     et-orbi (1.2.11)
       tzinfo
-    faraday (2.12.2)
+    faraday (2.13.1)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
@@ -406,7 +406,7 @@ DEPENDENCIES
   capybara
   debug
   dockerfile-rails (>= 1.6)
-  faraday (~> 2.12, >= 2.12.2)
+  faraday (~> 2.13)
   importmap-rails
   jbuilder
   kamal
