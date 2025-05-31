@@ -123,8 +123,7 @@
 										data-taper="<%= taper&.name %>"
 										data-type="<%= recording.recording_type.name %>"
 									>
-										<%= recording.recording_type.name %><%= ' by ' + (taper&.name || 'unknown') unless recording.recording_type.name == 'SBD' %>
-										: <%= recording.id %>
+										<%= recording.recording_type.name + (recording.recording_type.name == 'SBD' ? '' : ' by ' + (taper&.name || 'unknown') ) + ': ' + recording.id %>
 									</option>
 								<% end %>
 							</select>
@@ -150,14 +149,25 @@
 						data-playlist-thumbnail="<%= @show.poster_url %>"
 						class="hidden"
 					>
-						<% recording.recording_files.where("name LIKE :ext", ext: "%#{recording.preferred_format}").each_with_index do |file, idx| %>
+						<% files = recording
+							.recording_files
+							.matching_format(recording.preferred_format)
+							# .with_all_ancestors_present(recording.id)
+							
+							 if recording.id == 'kglw2025-05-18.KGLWLisbon25N1'
+								 files = files.where("name GLOB '[0-9][0-9]*'")
+							 end
+						%>
+						
+						<% files.each_with_index do |file, idx| %>
+							<% track_title = (file.title || file.name).gsub('->', '→').upcase_first %>
 							<a class="track"
 								 data-action="playlist#playTrack"
-								 data-track-title="<%= (file.title || file.name).gsub('->', '→') %>"
+								 data-track-title="<%= track_title %>"
 								 data-recording-url="/<%= @show.slug %>#<%= recording.id %>"
 								 href="<%= raw file.url %>">
 								<small><%= idx + 1 %></small>
-								<span><%= (file.title || file.name).gsub('->', '→') %></span>
+								<span><%= track_title %></span>
 								<small><%= Time.at(file.length).strftime("%-M:%S") %></small>
 							</a>
 						<% end %>
