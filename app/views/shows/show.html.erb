@@ -167,7 +167,9 @@
 							.matching_format(recording.preferred_format)
 							# .with_all_ancestors_present(recording.id)
 							
-							 if recording.id == 'kglw2025-05-18.KGLWLisbon25N1'
+							 if recording.id == 'kglw2025-05-18.KGLWLisbon25N1' or
+									recording.id == 'kglw2025-05-19.KGLWLisbon25N2' or
+									recording.id == 'kglw2025-05-23.Spain2025N1'
 								 files = files.where("name GLOB '[0-9][0-9]*'")
 							 end
 						%>
