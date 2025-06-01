@@ -1,3 +1,12 @@
+<% show_full_title = "#{@show.date}#{(@show.title.present? ? '—' + @show.title : '')}" %>
+
+<% content_for :meta_title, "#{show_full_title} on Gizz Tapes" %>
+<% content_for :meta_description, "King Gizzard at #{@show.venue.name} in #{[@show.venue.city, @show.venue.region, @show.venue.country&.name].reject { |s| s.blank? }.join(', ')}" %>
+
+<% if @show.poster_url.present? %>
+<% content_for :meta_image, @show.poster_url %>
+<% end %>
+
 <div
 	data-controller="show"
 	class="transition"
@@ -145,7 +154,7 @@
 					<div
 						data-controller="playlist"
 						data-playlist-id="<%= recording.id %>"
-						data-playlist-title="<%= @show.date %><%= raw '&mdash;' if @show.title.present? %><%= @show.title %>"
+						data-playlist-title="<%= raw show_full_title %>"
 						data-playlist-thumbnail="<%= @show.poster_url %>"
 						class="hidden"
 					>

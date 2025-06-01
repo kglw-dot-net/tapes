@@ -2,10 +2,29 @@
 <html lang="en" class="bg-zinc-200 dark:bg-zinc-900">
   <head>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+		
+		<%
+			default_title = 'Gizz Tapes'
+			default_description = 'Gizz Tapes is a jukebox for recordings of King Gizzard and the Lizard Wizard shows built and run by the KGLW.net team.'
+		%>
 
-    <title><%= content_for(:title) || "Gizz Tapes" %></title>
-    
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title><%= content_for?(:meta_title) ? yield(:meta_title) : default_title %></title>
+		<meta property="og:title" content="<%= content_for?(:meta_title) ? yield(:meta_title) : default_title %>" />
+		<meta name="twitter:title" content="<%= content_for?(:meta_title) ? yield(:meta_title) : default_title %>" />
+		
+		<meta name="description" content="<%= content_for?(:meta_description) ? yield(:meta_description) : default_description %>" />
+		<meta property="og:description" content="<%= content_for?(:meta_description) ? yield(:meta_description) : default_description %>" />
+		<meta name="twitter:description" content="<%= content_for?(:meta_description) ? yield(:meta_description) : default_description %>" />
+		
+		<meta name="twitter:image" content="<%= content_for?(:meta_image) ? yield(:meta_image) : asset_path('logo.png') %>" />
+		<meta property="og:image" content="<%= content_for?(:meta_image) ? yield(:meta_image) : asset_path('logo.png') %>" />
+		
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Gizz Tapes" />
+		
+		<meta name="twitter:card" content="summary_large_image" />
+		
+		<meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>

@@ -1,3 +1,5 @@
+<% content_for :meta_title, "#{@venue.name} on Gizz Tapes" %>
+
 <% location = [@venue.city, @venue.region, @venue.country.name].reject { |s| s.blank? }.join(', ') %>
 
 <div class="container mx-auto mt-8 px-5">
