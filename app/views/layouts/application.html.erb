@@ -36,7 +36,8 @@
 		<link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
 		<link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#87CEEB">
 		<meta name="msapplication-TileColor" content="#da532c">
-		<meta name="theme-color" content="#87CEEB">
+		
+		<meta name="theme-color" content="<%= content_for?(:meta_color) ? yield(:meta_color) : "#87CEEB" %>">
 
     <%= vite_client_tag %>
     <%= vite_javascript_tag "application", media: "all", "data-turbo-track": "reload" %>
