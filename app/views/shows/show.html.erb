@@ -8,7 +8,7 @@
 <% end %>
 
 <% if @show.color.present? %>
-	<% content_for :meta_color, @show.color %>
+	<% content_for :meta_color, "rgb(#{h @show.color})" %>
 <% end %>
 
 <div
