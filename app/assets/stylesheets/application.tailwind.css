@@ -84,19 +84,15 @@
     @apply bg-primary;
   }
 
-  .track.active>:first-child, .track.active>:last-child {
-    @apply text-white;
-  }
-
   .track>:nth-child(2) {
     @apply grow;
   }
 
-  .track.active>:nth-child(2) {
+  .track.active>* {
     @apply text-white;
   }
 
-  .track:not(.active)>:nth-child(2) {
+  .track:not(.active)>* {
     @apply text-black dark:text-white;
   }
 
@@ -106,6 +102,10 @@
 
   .track>:last-child {
     @apply grow-0 shrink-0 w-12 text-right;
+  }
+
+  .track:not(.active)>:first-child, .track:not(.active)>:last-child {
+    @apply opacity-60;
   }
 
   /* Footer */
