@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_19_122712) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_01_222610) do
   create_table "albums", force: :cascade do |t|
     t.string "title"
     t.string "cover_art_url"
@@ -180,6 +180,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_19_122712) do
     t.datetime "updated_at", null: false
     t.integer "country_id"
     t.index ["country_id"], name: "index_venues_on_country_id"
+  end
+
+  create_table "year_thumbnails", force: :cascade do |t|
+    t.integer "year"
+    t.string "poster_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "countries", "continents"
