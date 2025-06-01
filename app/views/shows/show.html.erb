@@ -1,4 +1,4 @@
-<% show_full_title = "#{@show.date}#{(@show.title.present? ? '—' + @show.title : '')}" %>
+<% show_full_title = h "#{@show.date.strftime("%Y-%m-%d")}#{(@show.title.present? ? '—' + @show.title : '')}" %>
 
 <% content_for :meta_title, "#{show_full_title} on Gizz Tapes" %>
 <% content_for :meta_description, "King Gizzard at #{@show.venue.name} in #{[@show.venue.city, @show.venue.region, @show.venue.country&.name].reject { |s| s.blank? }.join(', ')}" %>
