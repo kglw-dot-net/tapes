@@ -1,0 +1,2 @@
+class YearThumbnail < ApplicationRecord
+end
