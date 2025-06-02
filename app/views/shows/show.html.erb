@@ -120,7 +120,7 @@
 												 end
 							%>
 							<span class="badge badge-<%= color %> mr-2"><%= recording.recording_type.name %><%= ' by ' + (taper&.name || 'unknown') unless recording.recording_type.name == 'SBD' %></span>
-							<span class=""><%= recording.id %></span>
+							<span class="text-black dark:text-white opacity-60"><%= recording.id %></span>
 						<% else %>
 							<select
 								class="select w-full"
