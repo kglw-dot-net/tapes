@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   private
 
   def set_layout_data
-    @set_types = Rails.cache.fetch("set_types_excluding_standard_or_inactive", expires_in: 24.hours) do
+    @set_types = #Rails.cache.fetch("set_types_excluding_standard_or_inactive", expires_in: 24.hours) do
       SetType
         .joins(setlists: :show)
         .where.not(id: 1)
@@ -31,6 +31,6 @@ class ApplicationController < ActionController::Base
         .distinct
         .order(:name)
         .to_a
-    end
+    # end
   end
 end
