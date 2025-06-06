@@ -27,6 +27,9 @@ class PagesController < ApplicationController
       { url: "https://i.imgur.com/cZ7H1s4.jpeg", vPosition: 53, credit: "David Avidan, 2024-08-27 @ Philadelphia PA, USA" },
       { url: "https://i.imgur.com/RPfFQnm.jpeg", vPosition: 20, credit: "David Avidan, 2024-08-27 @ Philadelphia PA, USA" },
       { url: "https://i.imgur.com/sQKrODS.jpeg", vPosition: 55, credit: "Joe Lugo, 2024-08-27 @ Philadelphia PA, USA" },
+      { url: "https://i.imgur.com/LI2y3ZI.jpeg", vPosition: 42, credit: "Elliot Crotteau, 2024-08-28 @ Richmond VA, USA" },
+      { url: "https://i.imgur.com/nWPCl6C.jpeg", vPosition: 50, credit: "Elliot Crotteau, 2024-08-28 @ Richmond VA, USA" },
+      { url: "https://i.imgur.com/sOYEmqF.jpeg", vPosition: 42, credit: "Elliot Crotteau, 2024-08-28 @ Richmond VA, USA" },
       { url: "https://i.imgur.com/D9qgiYX.jpeg", vPosition: 40, credit: "the.bread.photography, 2024-09-01 @ Chicago IL, USA" },
       { url: "https://i.imgur.com/FprUDnN.jpeg", vPosition: 50, credit: "the.bread.photography, 2024-09-01 @ Chicago IL, USA" },
       { url: "https://i.imgur.com/4GRF3Qw.jpeg", vPosition: 68, credit: "the.bread.photography, 2024-09-01 @ Chicago IL, USA" },
@@ -40,7 +43,16 @@ class PagesController < ApplicationController
       { url: "https://i.imgur.com/K2aNZr1.jpeg", vPosition: 70, credit: "Axe, 2024-11-03 @ Paso Robles CA, USA" },
       { url: "https://i.imgur.com/PD3UNxn.jpeg", vPosition: 40, credit: "Axe, 2024-11-04 @ Stanford CA, USA" },
       { url: "https://i.imgur.com/LLXzXWk.jpeg", vPosition: 60, credit: "Axe, 2024-11-04 @ Stanford CA, USA" },
-      { url: "https://i.imgur.com/lIxdgPN.jpeg", vPosition: 20, credit: "/u/roadhogmtn, 2024-11-10 @ Albuquerque NM, USA" }
+      { url: "https://i.imgur.com/lIxdgPN.jpeg", vPosition: 20, credit: "/u/roadhogmtn, 2024-11-10 @ Albuquerque NM, USA" }, 
+      { url: "https://i.imgur.com/DJz1gnQ.jpeg", vPosition: 67, credit: "photon.obscura, 2024-09-14 @ The Gorge, George WA, USA" },
+      { url: "https://i.imgur.com/nzJDFgv.jpeg", vPosition: 100, credit: "photon.obscura, 2024-11-02 @ San Diego CA, USA" },
+      { url: "https://i.imgur.com/FoOvMtm.jpeg", vPosition: 75, credit: "photon.obscura, 2024-11-03 @ Paso Robles CA, USA" },
+      { url: "https://i.imgur.com/zpxt05W.jpeg", vPosition: 45, credit: "photon.obscura, 2024-11-04 @ The Frost, Stanford CA, USA" },
+      { url: "https://i.imgur.com/tdiJzr9.jpeg", vPosition: 70, credit: "photon.obscura, 2024-11-06 @ San Francisco CA, USA" },
+      { url: "https://i.imgur.com/riZG18C.jpeg", vPosition: 80, credit: "photon.obscura, 2024-11-19 @ Atlanta GA, USA" },
+      { url: "https://i.imgur.com/MPKk3d2.jpeg", vPosition: 50, credit: "saffron, 2025-05-19 @ Lisbon, Portugal" },
+      { url: "https://i.imgur.com/CQDZY9p.jpeg", vPosition: 44, credit: "saffron, 2025-05-19 @ Lisbon, Portugal" },
+      { url: "https://i.imgur.com/9DOzZ99.jpeg", vPosition: 50, credit: "saffron, 2025-05-19 @ Lisbon, Portugal" }
     ]
   end
 
