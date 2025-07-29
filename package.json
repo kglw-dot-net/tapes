@@ -6,7 +6,7 @@
     "@hotwired/turbo-rails": "^8.0.13",
     "@types/howler": "^2.2.12",
     "@types/node": "^22.15.17",
-    "daisyui": "^4.12.22",
+    "daisyui": "^5.0.50",
     "dexie": "^4.0.11",
     "howler": "^2.2.4",
     "sortablejs": "^1.15.6",
