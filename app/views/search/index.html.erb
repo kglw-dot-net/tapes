@@ -1,0 +1,66 @@
+<div class="container mx-auto mt-16 px-5">
+	<form class="w-full max-w-lg mx-auto"
+				action="#"
+				method="get"
+	>
+		<!--				data-controller="auto-submit" -->
+		<!--				data-auto-submit-target="form"-->
+		<div class="join w-full ">
+			<label class="input flex rounded-r-none w-full cursor-text">
+				<input class="rounded-r-none"
+							 type="search"
+							 name="q"
+							 placeholder="Search"
+							 value="<%= @query %>"
+					/>
+				<!--							 required-->
+				<!--							 autofocus-->
+				<!--							 onfocus="this.select()"-->
+				<!--							 data-auto-submit-target="input"-->
+				<!--							 data-action="input->auto-submit#input blur->auto-submit#blur"-->
+				<!--							 data-turbo-permanent-->
+			</label>
+			
+			<button type="submit" class="btn btn-primary join-item">
+				<svg class="h-[1em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+					<g
+						stroke-linejoin="round"
+						stroke-linecap="round"
+						stroke-width="2.5"
+						fill="none"
+						stroke="currentColor"
+					>
+						<circle cx="11" cy="11" r="8"></circle>
+						<path d="m21 21-4.3-4.3"></path>
+					</g>
+				</svg>
+			</button>
+		</div>
+	</form>
+	
+	<% if !@query.blank? %>
+		<% if @query.length <= 3 %>
+			<p class="text-center text-error mt-3">Please enter more than 3 characters to search!</p>
+		<% else %>
+			<h2 class="text-3xl font-bold mt-8 mb-3 text-center text-black dark:text-white">
+				Search Results for "<%= h @query %>"
+			</h2>
+			
+			<h3 class="text-2xl font-bold mb-8 text-center">
+				<%= @shows.length %> show<%= 's' unless @shows.length == 1 %>
+			</h3>
+			
+			<% if @shows.any? %>
+				<div class="card bg-base-100 shadow-xl mb-5">
+					<div class="card-body py-5 px-3">
+						<div class="responsive-grid">
+							<% @shows.each do |show| %>
+								<%= render "featured_show", show: show %>
+							<% end %>
+						</div>
+					</div>
+				</div>
+			<% end %>
+		<% end %>
+	<% end %>
+</div>

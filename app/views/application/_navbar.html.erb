@@ -50,7 +50,7 @@
 			<li>
 				<details class="z-10">
 					<summary>Show Types</summary>
-					<ul class="p-2">
+					<ul class="p-2 shadow-xl top-8">
 						<% @set_types.each do |set_type| %>
 							<li><a href="/types/<%= set_type.name.parameterize %>"><%= set_type.name %>s</a></li>
 						<% end %>
@@ -74,5 +74,21 @@
 	</div>
 	<div class="navbar-end">
 		<%# <button type="button" class="btn" onclick="login_modal.showModal()">Login</button> %>
+		
+		<a href="/search" class="btn btn-ghost text-black dark:text-white font-normal">
+			<span class="hidden lg:block">Search</span>
+			<svg class="h-[1em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+				<g
+					stroke-linejoin="round"
+					stroke-linecap="round"
+					stroke-width="2.5"
+					fill="none"
+					stroke="currentColor"
+				>
+					<circle cx="11" cy="11" r="8"></circle>
+					<path d="m21 21-4.3-4.3"></path>
+				</g>
+			</svg>
+		</a>
 	</div>
 </div>
