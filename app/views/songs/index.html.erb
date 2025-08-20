@@ -73,7 +73,7 @@
           </div>
         <% end %>
 
-        <% songs.sort_by { |song| album.nil? or song.track_number.nil? ? song.name : song.track_number }.each do |song| %>
+        <% songs.sort_by { |song| album.nil? or song.track_number.nil? ? song.name : song.track_number.to_s }.each do |song| %>
           <% show_count = @song_show_counts.find { |sc| sc.song_id == song.id }.show_count %>
 
           <a href="/songs/<%= song.slug %>" class="flex justify-between items-center rounded px-2 py-1 transition hover:bg-base-200">
