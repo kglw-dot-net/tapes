@@ -4,7 +4,7 @@
 <% content_for :meta_description, "King Gizzard at #{@show.venue.name} in #{[@show.venue.city, @show.venue.region, @show.venue.country&.name].reject { |s| s.blank? }.join(', ')}" %>
 
 <% if @show.poster_url.present? %>
-<% content_for :meta_image, @show.poster_url %>
+	<% content_for :meta_image, @show.poster_url %>
 <% end %>
 
 <% if @show.color.present? %>
@@ -136,7 +136,7 @@
 										data-taper="<%= taper&.name %>"
 										data-type="<%= recording.recording_type.name %>"
 									>
-										<%= recording.recording_type.name + (recording.recording_type.name == 'SBD' ? '' : ' by ' + (taper&.name || 'unknown') ) + ': ' + recording.id %>
+										<%= recording.recording_type.name + (recording.recording_type.name == 'SBD' ? '' : ' by ' + (taper&.name || 'unknown')) + ': ' + recording.id %>
 									</option>
 								<% end %>
 							</select>
@@ -165,8 +165,8 @@
 						<% files = recording
 							.recording_files
 							.matching_format(recording.preferred_format)
-							# .with_all_ancestors_present(recording.id)
-							
+							 # .with_all_ancestors_present(recording.id)
+							 
 							 if recording.id == 'kglw2025-05-18.KGLWLisbon25N1' or
 									recording.id == 'kglw2025-05-19.KGLWLisbon25N2' or
 									recording.id == 'kglw2025-05-23.Spain2025N1'
@@ -229,6 +229,21 @@
 										<dt class="text-xs">Upload Date</dt>
 										<dd class="text-black dark:text-white mb-3"><%= recording.uploaded_at.strftime("%Y-%m-%d") %></dd>
 									</div>
+									
+									<%
+										torrent_file = recording.recording_files.find { |x| x.format == 'Archive BitTorrent' }
+										if torrent_file.present?
+									%>
+										<div class="break-inside-avoid-column">
+											<dt class="text-xs">Download</dt>
+											<dd class="text-black dark:text-white mb-3">
+												<a href="<%= torrent_file.url %>"
+													 class="link link-hover link-primary"
+													 target="_blank">
+													Download via BitTorrent
+												</a>
+										</div>
+									<% end %>
 								</dl>
 							</div>
 						</div>
