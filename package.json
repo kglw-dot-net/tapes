@@ -3,7 +3,7 @@
   "type": "module",
   "devDependencies": {
     "@hotwired/stimulus": "^3.2.2",
-    "@hotwired/turbo-rails": "^8.0.13",
+    "@hotwired/turbo-rails": "^8.0.20",
     "@types/howler": "^2.2.12",
     "@types/node": "^22.15.17",
     "daisyui": "^4.12.22",
