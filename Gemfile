@@ -20,7 +20,7 @@ gem "tailwindcss-rails"
 gem "jbuilder"
 
 # For retrieving data from Songfish API
-gem "faraday", "~> 2.12", ">= 2.12.2"
+gem "faraday", "~> 2.14"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
