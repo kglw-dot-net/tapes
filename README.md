@@ -2,14 +2,16 @@
 
 A web app for streaming live music recordings. Rewrite of a previous version, now using Rails 8, Tailwind, Hotwire, etc.. Code licensed under AGPL. Currently hardcoded to cater for King Gizzard.
 
-## Running
-
-Start with `foreman start -f Procfile.dev`
-
-## Live instances
+# Live instances
 
 * [Gizz Tapes](https://tapes.kglw.net/) (soon!)
 * [Gizz Tapes (dev)](https://gizztapes2.fly.dev/)
+
+# Commands
+
+## Running
+
+Start with `foreman start -f Procfile.dev`
 
 ## Rake tasks
 
@@ -21,6 +23,10 @@ Start with `foreman start -f Procfile.dev`
 * `tapes:ia:fetchNew` -- fetches new recordings from the Internet Archive
 * `tapes:songfish:loadOverrides["~/path"]` -- loads overrides from GT1
 * `tapes:songfish:update` -- fetches latest show, setlist, etc. data from a Songfish instance
+
+### Rswag
+
+* `rake rswag` -- update the API docs page based on `/spec/requests/api/api_spec.rb`
 
 ## Fly.io
 
