@@ -63,6 +63,8 @@ group :development, :test do
 
   gem "rspec-rails"
   gem "rswag-specs"
+
+  gem "foreman"
 end
 
 group :development do
