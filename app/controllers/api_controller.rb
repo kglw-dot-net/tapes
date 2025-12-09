@@ -18,7 +18,8 @@ class ApiController < ApplicationController
   end
 
   def show
-    show = Show.find_by(slug: params[:slug], is_active: true)
+    show = Show.find_by(slug: params[:id], is_active: true) ||
+           Show.find_by(songfishID: params[:id], is_active: true)
 
     raise ActionController::RoutingError.new("Not Found") if show.nil?
 
