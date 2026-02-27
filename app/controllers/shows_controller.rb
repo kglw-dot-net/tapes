@@ -43,6 +43,19 @@ class ShowsController < ApplicationController
     # end
   end
 
+  # GET /:year/random
+  def random
+    @year = params[:year]
+
+    show = Show
+      .where(is_active: true)
+      .where("date >= ? AND date <= ?", "#{@year}-01-01", "#{@year}-12-31")
+      .order("RANDOM()")
+      .first
+
+    redirect_to show
+  end
+
   # GET /:slug
   def show
     @show = Show.find_by(slug: params[:slug], is_active: true)

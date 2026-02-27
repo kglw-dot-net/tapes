@@ -16,7 +16,7 @@
     </h2>
     
     <h3 class="text-2xl font-bold mb-8 text-center">
-        <%= @shows.length %> show<%= 's' unless @shows.length == 1 %>
+        <%= @shows.length %> show<%= 's' unless @shows.length == 1 %> &mdash; <a class="text-primary" href="/<%= @year %>/random">pick one at random!</a>
     </h3>
 
     <% if @tours.length > 1 %>
@@ -40,7 +40,7 @@
             <div class="card-body pb-4 pt-5 px-3">
                 <h2 class="card-title mb-2 text-black dark:text-white flex px-2" id="<%= tour.name.parameterize %>">
                     <span class="grow"><%= tour.name %> </span>
-                    <span class="text-end opacity-50"><%= tour_shows.length %>&nbsp;show<%= 's' unless tour_shows.length == 1 %></a>
+                    <span class="text-end opacity-50"><%= tour_shows.length %>&nbsp;show<%= 's' unless tour_shows.length == 1 %></span>
                 </h2>
 
                 <div class="responsive-grid">

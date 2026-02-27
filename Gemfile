@@ -81,3 +81,5 @@ end
 gem "mini_magick", "~> 5.2"
 
 gem "dockerfile-rails", ">= 1.6", group: :development
+
+gem "erb", "~> 6.0"

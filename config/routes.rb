@@ -26,13 +26,19 @@ Rails.application.routes.draw do
 
   get "years" => "shows#years"
 
+  get ":year/random" => "shows#random", constraints: lambda { |request|
+    Show.where(is_active: true).select("strftime('%Y', date) AS year").distinct.map(&:year).include?(request.params[:year])
+  }
+
   get ":year" => "shows#year", constraints: lambda { |request|
     Show.where(is_active: true).select("strftime('%Y', date) AS year").distinct.map(&:year).include?(request.params[:year])
   }
 
-  get ":slug" => "shows#show", constraints: lambda { |request|
-    Show.where.not(slug: nil).where(is_active: true).pluck(:slug).include?(request.params[:slug])
-  }
+  get ":slug" => "shows#show",
+    as: :show,
+    constraints: lambda { |request|
+      Show.where.not(slug: nil).where(is_active: true).pluck(:slug).include?(request.params[:slug])
+    }
 
   get ":slug/partials/featured" => "shows#featured", constraints: lambda { |request|
     Show.where.not(slug: nil).where(is_active: true).pluck(:slug).include?(request.params[:slug])
