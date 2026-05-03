@@ -119,4 +119,5 @@ Rails.application.routes.draw do
   get "api/v1/shows.json" => "api#shows"
   get "api/v1/shows/:id.json" => "api#show"
   get "api/v1/hero_photos.json" => "pages#hero_photos"
+  get "api/v1/search" => "api#search"
 end

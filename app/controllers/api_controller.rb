@@ -64,4 +64,21 @@ class ApiController < ApplicationController
       end
     }
   end
+
+  def search
+    shows = Searcher.search(params[:q]&.strip)
+                    .map do |show|
+      {
+        id: show.slug,
+        date: show.date,
+        venuename: show.venue.name,
+        location: [ show.venue.city, show.venue.region, show.venue.country&.name ].reject { |s| s.blank? }.join(", "),
+        title: show.title,
+        order: show.order,
+        poster_url: show.poster_url
+      }
+    end
+
+    render json: shows
+  end
 end

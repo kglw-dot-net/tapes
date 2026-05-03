@@ -125,4 +125,32 @@ RSpec.describe 'API', type: :request do
       end
     end
   end
+
+  path '/api/v1/search' do
+    get 'Searches all shows' do
+      tags 'Shows'
+      produces 'application/json'
+
+      parameter name: :q, in: :query, type: :string
+
+      response '200', 'shows found' do
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   id: { type: :string },
+                   date: { type: :string },
+                   venuename: { type: :string },
+                   location: { type: :string },
+                   title: { type: :string },
+                   order: { type: :integer },
+                   poster_url: { type: :string }
+                 },
+                 required: %w[id date venuename location order]
+               }
+
+        run_test!
+      end
+    end
+  end
 end

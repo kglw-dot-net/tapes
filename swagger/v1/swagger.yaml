@@ -159,3 +159,43 @@ paths:
                   required:
                   - credit
                   - url
+  "/api/v1/search":
+    get:
+      summary: Searches all shows
+      tags:
+      - Shows
+      parameters:
+      - name: q
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: shows found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    date:
+                      type: string
+                    venuename:
+                      type: string
+                    location:
+                      type: string
+                    title:
+                      type: string
+                    order:
+                      type: integer
+                    poster_url:
+                      type: string
+                  required:
+                  - id
+                  - date
+                  - venuename
+                  - location
+                  - order

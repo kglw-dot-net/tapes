@@ -38,18 +38,18 @@
 		</div>
 	</form>
 	
-	<% if !@query.blank? %>
-		<% if @query.length <= 3 %>
-			<p class="text-center text-error mt-3">Please enter more than 3 characters to search!</p>
+	<% unless @query.blank? %>
+		<% if @query.length < 3 %>
+			<p class="text-center text-error mt-3">Please enter more than 2 characters to search!</p>
 		<% else %>
 			<h2 class="text-3xl font-bold mt-8 mb-3 text-center text-black dark:text-white">
 				Search Results for "<%= h @query %>"
 			</h2>
-			
+
 			<h3 class="text-2xl font-bold mb-8 text-center">
 				<%= @shows.length %> show<%= 's' unless @shows.length == 1 %>
 			</h3>
-			
+
 			<% if @shows.any? %>
 				<div class="card bg-base-100 shadow-xl mb-5">
 					<div class="card-body py-5 px-3">
