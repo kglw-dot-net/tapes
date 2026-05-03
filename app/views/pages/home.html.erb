@@ -75,29 +75,19 @@
       </div>
 
       <div class="mb-4 lg:mb-0">
-        <h3 class="font-bold text-2xl mb-3 text-center text-black dark:text-white">Get the Android app</h3>
+        <h3 class="font-bold text-2xl mb-3 text-center text-black dark:text-white">Get the mobile app</h3>
 
         <div class="flex justify-center">
-          <a class="btn" href="https://play.google.com/store/apps/details?id=gizz.tapes.full"
-            target="_blank">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-              stroke="currentColor" class="size-6">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
-            </svg>
-
-            Google Play
+          <a class="h-12" href="https://apps.apple.com/app/gizz-tapes/id6761312548" target="_blank">
+            <img class="h-full" src="<%= asset_path('app-store.svg') %>" alt="Download on the App Store" />
           </a>
 
-          <a class="btn ml-3" href="https://f-droid.org/en/packages/gizz.tapes.foss/"
-             target="_blank">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                 stroke="currentColor" class="size-6">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
-            </svg>
+          <a class="h-12 ml-3" href="https://f-droid.org/en/packages/gizz.tapes.foss/" target="_blank">
+            <img class="h-full" src="<%= asset_path('f-droid.svg') %>" alt="Get it on F-Droid" />
+          </a>
 
-            F-Droid
+          <a class="h-12 ml-3" href="https://play.google.com/store/apps/details?id=gizz.tapes.full" target="_blank">
+            <img class="h-full" src="<%= asset_path('google-play.svg') %>" alt="Get it on the Play Store" />
           </a>
         </div>
       </div>
