@@ -14,7 +14,7 @@ jobs:
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: flyctl deploy --remote-only -a gizztapes2-staging -c fly.staging.toml
         env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_API_TOKEN: ${{ secrets.FLY_API_STAGING_TOKEN }}
   production:
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
