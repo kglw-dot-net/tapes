@@ -43,7 +43,7 @@ class PagesController < ApplicationController
       { url: "https://images.kglw.net/K2aNZr1.jpeg", vPosition: 70, credit: "Axe, 2024-11-03 @ Paso Robles CA, USA" },
       { url: "https://images.kglw.net/PD3UNxn.jpeg", vPosition: 40, credit: "Axe, 2024-11-04 @ Stanford CA, USA" },
       { url: "https://images.kglw.net/LLXzXWk.jpeg", vPosition: 60, credit: "Axe, 2024-11-04 @ Stanford CA, USA" },
-      { url: "https://images.kglw.net/lIxdgPN.jpeg", vPosition: 20, credit: "/u/roadhogmtn, 2024-11-10 @ Albuquerque NM, USA" }, 
+      { url: "https://images.kglw.net/lIxdgPN.jpeg", vPosition: 20, credit: "/u/roadhogmtn, 2024-11-10 @ Albuquerque NM, USA" },
       { url: "https://images.kglw.net/DJz1gnQ.jpeg", vPosition: 67, credit: "photon.obscura, 2024-09-14 @ The Gorge, George WA, USA" },
       { url: "https://images.kglw.net/nzJDFgv.jpeg", vPosition: 100, credit: "photon.obscura, 2024-11-02 @ San Diego CA, USA" },
       { url: "https://images.kglw.net/FoOvMtm.jpeg", vPosition: 75, credit: "photon.obscura, 2024-11-03 @ Paso Robles CA, USA" },

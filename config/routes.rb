@@ -86,9 +86,9 @@ Rails.application.routes.draw do
 
   get "types/:slug" => "types#type", constraints: lambda { |request|
     slug = request.params[:slug]
-    #Rails.cache.fetch("set_type_slug_exists_#{slug}", expires_in: 6.hours) do
-      SetType.exists?(["LOWER(REPLACE(name, ' ', '-')) = ?", slug.downcase])
-    #end
+    Rails.cache.fetch("set_type_slug_exists_#{slug}", expires_in: 2.hours) do
+      SetType.exists?([ "LOWER(REPLACE(name, ' ', '-')) = ?", slug.downcase ])
+    end
   }
 
   # Notables controller
