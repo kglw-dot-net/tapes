@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: deploy-production
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: flyctl deploy --remote-only -a gizztapes2 -c fly.toml
         env:
