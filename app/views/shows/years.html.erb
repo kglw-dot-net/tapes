@@ -5,24 +5,24 @@
         <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
             <ul class="menu menu-horizontal justify-center">
                 <% @years.each do |year| %>
-                    <li><a href="/<%= year.year %>"><%= year.year %></a></li>
+                    <li><a href="/<%= year[:year] %>"><%= year[:year] %></a></li>
                 <% end %>
             </ul>
         </div>
     </div>
 
     <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white">All Shows by Year</h2>
-    <h3 class="text-2xl font-bold mb-8 text-center">Total Shows: <%= @years.sum(&:show_count) %></h3>
+    <h3 class="text-2xl font-bold mb-8 text-center">Total Shows: <%= @years.sum { |y| y[:show_count] } %></h3>
     
     <div class="responsive-grid bg-base-100 rounded-xl shadow-xl p-5">
         <% @years.each do |year| %>
-            <a href="/<%= year.year %>" class="featured-item">
+            <a href="/<%= year[:year] %>" class="featured-item">
                 <div class="indicator w-full">
-                    <img src="<%= year.poster_url.blank? ? asset_path('missing.png') : year.poster_url %>" />
+                    <img src="<%= year[:poster_url].blank? ? asset_path('missing.png') : year[:poster_url] %>" />
                 </div>
         
-                <h4 class="text-primary mt-1"><%= year.year %></h4>
-                <small><%= year.show_count %> show<%= 's' unless year.show_count == 1 %></small>
+                <h4 class="text-primary mt-1"><%= year[:year] %></h4>
+                <small><%= year[:show_count] %> show<%= 's' unless year[:show_count] == 1 %></small>
             </a>
         <% end %>
     </div>
