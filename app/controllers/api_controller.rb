@@ -1,4 +1,6 @@
 class ApiController < ApplicationController
+  before_action :set_cache_headers
+
   def shows
     shows = Show
       .where(is_active: true)
@@ -80,5 +82,11 @@ class ApiController < ApplicationController
     end
 
     render json: shows
+  end
+
+  private
+
+  def set_cache_headers
+    response.headers["Cache-Control"] = "public, max-age=#{2.hours.to_i}"
   end
 end
