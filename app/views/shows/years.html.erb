@@ -4,7 +4,7 @@
     <div class="flex mb-8">
         <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
             <ul class="menu menu-horizontal justify-center">
-                <% @years.order(:year).reverse.each do |year| %>
+                <% @years.each do |year| %>
                     <li><a href="/<%= year.year %>"><%= year.year %></a></li>
                 <% end %>
             </ul>
