@@ -93,22 +93,16 @@ class PagesController < ApplicationController
       .order(Arel.sql("RANDOM()"))
       .limit(@shows_per_card)
 
-    @latest_year = Show.where(is_active: true).maximum(:date).year
-    @earliest_year = Show.where(is_active: true).minimum(:date).year
+    stats = Searcher.stats
 
-    @total_shows = Show.where(is_active: true).count
-
-    @total_recordings = Recording.joins(:show)
-      .where(is_active: true, shows: { is_active: true })
-      .count
-
-    total_minutes = RecordingFile.joins(recording: :show)
-      .where("recording_files.name LIKE '%' || recordings.preferred_format")
-      .where(recordings: { is_active: true, shows: { is_active: true } })
-      .sum(:length) / 60
-
-    @hours = ActiveSupport::NumberHelper.number_to_delimited((total_minutes / 60).floor)
-    @minutes = ActiveSupport::NumberHelper.number_to_delimited((total_minutes % 60).floor)
+    @latest_year = stats[:latest_year]
+    @earliest_year = stats[:earliest_year]
+    @total_shows = stats[:total_shows]
+    @total_recordings = stats[:total_recordings]
+    @hours = stats[:hours]
+    @minutes = stats[:minutes]
+    @sbd_count = stats[:sbd_count]
+    @aud_count = stats[:aud_count]
 
     hero_photos = get_hero_photos
 
@@ -131,14 +125,6 @@ class PagesController < ApplicationController
     end
 
     @hero_photo = hero_photos.sample
-
-    @sbd_count = Recording.joins(:recording_type, :show)
-      .where(is_active: true, recording_types: { name: "SBD" }, shows: { is_active: true })
-      .count
-
-    @aud_count = Recording.joins(:recording_type, :show)
-      .where(is_active: true, recording_types: { name: "AUD" }, shows: { is_active: true })
-      .count
   end
 
   def hero_photos

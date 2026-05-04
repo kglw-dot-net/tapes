@@ -21,7 +21,7 @@
           <div class="stat place-items-center">
             <div class="stat-title">Shows</div>
             <div class="stat-value text-black dark:text-white">
-              <%= @total_shows %>
+              <%= number_with_delimiter(@total_shows) %>
             </div>
             <div class="stat-desc">from <%= @earliest_year %> to <%= @latest_year %>
             </div>
@@ -30,7 +30,7 @@
           <div class="stat place-items-center">
             <div class="stat-title">Recordings</div>
             <div class="stat-value text-primary">
-              <%= @total_recordings %>
+              <%= number_with_delimiter(@total_recordings) %>
             </div>
             <div class="stat-desc text-primary/50">
               <%= @aud_count %> <abbr title="audience recordings">AUD</abbr>,
@@ -41,7 +41,7 @@
           <div class="stat place-items-center">
             <div class="stat-title">Hours</div>
             <div class="stat-value text-black dark:text-white">
-              <%= @hours %>
+              <%= number_with_delimiter(@hours) %>
             </div>
             <div class="stat-desc">and <%= @minutes %> mins</div>
           </div>

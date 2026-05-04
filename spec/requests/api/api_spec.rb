@@ -153,4 +153,52 @@ RSpec.describe 'API', type: :request do
       end
     end
   end
+
+  path '/api/v1/years.json' do
+    get 'List all years with shows' do
+      tags 'Misc.'
+
+      produces 'application/json'
+
+      response '200', 'years found' do
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   year: { type: :integer },
+                   show_count: { type: :integer },
+                   poster_url: { type: :string }
+                 },
+                 required: %w[year show_count]
+               }
+
+        run_test!
+      end
+    end
+  end
+
+  path '/api/v1/stats.json' do
+    get 'Retrieves statistics' do
+      tags 'Misc.'
+
+      produces 'application/json'
+
+      response '200', 'stats found' do
+        schema type: :object,
+               properties: {
+                 latest_year: { type: :integer },
+                 earliest_year: { type: :integer },
+                 total_shows: { type: :integer },
+                 total_recordings: { type: :integer },
+                 hours: { type: :integer },
+                 minutes: { type: :integer },
+                 sbd_count: { type: :integer },
+                 aud_count: { type: :integer }
+               },
+               required: %w[latest_year earliest_year total_shows total_recordings hours minutes sbd_count aud_count]
+
+        run_test!
+      end
+    end
+  end
 end

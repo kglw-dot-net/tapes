@@ -1,18 +1,7 @@
 class ShowsController < ApplicationController
   # GET /years
   def years
-    @years = Show
-               .select(<<~SQL)
-    strftime('%Y', shows.date) AS year,
-    COUNT(*) AS show_count,
-    COALESCE(
-      (SELECT yt.poster_url FROM year_thumbnails yt WHERE yt.year = strftime('%Y', shows.date) LIMIT 1),
-      MAX(CASE WHEN shows.poster_url IS NOT NULL THEN shows.poster_url ELSE '' END)
-    ) AS poster_url
-  SQL
-               .where(is_active: true)
-               .group("year")
-               .order("year DESC")
+    @years = Searcher.years
   end
 
   # GET /:year

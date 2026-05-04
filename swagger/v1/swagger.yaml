@@ -199,3 +199,65 @@ paths:
                   - venuename
                   - location
                   - order
+  "/api/v1/years.json":
+    get:
+      summary: List all years with shows
+      tags:
+      - Misc.
+      responses:
+        '200':
+          description: years found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    year:
+                      type: integer
+                    show_count:
+                      type: integer
+                    poster_url:
+                      type: string
+                  required:
+                  - year
+                  - show_count
+  "/api/v1/stats.json":
+    get:
+      summary: Retrieves statistics
+      tags:
+      - Misc.
+      responses:
+        '200':
+          description: stats found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  latest_year:
+                    type: integer
+                  earliest_year:
+                    type: integer
+                  total_shows:
+                    type: integer
+                  total_recordings:
+                    type: integer
+                  hours:
+                    type: integer
+                  minutes:
+                    type: integer
+                  sbd_count:
+                    type: integer
+                  aud_count:
+                    type: integer
+                required:
+                - latest_year
+                - earliest_year
+                - total_shows
+                - total_recordings
+                - hours
+                - minutes
+                - sbd_count
+                - aud_count

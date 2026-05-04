@@ -91,6 +91,14 @@ class ApiController < ApplicationController
     render json: shows
   end
 
+  def years
+    render json: Searcher.years
+  end
+
+  def stats
+    render json: Searcher.stats
+  end
+
   private
 
   def set_cache_headers
