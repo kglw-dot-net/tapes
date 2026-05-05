@@ -59,12 +59,16 @@ class PagesController < ApplicationController
   def home
     @shows_per_card = 6
 
-    # Get the latest n shows
+    # Get the most recent n shows
     @most_recent_shows = Show
       .includes(venue: :country)
       .includes(:recordings)
       .where(is_active: true)
       .order(date: :desc, order: :desc)
+      .limit(@shows_per_card)
+
+    # Get the latest added n shows
+    @recently_uploaded_shows = Searcher.archival_uploads
       .limit(@shows_per_card)
 
     # Get n shows from today's date

@@ -121,4 +121,9 @@ class ShowsController < ApplicationController
       }
     end
   end
+
+  # GET /archival
+  def archival
+    @shows = Searcher.archival_uploads
+  end
 end

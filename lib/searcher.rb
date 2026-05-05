@@ -73,4 +73,17 @@ class Searcher
       }
     end
   end
+
+  def self.archival_uploads
+    Rails.cache.fetch("Searcher.archival_uploads", expires_in: 2.hours) do
+      Show
+        .joins(:recordings)
+        .includes(venue: :country)
+        .where(is_active: true, recordings: { is_active: true })
+        .select("shows.*, MIN(recordings.uploaded_at) AS oldest_upload")
+        .group("shows.id")
+        .having("(JULIANDAY(MIN(recordings.uploaded_at)) - JULIANDAY(shows.date)) >= 365")
+        .order("oldest_upload DESC")
+    end
+  end
 end

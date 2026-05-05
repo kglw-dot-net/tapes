@@ -1,0 +1,40 @@
+<% content_for :meta_title, "Archival Uploads on Gizz Tapes" %>
+
+<div class="container mx-auto mt-8 px-5">
+  <h2 class="text-3xl font-bold mb-8 text-center text-black dark:text-white">
+    Archival Uploads
+  </h2>
+
+  <div class="bg-base-100 rounded-xl shadow-xl py-5 px-2">
+    <% @shows.each do |show| %>
+      <% venue = show.venue %>
+
+      <a
+        class="
+        flex
+        cursor-pointer
+        justify-between
+        mb-3 lg:mb-1
+        py-1 lg:py-0
+        hover:bg-base-200 transition
+        rounded
+        items-center"
+        href="/<%= show.slug %>"
+      >
+        <span class="h-[2.875rem] w-32 lg:h-32 lg:my-4 lg:w-[30%]">
+          <img class="h-full mx-auto" src="<%= show.poster_url.blank? ? asset_path('missing.png') : show.poster_url %>" />
+        </span>
+
+        <span class="w-4/5 lg:w-full pl-2 md:pl-4 lg:pl-4 xl:pl-0">
+          <span class="text-lg text-black dark:text-white"><%= show.date.strftime("%Y-%m-%d") %><%= raw '&mdash;' unless show.title.blank? %><%= show.title %></span>
+          <br/>
+          <span class="text-sm"><%= [venue.name, venue.city, venue.region, venue.country.name].reject(&:blank?).join(', ') %></span>
+        </span>
+
+        <span class="w-32 lg:w-64 align-middle text-sm text-end pr-3">
+          uploaded <%= show.oldest_upload.split(' ')[0] %>
+        </span>
+      </a>
+    <% end %>
+  </div>
+</div>

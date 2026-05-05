@@ -65,6 +65,8 @@ Rails.application.routes.draw do
     }
   end
 
+  get "archival" => "shows#archival"
+
   # Discography controller
 
   get "songs" => "songs#index"
