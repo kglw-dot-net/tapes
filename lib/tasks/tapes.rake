@@ -10,6 +10,10 @@ namespace :tapes do
 
     Tapes.setDefaults
 
+    puts "Clearing caches..."
+
+    Rails.cache.clear
+
     puts "Done!"
   end
 
