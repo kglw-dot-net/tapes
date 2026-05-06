@@ -16,7 +16,6 @@ console_command = '/rails/bin/rails console'
   auto_stop_machines = false
   auto_start_machines = false
   min_machines_running = 0
-  processes = ['app']
 
 [[vm]]
   memory = '1gb'
