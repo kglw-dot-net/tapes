@@ -22,7 +22,7 @@
         href="/<%= show.slug %>"
       >
         <span class="h-[2.875rem] w-32 lg:h-32 lg:my-4 lg:w-[30%]">
-          <img class="h-full mx-auto" src="<%= show.poster_url.blank? ? asset_path('missing.png') : show.poster_url %>" />
+          <img class="h-full mx-auto rounded" src="<%= show.poster_url.blank? ? asset_path('missing.png') : show.poster_url %>" />
         </span>
 
         <span class="w-4/5 lg:w-full pl-2 md:pl-4 lg:pl-4 xl:pl-0">
