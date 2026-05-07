@@ -63,6 +63,10 @@ Rails.application.routes.draw do
         .where("strftime('%d', date) = ?", "%02d" % request.params[:date])
         .exists?
     }
+
+    get "today/:month/:date" => "shows#today", constraints: lambda { |request|
+      Date::MONTHNAMES.compact.index { |m| m.casecmp(request.params[:month]) == 0 }.present?
+    }
   end
 
   get "archival" => "shows#archival"

@@ -126,4 +126,25 @@ class ShowsController < ApplicationController
   def archival
     @shows = Searcher.archival_uploads
   end
+
+  # GET /today/:month/:date
+  def today
+    month = params[:month]
+    date = params[:date]
+
+    @day_text = month.capitalize + " " + date
+    @day_url = url_for(controller: "shows", action: "date", month: month, date: date)
+
+    month_idx = Date::MONTHNAMES.compact.index { |m| m.casecmp(month) == 0 } + 1
+
+    @shows = Show
+      .includes(venue: :country)
+      .includes(:recordings)
+      .where(is_active: true)
+      .where("strftime('%m', date) = ?", "%02d" % month_idx)
+      .where("strftime('%d', date) = ?", "%02d" % date)
+      .order(date: :desc)
+
+    render partial: "today"
+  end
 end
