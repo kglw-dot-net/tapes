@@ -6,7 +6,7 @@
         <a href="<%= @day_url %>" class="text-end text-primary">&raquo; View all</a>
       </h3>
 
-      <div class="horizontal-scroll lg:responsive-grid text-center pb-3">
+      <div class="horizontal-scroll lg:responsive-grid text-center pb-3" data-controller="scroll-fade">
         <% @shows.each do |show| %>
           <%= render "featured_show", show: show %>
         <% end %>
