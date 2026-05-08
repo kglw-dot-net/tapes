@@ -27,8 +27,8 @@ RUN apt-get update -qq && \
 ENV BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development:test" \
-    RAILS_ENV="production"
-
+    RAILS_ENV="production" \
+    SOLID_QUEUE_IN_PUMA=true
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
