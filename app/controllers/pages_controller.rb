@@ -52,7 +52,8 @@ class PagesController < ApplicationController
       { url: "https://images.kglw.net/riZG18C.jpeg", vPosition: 80, credit: "photon.obscura, 2024-11-19 @ Atlanta GA, USA" },
       { url: "https://images.kglw.net/MPKk3d2.jpeg", vPosition: 50, credit: "saffron, 2025-05-19 @ Lisbon, Portugal" },
       { url: "https://images.kglw.net/CQDZY9p.jpeg", vPosition: 44, credit: "saffron, 2025-05-19 @ Lisbon, Portugal" },
-      { url: "https://images.kglw.net/9DOzZ99.jpeg", vPosition: 50, credit: "saffron, 2025-05-19 @ Lisbon, Portugal" }
+      { url: "https://images.kglw.net/9DOzZ99.jpeg", vPosition: 50, credit: "saffron, 2025-05-19 @ Lisbon, Portugal" },
+      { url: "https://images.kglw.net/KGLWnet_06112025_Tilburg_Poppodium-HU8A8092.jpg", vPosition: 25, credit: "dandy_gonna_wallop, 2025-11-06 @ Tilburg, Netherlands" }
     ]
   end
 
@@ -60,33 +61,25 @@ class PagesController < ApplicationController
     @shows_per_card = 6
 
     # Get the most recent n shows
-    @most_recent_shows = Show
-      .includes(venue: :country)
-      .includes(:recordings)
-      .where(is_active: true)
-      .order(date: :desc, order: :desc)
-      .limit(@shows_per_card)
+    @most_recent_shows = Searcher.most_recent_shows.limit(@shows_per_card)
 
     # Get the latest added n shows
-    @recently_uploaded_shows = Searcher.archival_uploads
-      .limit(@shows_per_card)
+    @recently_uploaded_shows = Searcher.archival_uploads.limit(@shows_per_card)
 
     # Get n shows from today's date
     # e.g. if today is 2024-12-26, get all shows with on December 26th regardless of year
-    @today_shows = Show
-      .includes(venue: :country)
-      .includes(:recordings)
-      .where(is_active: true)
-      # .where("EXTRACT(MONTH FROM date) = ? AND EXTRACT(DAY FROM date) = ?", Time.current.month, Time.current.day)
-      .where("strftime('%m', date) = ? AND strftime('%d', date) = ?", Time.current.month.to_s.rjust(2, "0"), Time.current.day.to_s.rjust(2, "0"))
-      .order(date: :desc, order: :desc)
-      .limit(@shows_per_card)
+    @today_shows = Searcher.today_shows.limit(@shows_per_card)
+
+    @top_shows = Searcher.top_shows.limit(@shows_per_card)
 
     # Get n random shows
     # No real need to exclude posterless shows, just looks nicer on the front page
     # First impressions and all that
 
-    exclude_from_random_shows = @most_recent_shows.pluck(:id) + @today_shows.pluck(:id)
+    exclude_from_random_shows = @most_recent_shows.map(&:id) +
+                                @today_shows.map(&:id) +
+                                @recently_uploaded_shows.map(&:id) +
+                                @top_shows.map(&:id)
 
     @random_shows = Show
       .includes(venue: :country)

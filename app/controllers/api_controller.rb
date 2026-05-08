@@ -13,7 +13,10 @@ class ApiController < ApplicationController
             location: [ show.venue.city, show.venue.region, show.venue.country&.name ].reject { |s| s.blank? }.join(", "),
             title: show.title,
             order: show.order,
-            poster_url: show.poster_url
+            poster_url: show.poster_url,
+            average_rating: show.average_rating,
+            count_ratings: show.count_ratings,
+            weighted_rating: show.bayesian_rating
           }
         end
     end
@@ -34,6 +37,10 @@ class ApiController < ApplicationController
         poster_url: show.poster_url,
         notes: show.notes,
         title: show.title,
+
+        average_rating: show.average_rating,
+        count_ratings: show.count_ratings,
+        weighted_rating: show.bayesian_rating,
 
         kglw_net: {
           id: show.songfishID,
@@ -84,7 +91,10 @@ class ApiController < ApplicationController
         location: [ show.venue.city, show.venue.region, show.venue.country&.name ].reject { |s| s.blank? }.join(", "),
         title: show.title,
         order: show.order,
-        poster_url: show.poster_url
+        poster_url: show.poster_url,
+        average_rating: show.average_rating,
+        count_ratings: show.count_ratings,
+        weighted_rating: show.bayesian_rating
       }
     end
 

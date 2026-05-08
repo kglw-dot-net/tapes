@@ -127,6 +127,10 @@ class ShowsController < ApplicationController
     @shows = Searcher.archival_uploads
   end
 
+  def top
+    @shows = Searcher.top_shows
+  end
+
   # GET /today/:month/:date
   def today
     month = params[:month]

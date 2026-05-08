@@ -17,6 +17,17 @@ namespace :tapes do
     puts "Done!"
   end
 
+  desc "Manually update weighted show ratings"
+  task calculateWeightedRatings: [ :environment ] do
+    include Tapes
+
+    puts "Calculating weighted show ratings..."
+
+    Tapes.calculateWeightedRatings
+
+    puts "Done!"
+  end
+
   desc "Set background colors for shows based on posters"
   task setShowColors: [ :environment ] do
     include Tapes
@@ -82,6 +93,21 @@ namespace :tapes do
       puts "Updating Songfish data..."
 
       Songfish.update
+
+      puts "Done!"
+    end
+
+    desc "Full Songfish update, using web scraper to update ratings and posters"
+    task fullUpdate: [ :environment ] do
+      include Songfish
+
+      puts "Updating Songfish data..."
+
+      Songfish.update
+
+      puts "Calculating weighted ratings..."
+
+      Tapes.calculateWeightedRatings
 
       puts "Done!"
     end

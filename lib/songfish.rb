@@ -14,6 +14,14 @@ module Songfish
     updateSetlists
   end
 
+  def full_update
+    updateVenues
+    updateCountries
+    updateSongs
+    updateShows(true, true)
+    updateSetlists
+  end
+
   def updateCountries
     puts "\tUpdating countries..."
 
@@ -180,15 +188,12 @@ module Songfish
     response["data"]
   end
 
-  def getPosterUrlFromWebScraper(permalink)
-    url = URI.join(@@url, "/setlists/#{permalink}")
-    site = Faraday.new.get(url).body
-    doc = Nokogiri::HTML(site)
+  def getPosterUrlFromWebScraper(doc)
     poster_link = doc.at_css("#setlist-card-poster-art a")
     poster_link&.attr("href")
   end
 
-  def updateShows(is_replace_posters = false)
+  def updateShows(is_replace_posters = false, is_update_ratings = false)
     puts "\tUpdating shows..."
 
     uploads = getUploads
@@ -234,6 +239,8 @@ module Songfish
           show.notes = setlist["shownotes"]
         end
 
+        doc = nil
+
         # show.notes = setlists[0]["notes"] unless setlists.nil? or setlists.empty?
 
         poster_upload = uploads.find { |u| u["show_id"] == songfish_show["show_id"].to_s and u["upload_type"] == "poster-art" }
@@ -242,14 +249,27 @@ module Songfish
           show.poster_url = poster_upload["URL"]
         else
           if show.poster_url.blank? or is_replace_posters
-            poster_url = getPosterUrlFromWebScraper(show.songfishPermalink)
+            doc = scrapeShowPage(show) if doc.nil?
+            poster_url = getPosterUrlFromWebScraper(doc)
             show.poster_url = poster_url unless poster_url.nil?
           end
+        end
+
+        if is_update_ratings
+          doc = scrapeShowPage(show) if doc.nil?
+          show.count_ratings = doc.at_css("#sf-rating-count").text.strip.to_i
+          show.average_rating = show.count_ratings == 0 ? nil : doc.at_css("#sf-rating-avg").text.strip.to_f
         end
 
         show.save
       end
     end
+  end
+
+  def scrapeShowPage(show)
+    url = URI.join(@@url, "/setlists/#{show.songfishPermalink}")
+    site = Faraday.new.get(url).body
+    Nokogiri::HTML(site)
   end
 
   def loadOverrides(path)

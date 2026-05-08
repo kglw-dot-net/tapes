@@ -26,6 +26,19 @@
             </span>
         <% end %>
 
+        <% unless show.average_rating.nil? or show.count_ratings < 3 %>
+            <span
+                class="indicator-item badge badge-warning bg-opacity-60 backdrop-blur shadow transform-none mr-3"
+                <% if seconds > 0 %>
+                    style="margin-top:calc(0.5rem + 1.25rem + 0.5rem + 1.25rem + 0.25rem) !important;"
+                <% else %>
+                    style="margin-top:calc(0.5rem + 1.25rem + 0.5rem) !important;"
+                <% end %>
+            >
+                <%= format('%.1f', show.average_rating) %>&#9733;
+            </span>
+        <% end %>
+
         <img class="rounded-xl" src="<%= show.poster_url || (asset_path 'missing.png') %>" />
     </div>
     

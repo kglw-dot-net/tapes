@@ -33,6 +33,14 @@ paths:
                       type: integer
                     poster_url:
                       type: string
+                    average_rating:
+                      type: number
+                      format: float
+                    count_ratings:
+                      type: integer
+                    weighted_rating:
+                      type: number
+                      format: float
                   required:
                   - id
                   - date
@@ -70,6 +78,14 @@ paths:
                     type: string
                   title:
                     type: string
+                  average_rating:
+                    type: number
+                    format: float
+                  count_ratings:
+                    type: integer
+                  weighted_rating:
+                    type: number
+                    format: float
                   kglw_net:
                     type: object
                     properties:
@@ -193,6 +209,14 @@ paths:
                       type: integer
                     poster_url:
                       type: string
+                    average_rating:
+                      type: number
+                      format: float
+                    count_ratings:
+                      type: integer
+                    weighted_rating:
+                      type: number
+                      format: float
                   required:
                   - id
                   - date

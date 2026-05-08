@@ -17,7 +17,10 @@ RSpec.describe 'API', type: :request do
               location: { type: :string },
               title: { type: :string },
               order: { type: :integer },
-              poster_url: { type: :string }
+              poster_url: { type: :string },
+              average_rating: { type: :number, format: :float },
+              count_ratings: { type: :integer },
+              weighted_rating: { type: :number, format: :float }
             },
             required: %w[id date venuename location order]
           }
@@ -43,6 +46,9 @@ RSpec.describe 'API', type: :request do
             poster_url: { type: :string },
             notes: { type: :string },
             title: { type: :string },
+            average_rating: { type: :number, format: :float },
+            count_ratings: { type: :integer },
+            weighted_rating: { type: :number, format: :float },
             kglw_net: {
               type: :object,
               properties: {
@@ -144,7 +150,10 @@ RSpec.describe 'API', type: :request do
                    location: { type: :string },
                    title: { type: :string },
                    order: { type: :integer },
-                   poster_url: { type: :string }
+                   poster_url: { type: :string },
+                   average_rating: { type: :number, format: :float },
+                   count_ratings: { type: :integer },
+                   weighted_rating: { type: :number, format: :float }
                  },
                  required: %w[id date venuename location order]
                }

@@ -143,4 +143,14 @@ module Tapes
       end
     end
   end
+
+  def calculateWeightedRatings
+    minimum_ratings = Show.average(:count_ratings)
+    all_shows_mean_rating = Show.where.not(average_rating: nil).average(:average_rating)
+
+    Show.all.each do |show|
+      show.bayesian_rating = show.average_rating.nil? ? nil : Bayesian.calculate(show.average_rating, show.count_ratings, minimum_ratings, all_shows_mean_rating)
+      show.save
+    end
+  end
 end

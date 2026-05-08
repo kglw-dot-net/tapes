@@ -70,6 +70,7 @@ Rails.application.routes.draw do
   end
 
   get "archival" => "shows#archival"
+  get "top" => "shows#top"
 
   # Discography controller
 

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Searcher
+  CACHE_DURATION = 4.hours
+
   def self.search(query)
     return [] if query.blank? or query.length < 3
 
@@ -21,7 +23,7 @@ class Searcher
   end
 
   def self.years
-    Rails.cache.fetch("Searcher.years", expires_in: 2.hours) do
+    Rails.cache.fetch("Searcher.years", expires_in: CACHE_DURATION) do
       Show
         .select(<<~SQL)
       CAST(strftime('%Y', shows.date) AS INTEGER) AS year,
@@ -45,7 +47,7 @@ class Searcher
   end
 
   def self.stats
-    Rails.cache.fetch("Searcher.stats", expires_in: 2.hours) do
+    Rails.cache.fetch("Searcher.stats", expires_in: CACHE_DURATION) do
       total_minutes = RecordingFile.joins(recording: :show)
                                    .where("recording_files.name LIKE '%' || recordings.preferred_format")
                                    .where(recordings: { is_active: true, shows: { is_active: true } })
@@ -75,7 +77,7 @@ class Searcher
   end
 
   def self.archival_uploads
-    Rails.cache.fetch("Searcher.archival_uploads", expires_in: 2.hours) do
+    Rails.cache.fetch("Searcher.archival_uploads", expires_in: CACHE_DURATION) do
       Show
         .joins(:recordings)
         .includes(venue: :country)
@@ -84,6 +86,41 @@ class Searcher
         .group("shows.id")
         .having("(JULIANDAY(MIN(recordings.uploaded_at)) - JULIANDAY(shows.date)) >= 365")
         .order("oldest_upload DESC")
+    end
+  end
+
+  def self.top_shows
+    Rails.cache.fetch("Searcher.top_shows", expires_in: CACHE_DURATION) do
+      Show
+        .includes(venue: :country)
+        .includes(:recordings)
+        .where(is_active: true)
+        .where("count_ratings >= ?", 3)
+        .order(bayesian_rating: :desc)
+    end
+  end
+
+  def self.most_recent_shows
+    Rails.cache.fetch("Searcher.most_recent_shows", expires_in: CACHE_DURATION) do
+      Show
+        .includes(venue: :country)
+        .includes(:recordings)
+        .where(is_active: true)
+        .order(date: :desc, order: :desc)
+    end
+  end
+
+  def self.today_shows
+    month = Time.current.month.to_s.rjust(2, "0")
+    day = Time.current.day.to_s.rjust(2, "0")
+
+    Rails.cache.fetch("Searcher.today_shows(#{month},#{day})", expires_in: 24.hours) do
+      Show
+        .includes(venue: :country)
+        .includes(:recordings)
+        .where(is_active: true)
+        .where("strftime('%m', date) = ? AND strftime('%d', date) = ?", month, day)
+        .order(date: :desc, order: :desc)
     end
   end
 end
