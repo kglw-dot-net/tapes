@@ -6,13 +6,13 @@ require "faraday"
 module InternetArchive
   @@searchQuery = 'collection:KingGizzardAndTheLizardWizard OR creator:"King Gizzard & The Lizard Wizard" OR subject:"KGLW" OR subject:"kgatlw" OR subject:"king gizzard" OR subject:"king gizzard & the lizard wizard"'
 
-  def update(is_create_only)
+  def self.update(is_create_only)
     identifiers = getUploads
 
     identifiers.each { |identifier| updateRecording(identifier, is_create_only) }
   end
 
-  def runInternetArchiveSearch(query)
+  def self.runInternetArchiveSearch(query)
     searchResults = []
     urlEncodedQuery = URI.encode_www_form_component(query)
     pageNo = 1
@@ -38,11 +38,11 @@ module InternetArchive
     searchResults
   end
 
-  def getUploads
+  def self.getUploads
     runInternetArchiveSearch(@@searchQuery).map { |x| x["identifier"] }
   end
 
-  def updateRecording (identifier, is_create_only = false)
+  def self.updateRecording (identifier, is_create_only = false)
     return nil if is_create_only and Recording.exists?(id: identifier)
 
     puts "\tUpdating recording #{identifier}..."
@@ -95,7 +95,7 @@ module InternetArchive
     end
   end
 
-  def getTitleForFile(file, files)
+  def self.getTitleForFile(file, files)
     return file["title"] unless file["title"].nil?
 
     return processPathAsTitle(file["name"]) if file["original"].nil?
@@ -110,11 +110,11 @@ module InternetArchive
     ogFile["title"].nil? ? processPathAsTitle(file["name"]) : ogFile["title"]
   end
 
-  def processPathAsTitle(path)
+  def self.processPathAsTitle(path)
     File.basename(path, ".*").split(".")[0]
   end
 
-  def getFileLength(x)
+  def self.getFileLength(x)
     return nil if x.nil?
     return x.to_f if x.include?(".")
 
@@ -126,7 +126,7 @@ module InternetArchive
     x.to_i
   end
 
-  def loadOverrides(path)
+  def self.loadOverrides(path)
     puts "\tLoading overrides from path..."
 
     overrides = YAML.load_file(path)

@@ -15,4 +15,4 @@ production:
     schedule: every hour at minute 12
   update_songfish_data:
     command: "Songfish.full_update"
-    schedule: every hour at minute 15
+    schedule: every hour at minute 45

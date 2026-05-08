@@ -6,7 +6,7 @@ require "faraday"
 module Songfish
   @@url = "https://kglw.net"
 
-  def update
+  def self.update
     updateVenues
     updateCountries
     updateSongs
@@ -14,7 +14,7 @@ module Songfish
     updateSetlists
   end
 
-  def full_update
+  def self.full_update
     updateVenues
     updateCountries
     updateSongs
@@ -22,7 +22,7 @@ module Songfish
     updateSetlists
   end
 
-  def updateCountries
+  def self.updateCountries
     puts "\tUpdating countries..."
 
     Country.where(slug: nil).each do |country|
@@ -31,7 +31,7 @@ module Songfish
     end
   end
 
-  def updateVenues
+  def self.updateVenues
     puts "\tUpdating venues..."
 
     url = URI.join(@@url, "/api/v2/venues")
@@ -63,7 +63,7 @@ module Songfish
     end
   end
 
-  def updateSongs
+  def self.updateSongs
     url = URI.join(@@url, "/api/v2/songs")
 
     conn = Faraday.new(url) do |f|
@@ -91,7 +91,7 @@ module Songfish
   end
 
   # Convert string e.g. "1:23" to number of seconds e.g. 83.0
-  def getDuration(time)
+  def self.getDuration(time)
     return nil if time.blank?
 
     parts = time.split(":")
@@ -103,7 +103,7 @@ module Songfish
     minutes * 60 + seconds
   end
 
-  def updateSetlists
+  def self.updateSetlists
     puts "\tUpdating setlists..."
 
     (2010..Time.current.year).each do |year|
@@ -154,7 +154,7 @@ module Songfish
     end
   end
 
-  def getUploads
+  def self.getUploads
     url = URI.join(@@url, "/api/v2/uploads")
 
     conn = Faraday.new(url) do |f|
@@ -171,7 +171,7 @@ module Songfish
     response["data"]
   end
 
-  def getSetlistsForYear(year)
+  def self.getSetlistsForYear(year)
     url = URI.join(@@url, "/api/v2/setlists/showyear/#{year}")
 
     conn = Faraday.new(url) do |f|
@@ -188,12 +188,12 @@ module Songfish
     response["data"]
   end
 
-  def getPosterUrlFromWebScraper(doc)
+  def self.getPosterUrlFromWebScraper(doc)
     poster_link = doc.at_css("#setlist-card-poster-art a")
     poster_link&.attr("href")
   end
 
-  def updateShows(is_replace_posters = false, is_update_ratings = false)
+  def self.updateShows(is_replace_posters = false, is_update_ratings = false)
     puts "\tUpdating shows..."
 
     uploads = getUploads
@@ -266,13 +266,13 @@ module Songfish
     end
   end
 
-  def scrapeShowPage(show)
+  def self.scrapeShowPage(show)
     url = URI.join(@@url, "/setlists/#{show.songfishPermalink}")
     site = Faraday.new.get(url).body
     Nokogiri::HTML(site)
   end
 
-  def loadOverrides(path)
+  def self.loadOverrides(path)
     overrides = YAML.load_file(path)
 
     overrides.each do |override|

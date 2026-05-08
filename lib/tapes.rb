@@ -1,5 +1,5 @@
 module Tapes
-  def setDefaults
+  def self.setDefaults
     puts "For each show without a slug, if there is only one show with the same date, set the slug to date in YYYY-MM-DD format"
     Show.where(slug: [ nil, "" ])
       .where(is_active: nil)
@@ -93,7 +93,7 @@ module Tapes
     end
   end
 
-  def setShowColors
+  def self.setShowColors
     Show.where(color: nil)
       .find_each do |show|
         puts "\tSetting color for show #{show.slug || show.id}..."
@@ -104,7 +104,7 @@ module Tapes
 
   # Get the average color of an image from a URL
   # Outputs 'r, g, b' where r, g, and b are integers between 0 and 255
-  def getAvgColor(url)
+  def self.getAvgColor(url)
     return nil if url.nil?
 
     uri = URI.parse(url)
@@ -124,7 +124,7 @@ module Tapes
     color.gsub("srgb(", "").gsub(")", "")
   end
 
-  def importAlbums(path)
+  def self.importAlbums(path)
     ymlalbums = YAML.load_file(path)
 
     ymlalbums.each do |ymlalbum|
@@ -144,7 +144,7 @@ module Tapes
     end
   end
 
-  def calculateWeightedRatings
+  def self.calculateWeightedRatings
     minimum_ratings = Show.average(:count_ratings)
     all_shows_mean_rating = Show.where.not(average_rating: nil).average(:average_rating)
 
