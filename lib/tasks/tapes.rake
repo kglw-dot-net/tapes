@@ -85,11 +85,7 @@ namespace :tapes do
     task fullUpdate: [ :environment ] do
       puts "Updating Songfish data..."
 
-      Songfish.update
-
-      puts "Calculating weighted ratings..."
-
-      Tapes.calculateWeightedRatings
+      Songfish.full_update
 
       puts "Done!"
     end

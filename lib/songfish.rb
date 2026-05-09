@@ -20,6 +20,7 @@ module Songfish
     updateSongs
     updateShows(true, true)
     updateSetlists
+    Tapes.calculateWeightedRatings
   end
 
   def self.updateCountries

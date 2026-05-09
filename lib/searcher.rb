@@ -96,7 +96,7 @@ class Searcher
         .includes(:recordings)
         .where(is_active: true)
         .where("count_ratings >= ?", 3)
-        .order(bayesian_rating: :desc)
+        .order(bayesian_rating: :desc, average_rating: :desc, count_ratings: :desc)
     end
   end
 
