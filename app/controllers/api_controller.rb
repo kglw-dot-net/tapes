@@ -68,7 +68,7 @@ class ApiController < ApplicationController
               {
                 filename: file.name,
                 length: file.length,
-                title: file.title
+                title: file.title_override || file.title
               }
             end
           }

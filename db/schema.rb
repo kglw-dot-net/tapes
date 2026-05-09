@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_07_232011) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_09_120548) do
   create_table "albums", force: :cascade do |t|
     t.string "title"
     t.string "cover_art_url"
@@ -50,6 +50,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_07_232011) do
     t.string "recording_id", null: false
     t.string "name"
     t.string "url"
+    t.string "title_override"
     t.index ["recording_id"], name: "index_recording_files_on_recording_id"
   end
 

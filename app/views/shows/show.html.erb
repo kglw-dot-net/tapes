@@ -180,7 +180,7 @@
 						%>
 						
 						<% files.each_with_index do |file, idx| %>
-							<% track_title = (file.title || file.name).gsub('->', '→').upcase_first %>
+							<% track_title = (file.title_override || file.title || file.name).gsub('->', '→').upcase_first %>
 							<a class="track"
 								 data-action="playlist#playTrack"
 								 data-track-title="<%= track_title %>"
