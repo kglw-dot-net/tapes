@@ -4,8 +4,8 @@ A web app for streaming live music recordings. Rewrite of a previous version, no
 
 # Live instances
 
-* [Gizz Tapes](https://tapes.kglw.net/) (soon!)
-* [Gizz Tapes (dev)](https://gizztapes2.fly.dev/)
+* [Gizz Tapes](https://tapes.kglw.net/)
+* [Gizz Tapes (staging)](https://gizztapes2-staging.fly.dev/)
 
 # Commands
 
@@ -23,6 +23,7 @@ Start with `foreman start -f Procfile.dev`
 * `tapes:ia:fetchNew` -- fetches new recordings from the Internet Archive
 * `tapes:songfish:loadOverrides["~/path"]` -- loads overrides from GT1
 * `tapes:songfish:update` -- fetches latest show, setlist, etc. data from a Songfish instance
+* `tapes:songfish:fullUpdate` -- also fetches latest user ratings of shows, which relies on a web scraper; is also run as a Solid Queue recurring job
 
 ### Rswag
 
