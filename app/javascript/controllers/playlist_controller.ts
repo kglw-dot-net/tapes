@@ -11,6 +11,16 @@ export default class extends Controller<HTMLElement> {
             title: this.element.dataset.playlistTitle,
             thumbnail: this.element.dataset.playlistThumbnail,
             url: window.location.href,
+
+            color: this.element.dataset.playlistColor,
+
+            showTitle: this.element.dataset.showTitle,
+            venueName: this.element.dataset.venueName,
+            city: this.element.dataset.city,
+            date: this.element.dataset.date,
+
+            duration: parseInt(this.element.dataset.playlistDuration),
+
             tracks: [...this.element.querySelectorAll(`[data-action="playlist#playTrack"]`)].map((track: HTMLAnchorElement) => ({
                 title: track.dataset.trackTitle,
                 

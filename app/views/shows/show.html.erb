@@ -159,31 +159,38 @@
 				<% @show.recordings.where(is_active: true).each do |recording| %>
 					<% taper = recording.taper&.parent_id.nil? ? recording.taper : recording.taper.parent %>
 					<% taper = nil if taper&.is_anon? %>
-					
+
+          <% files = recording
+            .recording_files
+            .matching_format(recording.preferred_format)
+             # .with_all_ancestors_present(recording.id)
+
+             # TODO: remove these recording specific hacks
+
+             if recording.id == 'kglw2025-05-18.KGLWLisbon25N1' or
+                recording.id == 'kglw2025-05-19.KGLWLisbon25N2' or
+                recording.id == 'kglw2025-05-23.Spain2025N1'
+               files = files.where("name GLOB '[0-9][0-9]*'")
+             end
+
+             if recording.id == 'kglw2025-08-02'
+               files = files.order(name: :asc)
+             end
+          %>
+
 					<div
 						data-controller="playlist"
 						data-playlist-id="<%= recording.id %>"
 						data-playlist-title="<%= raw show_full_title %>"
 						data-playlist-thumbnail="<%= @show.poster_url %>"
+            data-playlist-color="<%= @show.color %>"
+            data-show-title="<%= @show.title %>"
+            data-venue-name="<%= @show.venue.name %>"
+            data-city="<%= [@show.venue.city, @show.venue.region, @show.venue.country&.name].reject { |s| s.blank? }.join(', ') %>"
+            data-date="<%= @show.date.strftime("%Y-%m-%d") %>"
+            data-playlist-duration="<%= files.map(&:length).sum %>"
 						class="hidden"
 					>
-						<% files = recording
-							.recording_files
-							.matching_format(recording.preferred_format)
-							 # .with_all_ancestors_present(recording.id)
-
-               # TODO: remove these recording specific hacks
-
-							 if recording.id == 'kglw2025-05-18.KGLWLisbon25N1' or
-									recording.id == 'kglw2025-05-19.KGLWLisbon25N2' or
-									recording.id == 'kglw2025-05-23.Spain2025N1'
-								 files = files.where("name GLOB '[0-9][0-9]*'")
-							 end
-
-               if recording.id == 'kglw2025-08-02'
-                 files = files.order(name: :asc)
-               end
-						%>
 						
 						<% files.each_with_index do |file, idx| %>
 							<% track_title = (file.title_override || file.title || file.name).gsub('->', '→').upcase_first %>

@@ -12,6 +12,14 @@ export interface Playlist {
     title: string;
 
     thumbnail: string;
+    color: string;
+
+    showTitle: string;
+    venueName: string;
+    city: string;
+    date: string;
+
+    duration: number;
 
     url: string;
 

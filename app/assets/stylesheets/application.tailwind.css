@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat&family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
 
 @layer base {
     /* Global utilities */
@@ -33,10 +33,9 @@
     }
 
     #mobilePlayerImage {
-        /* portrait:h-full */
         @apply portrait:h-0 portrait:my-8 portrait:grow portrait:mx-auto
-        landscape:mx-8 landscape:grow-0 landscape:my-8
-        rounded-xl object-contain;
+        rounded-xl object-contain
+        landscape:mx-8 landscape:grow-0 landscape:my-8;
     }
 
     @media (orientation: landscape) {
@@ -132,5 +131,190 @@
         .hero .link-primary {
             color: var(--fallback-p, oklch(var(--p)));
         }
+    }
+
+    /* Tape mode */
+    :root {
+        /*--cassette-label-color: #ff4400;*/
+        --cassette-label-color: rgb(253, 198, 10);
+        --cassette-label-height: 62.3904219%;
+        --cassette-label-margin-top: 6.25%;
+        --cassette-label-margin-bottom: 4.73851305%;
+    }
+
+    .fs-cassette-outer-container {
+        @apply w-full my-8 grow rounded flex items-center justify-center;
+    }
+
+    .fs-cassette-inner-container {
+        @apply bg-base-300 rounded-xl;
+
+        display: inline-block;
+        aspect-ratio: 100 / 63.311;
+    }
+
+    @media (orientation: portrait) {
+        .fs-cassette-inner-container {
+            @apply w-full h-auto;
+        }
+    }
+
+    @media (orientation: landscape) {
+        .fs-cassette-inner-container {
+            @apply w-auto h-full mx-4;
+        }
+    }
+
+    .fs-cassette-label {
+        @apply rounded-lg mx-[6.81818182%];
+        height: var(--cassette-label-height);
+        margin-top: var(--cassette-label-margin-top);
+        position: relative;
+        background-color: var(--cassette-label-color);
+
+        /*clip-path: polygon(*/
+        /*        0 0,*/
+        /*        100% 0,*/
+        /*        100% 40%,*/
+        /*        0 40%,*/
+        /*        0 60%,*/
+        /*        100% 60%,*/
+        /*        100% 100%,*/
+        /*        0 100%*/
+        /*);*/
+    }
+
+    .fs-cassette-label-line {
+        @apply w-full h-[12.02278481%] bg-white;
+
+        border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+    }
+
+    .fs-cassette-label-line:first-child {
+        @apply rounded-t-lg;
+    }
+
+    .fs-cassette-label-line:first-child::before {
+        content: 'INDEX';
+        font-size: 1.5cqi;
+        padding-left: 1.5cqi;
+    }
+
+    .fs-cassette-label-writing {
+        @apply text-blue-700 w-full;
+        font-family: 'Caveat', cursive;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+        position: absolute;
+        top: 0;
+        font-size: 3cqi;
+        line-height: 4.25cqi;
+        padding-left: 6cqi;
+    }
+
+    .fs-cassette-label-writing-date {
+        position: absolute;
+        right: 0;
+        top: calc(100% / 3);
+        margin-right: 4cqi;
+        line-height: 4cqi;
+        font-size: 6cqi;
+    }
+
+    .fs-cassette-label-side-text {
+        @apply text-black;
+        position: absolute;
+        bottom: 0;
+        margin-bottom: 6cqi;
+        margin-left: 2cqi;
+    }
+
+    .fs-cassette-label-side-text-side {
+        @apply block;
+        font-weight: 500;
+        font-size: 6cqi;
+    }
+
+    .fs-cassette-label-side-text-type {
+        @apply block;
+        font-size: 1.5cqi;
+        line-height: 4cqi;
+    }
+
+    .fs-cassette-label-bottom {
+        @apply rounded-b-lg h-[18.10886076%] bg-white w-full flex;
+        position: absolute;
+        bottom: 0;
+        container-type: inline-size;
+    }
+
+    .fs-cassette-label-bottom-container {
+        @apply w-[85%] mx-auto h-full flex text-black font-semibold;
+    }
+
+    .fs-cassette-label-bottom-segment {
+        flex-grow: 1;
+    }
+
+    .fs-cassette-label-bottom-segment-brand {
+        @apply block font-serif text-[300%];
+        transform: scale(1.125,1);
+        font-size: 8cqi;
+        line-height: 6cqi;
+        font-weight: 600;
+        margin-left: 2.25cqi;
+    }
+
+    .fs-cassette-label-bottom-segment-type {
+        @apply block font-bold uppercase text-[2.5cqi];
+        line-height: 2cqi;
+    }
+
+    .fs-cassette-label-bottom-segment:last-child {
+        @apply text-[8cqi] text-right;
+        line-height: 8.5cqi;
+    }
+
+    .text-cassette-label-color {
+        color: var(--cassette-label-color);
+    }
+
+    .fs-cassette-protrusion {
+        @apply bg-base-100 mx-auto flex justify-evenly;
+        width: 61%;
+        height: calc(
+            100% -
+            calc(
+                var(--cassette-label-margin-top) +
+                    calc(
+                        var(--cassette-label-height) +
+                        var(--cassette-label-margin-bottom)
+                    )
+            )
+        );
+        margin-top: var(--cassette-label-margin-bottom);
+
+        clip-path: polygon(
+                5% 0%,
+                95% 0%,
+                100% 100%,
+                0% 100%
+        );
+    }
+
+    .fs-cassette-protrusion-hole {
+        @apply bg-gray-700/50;
+        --diameter: 3cqi;
+        width: var(--diameter);
+        height: var(--diameter);
+        border-radius: 50%;
+        margin-top: auto;
+        margin-bottom: 10%;
+    }
+
+    .fs-cassette-protrusion-hole:first-child,
+    .fs-cassette-protrusion-hole:last-child {
+        margin-bottom: 5%;
     }
 }
