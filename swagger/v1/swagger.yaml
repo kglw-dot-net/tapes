@@ -285,3 +285,61 @@ paths:
                 - minutes
                 - sbd_count
                 - aud_count
+  "/api/v1/venues.json":
+    get:
+      summary: Retrieves venues
+      tags:
+      - Venues
+      responses:
+        '200':
+          description: venues found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    slug:
+                      type: string
+                    name:
+                      type: string
+                    city:
+                      type: string
+                    region:
+                      type: string
+                    country_id:
+                      type: integer
+                    show_count:
+                      type: integer
+                  required:
+                  - id
+                  - name
+                  - show_count
+  "/api/v1/countries.json":
+    get:
+      summary: Retrieves countries
+      tags:
+      - Venues
+      responses:
+        '200':
+          description: countries found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    show_count:
+                      type: integer
+                  required:
+                  - id
+                  - name
+                  - show_count

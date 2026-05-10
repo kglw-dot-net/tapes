@@ -210,4 +210,54 @@ RSpec.describe 'API', type: :request do
       end
     end
   end
+
+  path '/api/v1/venues.json' do
+    get 'Retrieves venues' do
+      tags 'Venues'
+
+      produces 'application/json'
+
+      response '200', 'venues found' do
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   id: { type: :integer },
+                   slug: { type: :string },
+                   name: { type: :string },
+                   city: { type: :string },
+                   region: { type: :string },
+                   country_id: { type: :integer },
+                   show_count: { type: :integer }
+                 },
+                 required: %w[id name show_count]
+               }
+
+        run_test!
+      end
+    end
+  end
+
+  path '/api/v1/countries.json' do
+    get 'Retrieves countries' do
+      tags 'Venues'
+
+      produces 'application/json'
+
+      response '200', 'countries found' do
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   id: { type: :integer },
+                   name: { type: :string },
+                   show_count: { type: :integer }
+                 },
+                 required: %w[id name show_count]
+               }
+
+        run_test!
+      end
+    end
+  end
 end

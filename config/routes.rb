@@ -129,4 +129,6 @@ Rails.application.routes.draw do
   get "api/v1/search" => "api#search"
   get "api/v1/years.json" => "api#years"
   get "api/v1/stats.json" => "api#stats"
+  get "api/v1/venues.json" => "api#venues"
+  get "api/v1/countries.json" => "api#countries"
 end

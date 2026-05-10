@@ -2,7 +2,7 @@ class ApiController < ApplicationController
   before_action :set_cache_headers
 
   def shows
-    shows = Rails.cache.fetch("api/shows.json", expires_in: 2.hours) do
+    shows = Rails.cache.fetch("api/shows.json", expires_in: 4.hours) do
       Show
         .where(is_active: true)
         .map do |show|
@@ -24,7 +24,7 @@ class ApiController < ApplicationController
   end
 
   def show
-    show_data = Rails.cache.fetch("api/shows/#{params[:id]}.json", expires_in: 2.hours) do
+    show_data = Rails.cache.fetch("api/shows/#{params[:id]}.json", expires_in: 4.hours) do
       show = Show.find_by(slug: params[:id], is_active: true) ||
              Show.find_by(songfishID: params[:id], is_active: true)
 
@@ -109,9 +109,49 @@ class ApiController < ApplicationController
     render json: Searcher.stats
   end
 
+  def venues
+    venues = Rails.cache.fetch("api/venues.json", expires_in: 4.hours) do
+      Venue
+        .joins(:shows)
+        .where(shows: { is_active: true })
+        .distinct
+        .map do |venue|
+          {
+            id: venue.id,
+            slug: venue.slug,
+            name: venue.name,
+            city: venue.city,
+            region: venue.region,
+            country_id: venue.country_id,
+            show_count: venue.shows.where(is_active: true).count
+          }
+        end
+    end
+
+    render json: venues
+  end
+
+  def countries
+    countries = Rails.cache.fetch("api/countries.json", expires_in: 4.hours) do
+      Country
+        .joins(venues: :shows)
+        .where(shows: { is_active: true })
+        .distinct
+        .map do |country|
+          {
+            id: country.id,
+            name: country.name,
+            show_count: country.venues.joins(:shows).where(shows: { is_active: true }).count
+          }
+        end
+    end
+
+    render json: countries
+  end
+
   private
 
   def set_cache_headers
-    response.headers["Cache-Control"] = "public, max-age=#{2.hours.to_i}"
+    response.headers["Cache-Control"] = "public, max-age=#{4.hours.to_i}"
   end
 end
