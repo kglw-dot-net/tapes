@@ -1,21 +1,21 @@
 <% content_for :meta_title, "KGLW.net's Notable Tracks on Gizz Tapes" %>
 
 <div class="container mx-auto mt-8 px-5">
-    <h2 class="text-3xl font-bold mb-8 text-center text-black dark:text-white">
-        KGLW.net Curated Notable Tracks
-    </h2>
-    
-    <%= render "notable_links", current: 'curated' %>
-    
-    <div class="bg-base-100 rounded-xl shadow-xl py-5 px-2">
-        <% @songs.each do |song| %>
-            <%= render "notable_row", set_song: song %>
-            
-            <% unless song.jamchart_notes.blank? %>
-                <div class="block mb-8 px-5">
-                    <%=raw song.jamchart_notes %>
-                </div>
-            <% end %>
-        <% end %>
-    </div>
+  <h2 class="text-3xl font-bold mb-8 text-center text-black dark:text-white">
+    KGLW.net Curated Notable Tracks
+  </h2>
+
+  <%= render "notable_links", current: 'curated' %>
+
+  <div class="bg-base-100 rounded-xl shadow-xl py-5 px-2">
+    <% @songs.each do |song| %>
+      <%= render "notable_row", set_song: song %>
+
+      <% unless song.jamchart_notes.blank? %>
+        <div class="block mb-8 px-5">
+          <%= raw song.jamchart_notes %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
 </div>

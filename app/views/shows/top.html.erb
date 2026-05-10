@@ -23,7 +23,7 @@
         items-center"
         href="/<%= show.slug %>"
       >
-        <span class="w-16 align-middle pl-3 text-sm"><%= idx + 1 %>&nbsp;</span>
+        <span class="w-16 lg:w-8 align-middle pl-3 text-sm"><%= idx + 1 %>&nbsp;</span>
 
         <span class="h-[2.875rem] w-32 lg:h-32 lg:my-4 lg:w-[30%]">
           <img class="h-full mx-auto rounded" src="<%= show.poster_url.blank? ? asset_path('missing.png') : show.poster_url %>" />

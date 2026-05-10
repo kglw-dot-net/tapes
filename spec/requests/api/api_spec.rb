@@ -260,4 +260,97 @@ RSpec.describe 'API', type: :request do
       end
     end
   end
+
+  path '/api/v1/songs.json' do
+    get 'Retrieves songs' do
+      tags 'Discography'
+
+      produces 'application/json'
+
+      response '200', 'songs found' do
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   id: { type: :integer },
+                   slug: { type: :string },
+                   name: { type: :string },
+                   album_id: { type: :integer },
+                   track_number: { type: :integer },
+                   show_count: { type: :integer }
+                 },
+                 required: %w[id name show_count]
+               }
+
+        run_test!
+      end
+    end
+  end
+
+  path '/api/v1/songs/{slug}.json' do
+    get 'Retrieves a song' do
+      tags 'Discography'
+
+      produces 'application/json'
+
+      parameter name: :slug, in: :path, type: :string
+
+      response '200', 'song found' do
+        schema type: :object,
+               properties: {
+                 id: { type: :integer },
+                 slug: { type: :string },
+                 name: { type: :string },
+                 album_id: { type: :integer },
+                 track_number: { type: :integer },
+                 shows: {
+                    type: :array,
+                    items: {
+                      type: :object,
+                      properties: {
+                        id: { type: :string },
+                        is_notable: { type: :boolean },
+                        notable_description: { type: :string }
+                      }
+                    }
+                 }
+               },
+               required: %w[id name show_count]
+
+        let(:slug) { Song.first.slug }
+
+        run_test!
+      end
+
+      response '404', 'song not found' do
+        let(:slug) { 'invalid' }
+        run_test!
+      end
+    end
+  end
+
+  path '/api/v1/albums.json' do
+    get 'Retrieves albums' do
+      tags 'Discography'
+
+      produces 'application/json'
+
+      response '200', 'albums found' do
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   id: { type: :integer },
+                   title: { type: :string },
+                   cover_art_url: { type: :string },
+                   subtitle: { type: :string },
+                   release_date: { type: :string }
+                 },
+                 required: %w[id title]
+               }
+
+        run_test!
+      end
+    end
+  end
 end

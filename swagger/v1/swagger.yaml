@@ -343,3 +343,108 @@ paths:
                   - id
                   - name
                   - show_count
+  "/api/v1/songs.json":
+    get:
+      summary: Retrieves songs
+      tags:
+      - Discography
+      responses:
+        '200':
+          description: songs found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    slug:
+                      type: string
+                    name:
+                      type: string
+                    album_id:
+                      type: integer
+                    track_number:
+                      type: integer
+                    show_count:
+                      type: integer
+                  required:
+                  - id
+                  - name
+                  - show_count
+  "/api/v1/songs/{slug}.json":
+    get:
+      summary: Retrieves a song
+      tags:
+      - Discography
+      parameters:
+      - name: slug
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: song found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  slug:
+                    type: string
+                  name:
+                    type: string
+                  album_id:
+                    type: integer
+                  track_number:
+                    type: integer
+                  shows:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        is_notable:
+                          type: boolean
+                        notable_description:
+                          type: string
+                required:
+                - id
+                - name
+                - show_count
+        '404':
+          description: song not found
+  "/api/v1/albums.json":
+    get:
+      summary: Retrieves albums
+      tags:
+      - Discography
+      responses:
+        '200':
+          description: albums found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    title:
+                      type: string
+                    cover_art_url:
+                      type: string
+                    subtitle:
+                      type: string
+                    release_date:
+                      type: string
+                  required:
+                  - id
+                  - title

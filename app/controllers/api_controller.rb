@@ -6,19 +6,19 @@ class ApiController < ApplicationController
       Show
         .where(is_active: true)
         .map do |show|
-          {
-            id: show.slug,
-            date: show.date,
-            venuename: show.venue.name,
-            location: [ show.venue.city, show.venue.region, show.venue.country&.name ].reject { |s| s.blank? }.join(", "),
-            title: show.title,
-            order: show.order,
-            poster_url: show.poster_url,
-            average_rating: show.average_rating,
-            count_ratings: show.count_ratings,
-            weighted_rating: show.bayesian_rating
-          }
-        end
+        {
+          id: show.slug,
+          date: show.date,
+          venuename: show.venue.name,
+          location: [show.venue.city, show.venue.region, show.venue.country&.name].reject { |s| s.blank? }.join(", "),
+          title: show.title,
+          order: show.order,
+          poster_url: show.poster_url,
+          average_rating: show.average_rating,
+          count_ratings: show.count_ratings,
+          weighted_rating: show.bayesian_rating
+        }
+      end
     end
     render json: shows
   end
@@ -88,7 +88,7 @@ class ApiController < ApplicationController
         id: show.slug,
         date: show.date,
         venuename: show.venue.name,
-        location: [ show.venue.city, show.venue.region, show.venue.country&.name ].reject { |s| s.blank? }.join(", "),
+        location: [show.venue.city, show.venue.region, show.venue.country&.name].reject { |s| s.blank? }.join(", "),
         title: show.title,
         order: show.order,
         poster_url: show.poster_url,
@@ -116,16 +116,16 @@ class ApiController < ApplicationController
         .where(shows: { is_active: true })
         .distinct
         .map do |venue|
-          {
-            id: venue.id,
-            slug: venue.slug,
-            name: venue.name,
-            city: venue.city,
-            region: venue.region,
-            country_id: venue.country_id,
-            show_count: venue.shows.where(is_active: true).count
-          }
-        end
+        {
+          id: venue.id,
+          slug: venue.slug,
+          name: venue.name,
+          city: venue.city,
+          region: venue.region,
+          country_id: venue.country_id,
+          show_count: venue.shows.where(is_active: true).count
+        }
+      end
     end
 
     render json: venues
@@ -138,15 +138,74 @@ class ApiController < ApplicationController
         .where(shows: { is_active: true })
         .distinct
         .map do |country|
-          {
-            id: country.id,
-            name: country.name,
-            show_count: country.venues.joins(:shows).where(shows: { is_active: true }).count
-          }
-        end
+        {
+          id: country.id,
+          name: country.name,
+          show_count: country.venues.joins(:shows).where(shows: { is_active: true }).count
+        }
+      end
     end
 
     render json: countries
+  end
+
+  def songs
+    songs = Rails.cache.fetch("api/songs.json", expires_in: 4.hours) do
+      Searcher.songs.map do |song|
+        {
+          id: song.id,
+          slug: song.slug,
+          name: song.name,
+          show_count: song.show_count,
+          album_id: song.album_id,
+          track_number: song.track_number
+        }
+      end
+    end
+
+    render json: songs
+  end
+
+  def song
+    song = Song.find_by(slug: params[:slug])
+
+    raise ActionController::RoutingError.new("Not Found") if song.nil?
+
+    render json: {
+      id: song.id,
+      slug: song.slug,
+      name: song.name,
+      album_id: song.album_id,
+      track_number: song.track_number,
+      shows: song.set_songs
+                 .joins(setlist: :show)
+                 .where(setlists: { shows: { is_active: true } })
+                 .map do |set_song|
+        {
+          id: set_song.setlist.show.id,
+          is_notable: set_song.is_jamchart,
+          notable_description: set_song.jamchart_notes
+        }
+      end
+    }
+  end
+
+  def albums
+    albums = Rails.cache.fetch("api/albums.json", expires_in: 4.hours) do
+      Album
+        .all
+        .map do |album|
+        {
+          id: album.id,
+          title: album.title,
+          cover_art_url: album.cover_art_url,
+          subtitle: album.subtitle,
+          release_date: album.release_date
+        }
+      end
+    end
+
+    render json: albums
   end
 
   private

@@ -6,7 +6,7 @@
   </h2>
 
   <h3 class="text-2xl font-bold mb-8 text-center">
-    <%= @songs.count %> song<%= 's' unless @songs.count == 1 %> in total
+    <%= @songs.length %> song<%= 's' unless @songs.length == 1 %> in total
   </h3>
 
   <% albums = @songs.group_by(&:album).sort_by { |album, _| [album&.release_date || Float::INFINITY, album.nil? ? 1 : 0] }.to_h %>
@@ -23,7 +23,7 @@
                 data-action="jump-to-anchor#jump"
         >
           <option selected>Select an album</option>
-          <% albums.each do |album, songs| %>
+          <% albums.each do |album, _| %>
             <% next if album.nil? %>
             <option value="<%= album.title.parameterize %>"><%= album.title %></option>
           <% end %>
@@ -43,7 +43,7 @@
             </li>
           <% end %>
 
-          <% misc_songs = @songs.where(album_id: nil) %>
+          <% misc_songs = @songs.select { |s| s.album_id.nil? } %>
 
           <li>
             <a href="#miscellaneous" class="text-black dark:text-white">
@@ -73,12 +73,10 @@
           </div>
         <% end %>
 
-        <% songs.sort_by { |song| album.nil? or song.track_number.nil? ? song.name : song.track_number.to_s }.each do |song| %>
-          <% show_count = @song_show_counts.find { |sc| sc.song_id == song.id }.show_count %>
-
+        <% songs.sort_by { |song| song.track_number.present? ? [0, song.track_number.to_i] : [1, song.name] }.each do |song| %>
           <a href="/songs/<%= song.slug %>" class="flex justify-between items-center rounded px-2 py-1 transition hover:bg-base-200">
             <span class="text-black dark:text-white"><%= song.name %></span>
-            <span class="text-sm"><%= show_count %> show<%= 's' unless show_count == 1 %></span>
+            <span class="text-sm"><%= song.show_count %> show<%= 's' unless song.show_count == 1 %></span>
           </a>
         <% end %>
       </div>

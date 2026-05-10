@@ -1,0 +1,63 @@
+<% 
+    show = set_song.setlist.show
+    venue = set_song.setlist.show.venue
+
+    minutes = 0
+    seconds = 0
+
+    unless set_song.duration.nil?
+        minutes = (set_song.duration / 60).floor
+        seconds = set_song.duration % 60
+    end
+
+    hide_song_name = false if local_assigns[:hide_song_name].nil?
+ %>
+
+<a 
+    class="
+    flex 
+    cursor-pointer 
+    justify-between 
+    mb-3 lg:mb-1 
+    py-1 lg:py-0
+    hover:bg-base-200 transition 
+    rounded 
+    items-center" 
+    href="/<%= set_song.setlist.show.slug %>" 
+>
+  <span class="w-16 lg:w-8 align-middle pl-3 text-sm"><%= set_song.position %>&nbsp;</span>
+
+  <span class="h-[2.875rem] w-16 lg:h-32 lg:my-4 lg:w-[15%]">
+    <img class="h-full mx-auto rounded" src="<%= show.poster_url.blank? ? asset_path('missing.png') : show.poster_url %>" />
+  </span>
+
+  <% unless hide_song_name %>
+    <span class="align-middle w-4/5 lg:w-2/5">
+      <span class="text-lg text-black dark:text-white"><%= set_song.song.name %></span>
+      <span class="lg:hidden">
+        <br />
+        <span class="text-sm"><%= show.date.strftime("%Y-%m-%d") %><%=raw '&mdash;' unless show.title.blank? %><%= show.title %></span>
+        <span class="text-sm"><%= [venue.name, venue.city, venue.region, venue.country.name].reject(&:blank?).join(', ') %></span>
+      </span>
+    </span>
+  <% end %>
+  
+  <span class="pr-8 py-2 whitespace-nowrap <% if hide_song_name %> w-[30%] max-lg:w-3/5 <% else %> w-2/5 hidden lg:block <% end %>">
+    <span class="block text-black dark:text-white"><%= show.date.strftime("%Y-%m-%d") %><%=raw '&mdash;' unless show.title.blank? %><%= show.title %></span>
+    <span class="block text-sm"><%= [venue.name, venue.city, venue.region, venue.country.name].reject(&:blank?).join(', ') %></span>
+  </span>
+
+  <% unless local_assigns[:extra_html].nil? %>
+    <span class="w-2/5 align-middle text-sm pr-3 hidden lg:block">
+      <%= raw extra_html %>
+    </span>
+  <% end %>
+  
+  <span class="w-16 align-middle text-sm text-end pr-3"><%= format('%02d', minutes) %>:<%= format('%02d', seconds) %></span>
+</a>
+
+<% unless local_assigns[:extra_html].nil? %>
+  <div class="block lg:hidden mb-8 px-5">
+    <%= raw extra_html %>
+  </div>
+<% end %>

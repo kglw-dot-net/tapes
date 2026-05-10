@@ -1,26 +1,51 @@
 <% content_for :meta_title, "#{@song.name} on Gizz Tapes" %>
 
+<%
+  notables = @set_songs.where(is_jamchart: true)
+  shows_count = @set_songs.map(&:setlist).map(&:show).map(&:id).uniq.length
+%>
+
 <div class="container mx-auto mt-8 px-5">
-    <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white">
-        <%= @song.name %>
-    </h2>
-    
-    <h3 class="text-2xl font-bold mb-8 text-center">
-        <%= @shows.length %> show<%= 's' unless @shows.length == 1 %>
-    </h3>
+  <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white">
+    <%= @song.name %>
+  </h2>
 
-    <div class="flex mb-8">
-        <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
-            <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
-                <li><a href="https://kglw.net/songs/<%= @song.slug %>" target="_blank">View song on KGLW.net</a></li>
-                <li><a href="/songs/">Back to index</a></li>
-            </ul>
-        </div>
-    </div>
+  <h3 class="text-2xl font-bold mb-8 text-center">
+    <%= shows_count %> show<%= 's' unless shows_count == 1 %>
+  </h3>
 
-    <div class="responsive-grid bg-base-100 rounded-xl shadow-xl p-5">
-        <% @shows.each do |show| %>
-            <%= render "featured_show" , show: show %>
-        <% end %>
+  <div class="flex mb-8">
+    <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
+      <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
+        <li><a href="https://kglw.net/songs/<%= @song.slug %>" target="_blank">View song on KGLW.net</a></li>
+        <li><a href="/songs/">Back to index</a></li>
+      </ul>
     </div>
+  </div>
+
+  <% unless notables.empty? %>
+    <div class="bg-base-100 rounded-xl shadow-xl p-5 mb-5">
+      <h3 class="card-title mb-2 text-black dark:text-white flex px-2">
+        Notable performances
+      </h3>
+
+      <% notables.each do |set_song| %>
+        <%= render "notable_row", set_song: set_song, hide_song_name: true, extra_html: set_song.jamchart_notes %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="bg-base-100 rounded-xl shadow-xl p-5">
+    <% unless notables.empty? %>
+      <h3 class="card-title mb-2 text-black dark:text-white flex px-2">
+        Other performances
+      </h3>
+    <% end %>
+
+    <div class="responsive-grid">
+      <% @set_songs.where(is_jamchart: false).map(&:setlist).map(&:show).uniq.each do |show| %>
+        <%= render "featured_show", show: show %>
+      <% end %>
+    </div>
+  </div>
 </div>

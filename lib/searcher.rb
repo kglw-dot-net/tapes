@@ -123,4 +123,18 @@ class Searcher
         .order(date: :desc, order: :desc)
     end
   end
+
+  def self.songs
+    Rails.cache.fetch("Searcher.songs", expires_in: CACHE_DURATION) do
+      Song
+        .includes(:album)
+        .joins(set_songs: { setlist: :show })
+        .joins(set_songs: { setlist: :set_type })
+        .where(shows: { is_active: true })
+        .where.not(set_types: { name: "DJ Set" })
+        .select("songs.*, COUNT(DISTINCT shows.id) AS show_count")
+        .group("songs.id")
+        .to_a
+    end
+  end
 end
