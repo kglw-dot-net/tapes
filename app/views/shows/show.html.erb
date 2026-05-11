@@ -47,7 +47,11 @@
               <% end %>
 
               <a href="/<%= @show.date.strftime("%Y") %>#<%= @show.tour.name.parameterize %>" class="block text-center link link-hover link-primary mb-2"><%= @show.tour.name %></a>
-              <small class="block text-center mb-4"><%= @show.venue.name %> &bull; <%= [@show.venue.city, @show.venue.region, @show.venue.country&.name].reject { |s| s.blank? }.join(', ') %></small>
+              <small class="block text-center mb-4">
+                <a href="/venues/<%= @show.venue.country.slug %>/<%= @show.venue.slug %>" class="link link-hover link-primary"><%= @show.venue.name %></a> &bull;
+                <%= [@show.venue.city, @show.venue.region].reject { |s| s.blank? }.join(', ') %>,
+                <a href="/venues/<%= @show.venue.country.slug %>" class="link link-hover link-primary"><%= @show.venue.country&.name %></a>
+              </small>
 
               <button
                 class="hidden btn btn-ghost btn-lg block mx-auto mb-4"
