@@ -1,33 +1,92 @@
-<% content_for :meta_title, "#{@country.name} on Gizz Tapes" %>
+<%
+  content_for :meta_title, "#{@country.name} on Gizz Tapes"
+  regions = @venues.group_by { |v| v.region&.strip }.sort_by { |region, _| region.to_s }
+%>
 
 <div class="container mx-auto mt-8 px-5">
-    <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white"><%= @country.name %> Venues</h2>
-    <h3 class="text-2xl font-bold mb-8 text-center">Total Venues: <%= @venues.size %></h3>
-    
+  <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white"><%= @country.name %> Venues</h2>
+  <h3 class="text-2xl font-bold mb-8 text-center">Total Venues: <%= @venues.size %></h3>
+
+  <div class="flex mb-8">
+    <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
+      <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
+        <li><a href="/venues/" class="text-black dark:text-white">Back to venues index</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <% if regions.any? { |x, _| x&.strip&.presence } %>
     <div class="flex mb-8">
-        <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
-            <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
-                <li><a href="/venues/" class="text-black dark:text-white">Back to venues index</a></li>
-            </ul>
+      <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
+        <div class="block lg:hidden">
+          <label class="text-center block mt-3" for="region_select">Jump to:</label>
+          <select class="select w-[calc(100%-1.5rem)] ml-3 my-3"
+                  id="region_select"
+                  data-controller="jump-to-anchor"
+                  data-jump-to-anchor-target="source"
+                  data-action="jump-to-anchor#jump"
+          >
+            <option selected>Select a region</option>
+            <% regions.each do |region, _| %>
+              <% region_name = @country.name == 'USA' ? region + '—' + ISO3166::Country['US'].subdivisions[region].name : region %>
+              <option value="<%= region.parameterize %>"><%= region_name %></option>
+            <% end %>
+<!--            <option value="miscellaneous">Miscellaneous</option>-->
+          </select>
         </div>
+
+        <div class="hidden lg:block">
+          <label class="text-center block mt-3">Jump to:</label>
+          <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
+            <% regions.each do |region, venues| %>
+              <li>
+                <a href="#<%= region.parameterize %>" class="text-black dark:text-white">
+                  <%= region %> <span class="badge badge-neutral"><%= venues.count %></span>
+                </a>
+              </li>
+            <% end %>
+
+            <%# regionless_venues = @venues.select { |x| !x.region&.strip&.presence }.count %>
+
+<!--            <li>-->
+<!--              <a href="#miscellaneous" class="text-black dark:text-white">-->
+<!--                Miscellaneous <span class="badge badge-neutral"><%#= regionless_venues %></span>-->
+<!--              </a>-->
+<!--            </li>-->
+          </ul>
+        </div>
+      </div>
     </div>
 
-    <div class="card bg-base-100 shadow-xl mb-5">
+    <% regions.each do |region, venues| %>
+      <% region_name = case @country.name
+                       when 'Australia' then region + '—' + ISO3166::Country['AU'].subdivisions[region].name
+                       when 'Canada' then region + '—' + ISO3166::Country['CA'].subdivisions[region].name
+                       when 'USA' then region + '—' + ISO3166::Country['US'].subdivisions[region].name
+                       else region
+                       end %>
+      <div class="card bg-base-100 shadow-xl mb-5" id="<%= region.parameterize %>">
         <div class="card-body pb-0 pt-5 px-3">
-            <div class="responsive-grid text-center pb-3">
-                <% @venues.each do |venue| %>
-                    <a href="/venues/<%= venue.country.slug %>/<%= venue.slug %>" class="featured-item">
-                        <% poster_url = venue.shows.where(is_active: true).where.not(poster_url: nil).order('date DESC').first&.poster_url %>
-
-                        <img src="<%= poster_url.blank? ? asset_path('missing.png') : poster_url %>" class="w-full" />
-
-                        <h4 class="text-primary mt-1"><%= venue.name %></h4>
-                        <% show_count = venue.shows.where(is_active: true).count %>
-
-                        <small><%= show_count %> show<%= 's' unless show_count == 1 %></small>
-                    </a>
-                <% end %>
+          <div class="text-center pb-3">
+            <h3 class="card-title mb-2 text-black dark:text-white px-2"><%= region_name %></h3>
+            <div class="responsive-grid">
+              <% venues.each do |venue| %>
+                <%= render 'featured_venue', venue: venue %>
+              <% end %>
             </div>
+          </div>
         </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="card bg-base-100 shadow-xl mb-5">
+      <div class="card-body pb-0 pt-5 px-3">
+        <div class="responsive-grid text-center pb-3">
+          <% @venues.each do |venue| %>
+            <%= render 'featured_venue', venue: venue %>
+          <% end %>
+        </div>
+      </div>
     </div>
+  <% end %>
 </div>

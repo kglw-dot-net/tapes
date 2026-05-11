@@ -1,0 +1,10 @@
+<a href="/venues/<%= venue.country.slug %>/<%= venue.slug %>" class="featured-item">
+  <% poster_url = venue.shows.where(is_active: true).where.not(poster_url: nil).order('date DESC').first&.poster_url %>
+
+  <img src="<%= poster_url.blank? ? asset_path('missing.png') : poster_url %>" class="w-full"/>
+
+  <h4 class="text-primary mt-1"><%= venue.name %></h4>
+  <% show_count = venue.shows.where(is_active: true).count %>
+
+  <small><%= raw venue.city %> &bull; <%= show_count %> show<%= 's' unless show_count == 1 %></small>
+</a>
