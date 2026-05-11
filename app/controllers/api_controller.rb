@@ -50,6 +50,28 @@ class ApiController < ApplicationController
         venue_id: show.venue_id,
         tour_id: show.tour_id,
 
+        sets: show.setlists.map do |setlist|
+          {
+            number: setlist.setnumber,
+            set_type: setlist.set_type&.name,
+            songs: setlist.set_songs.order(:position).map do |set_song|
+              {
+                song: {
+                  id: set_song.song_id,
+                  slug: set_song.song.slug,
+                  name: set_song.song.name
+                },
+                position: set_song.position,
+                duration: set_song.duration,
+                footnote: set_song.footnote,
+                is_notable: set_song.is_jamchart,
+                notable_description: set_song.jamchart_notes,
+                transition: set_song.transition&.separator
+              }
+            end
+          }
+        end,
+
         recordings: show.recordings.where(is_active: true).map do |recording|
           {
             id: recording.id,

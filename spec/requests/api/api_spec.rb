@@ -59,6 +59,41 @@ RSpec.describe 'API', type: :request do
             },
             venue_id: { type: :string },
             tour_id: { type: :string },
+            sets: {
+              type: :array,
+              items: {
+                type: :object,
+                properties: {
+                  number: { type: :integer },
+                  set_type: { type: :string },
+                  songs: {
+                    type: :array,
+                    items: {
+                      type: :object,
+                      properties: {
+                        song: {
+                          type: :object,
+                          properties: {
+                            id: { type: :integer },
+                            slug: { type: :string },
+                            name: { type: :string }
+                          },
+                          required: %w[id slug name]
+                        },
+                        position: { type: :integer },
+                        duration: { type: :integer },
+                        footnote: { type: :string },
+                        is_notable: { type: :boolean },
+                        notable_description: { type: :string },
+                        transition: { type: :string }
+                      },
+                      required: %w[song position duration is_notable]
+                    }
+                  }
+                },
+                required: %w[number set_type songs]
+              }
+            },
             recordings: {
               type: :array,
               items: {
@@ -95,7 +130,7 @@ RSpec.describe 'API', type: :request do
               }
             }
           },
-          required: %w[id date order recordings]
+          required: %w[id date order recordings sets]
 
         let(:id) { Show.where(is_active: true).order(date: :desc).first.slug }
 

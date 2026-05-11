@@ -100,6 +100,54 @@ paths:
                     type: string
                   tour_id:
                     type: string
+                  sets:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        number:
+                          type: integer
+                        set_type:
+                          type: string
+                        songs:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              song:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                  slug:
+                                    type: string
+                                  name:
+                                    type: string
+                                required:
+                                - id
+                                - slug
+                                - name
+                              position:
+                                type: integer
+                              duration:
+                                type: integer
+                              footnote:
+                                type: string
+                              is_notable:
+                                type: boolean
+                              notable_description:
+                                type: string
+                              transition:
+                                type: string
+                            required:
+                            - song
+                            - position
+                            - duration
+                            - is_notable
+                      required:
+                      - number
+                      - set_type
+                      - songs
                   recordings:
                     type: array
                     items:
@@ -149,6 +197,7 @@ paths:
                 - date
                 - order
                 - recordings
+                - sets
         '404':
           description: show not found
   "/api/v1/hero_photos.json":
