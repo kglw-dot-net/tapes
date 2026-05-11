@@ -90,7 +90,7 @@
                   <% notables.each do |set_song| %>
                     <li value="<%= set_song.position %>"><%= set_song.song.name %>
                       <% unless set_song.jamchart_notes.blank? %>&mdash;
-                        <% end %><%= raw set_song.jamchart_notes %></li>
+                        <% end %><%= CGI.unescapeHTML set_song.jamchart_notes %></li>
                   <% end %>
                 </ol>
               <% end %>
@@ -100,7 +100,7 @@
 
                 <ol>
                   <% footnotes.each do |set_song| %>
-                    <li value="<%= set_song.position %>"><%= set_song.song.name %>&mdash;<%= raw set_song.footnote %></li>
+                    <li value="<%= set_song.position %>"><%= set_song.song.name %>&mdash;<%= CGI.unescapeHTML set_song.footnote %></li>
                   <% end %>
                 </ol>
               <% end %>
