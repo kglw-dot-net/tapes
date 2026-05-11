@@ -76,6 +76,7 @@
 
               <%
                 notables = @show.setlists.flat_map(&:set_songs).select(&:is_jamchart)
+                footnotes = @show.setlists.flat_map(&:set_songs).select { |s| s.footnote.present? }
               %>
 
               <% if notables.any? %>
@@ -86,6 +87,16 @@
                     <li value="<%= set_song.position %>"><%= set_song.song.name %>
                       <% unless set_song.jamchart_notes.blank? %>&mdash;
                         <% end %><%= set_song.jamchart_notes %></li>
+                  <% end %>
+                </ol>
+              <% end %>
+
+              <% if footnotes.any? %>
+                <h3 class="text-lg font-bold mt-4 mb-2 text-black dark:text-white">Notes</h3>
+
+                <ol>
+                  <% footnotes.each do |set_song| %>
+                    <li value="<%= set_song.position %>"><%= set_song.song.name %>&mdash;<%= set_song.footnote %></li>
                   <% end %>
                 </ol>
               <% end %>
