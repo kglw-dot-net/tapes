@@ -109,6 +109,8 @@ paths:
                           type: integer
                         set_type:
                           type: string
+                        set_type_id:
+                          type: integer
                         songs:
                           type: array
                           items:
@@ -234,6 +236,10 @@ paths:
         in: query
         schema:
           type: string
+      - name: set_type_id
+        in: query
+        schema:
+          type: integer
       responses:
         '200':
           description: shows found
@@ -497,3 +503,28 @@ paths:
                   required:
                   - id
                   - title
+  "/api/v1/set_types.json":
+    get:
+      summary: Retrieves set types
+      tags:
+      - Misc.
+      responses:
+        '200':
+          description: set types found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    show_count:
+                      type: integer
+                  required:
+                  - id
+                  - name
+                  - show_count

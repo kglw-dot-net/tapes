@@ -133,6 +133,8 @@ Rails.application.routes.draw do
   get "api/v1/venues.json" => "api#venues"
   get "api/v1/countries.json" => "api#countries"
 
+  get "api/v1/set_types.json" => "api#set_types"
+
   get "api/v1/songs.json" => "api#songs"
   get "api/v1/songs/:slug.json" => "api#song"
   get "api/v1/albums.json" => "api#albums"

@@ -3,36 +3,44 @@
 class Searcher
   CACHE_DURATION = 4.hours
 
-  def self.search(query)
-    return [] if query.blank? or query.length < 3
+  def self.search(query, set_type_id)
+    return [] if (query.blank? or query.length < 3) and set_type_id.nil?
 
-    Show.joins(venue: :country)
-        .joins(setlists: { set_songs: :song })
-        .where(is_active: true)
-        .where(
-          "date LIKE :q OR
+    data = Show.joins(venue: :country)
+               .joins(setlists: { set_songs: :song })
+               .where(is_active: true)
+
+    if set_type_id.present?
+      data = data.where(setlists: { set_type_id: set_type_id })
+    end
+
+    if query.present? && query.length >= 3
+      data = data.where(
+        "date LIKE :q OR
         title LIKE :q OR
         venues.name LIKE :q OR
         venues.city LIKE :q OR
         venues.region LIKE :q OR
         countries.name LIKE :q OR
         songs.name LIKE :q",
-          q: "%#{query}%"
-        )
-        .distinct
+        q: "%#{query}%"
+      )
+    end
+
+    data.distinct
   end
 
   def self.years
     Rails.cache.fetch("Searcher.years", expires_in: CACHE_DURATION) do
       Show
         .select(<<~SQL)
-      CAST(strftime('%Y', shows.date) AS INTEGER) AS year,
-      COUNT(*) AS show_count,
-      COALESCE(
-        (SELECT yt.poster_url FROM year_thumbnails yt WHERE yt.year = strftime('%Y', shows.date) LIMIT 1),
-        MAX(CASE WHEN shows.poster_url IS NOT NULL THEN shows.poster_url ELSE '' END)
-      ) AS poster_url
-    SQL
+          CAST(strftime('%Y', shows.date) AS INTEGER) AS year,
+          COUNT(*) AS show_count,
+          COALESCE(
+            (SELECT yt.poster_url FROM year_thumbnails yt WHERE yt.year = strftime('%Y', shows.date) LIMIT 1),
+            MAX(CASE WHEN shows.poster_url IS NOT NULL THEN shows.poster_url ELSE '' END)
+          ) AS poster_url
+        SQL
         .where(is_active: true)
         .group("year")
         .order("year DESC")
@@ -42,7 +50,7 @@ class Searcher
           show_count: x.show_count,
           poster_url: x.poster_url
         }
-        end
+      end
     end
   end
 
@@ -59,8 +67,8 @@ class Searcher
 
         total_shows: Show.where(is_active: true).count,
         total_recordings: Recording.joins(:show)
-                                    .where(is_active: true, shows: { is_active: true })
-                                    .count,
+                                   .where(is_active: true, shows: { is_active: true })
+                                   .count,
 
         hours: (total_minutes / 60).floor,
         minutes: (total_minutes % 60).floor,
@@ -70,8 +78,8 @@ class Searcher
                             .count,
 
         aud_count: Recording.joins(:recording_type, :show)
-                             .where(is_active: true, recording_types: { name: "AUD" }, shows: { is_active: true })
-                             .count
+                            .where(is_active: true, recording_types: { name: "AUD" }, shows: { is_active: true })
+                            .count
       }
     end
   end

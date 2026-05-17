@@ -8,22 +8,22 @@ RSpec.describe 'API', type: :request do
 
       response '200', 'shows found' do
         schema type: :array,
-          items: {
-            type: :object,
-            properties: {
-              id: { type: :string },
-              date: { type: :string },
-              venuename: { type: :string },
-              location: { type: :string },
-              title: { type: :string },
-              order: { type: :integer },
-              poster_url: { type: :string },
-              average_rating: { type: :number, format: :float },
-              count_ratings: { type: :integer },
-              weighted_rating: { type: :number, format: :float }
-            },
-            required: %w[id date venuename location order]
-          }
+               items: {
+                 type: :object,
+                 properties: {
+                   id: { type: :string },
+                   date: { type: :string },
+                   venuename: { type: :string },
+                   location: { type: :string },
+                   title: { type: :string },
+                   order: { type: :integer },
+                   poster_url: { type: :string },
+                   average_rating: { type: :number, format: :float },
+                   count_ratings: { type: :integer },
+                   weighted_rating: { type: :number, format: :float }
+                 },
+                 required: %w[id date venuename location order]
+               }
 
         run_test!
       end
@@ -39,98 +39,99 @@ RSpec.describe 'API', type: :request do
 
       response '200', 'show found' do
         schema type: :object,
-          properties: {
-            id: { type: :string },
-            date: { type: :string },
-            order: { type: :integer },
-            poster_url: { type: :string },
-            notes: { type: :string },
-            title: { type: :string },
-            average_rating: { type: :number, format: :float },
-            count_ratings: { type: :integer },
-            weighted_rating: { type: :number, format: :float },
-            kglw_net: {
-              type: :object,
-              properties: {
-                id: { type: :string },
-                permalink: { type: :string }
-              },
-              required: %w[id permalink]
-            },
-            venue_id: { type: :string },
-            tour_id: { type: :string },
-            sets: {
-              type: :array,
-              items: {
-                type: :object,
-                properties: {
-                  number: { type: :integer },
-                  set_type: { type: :string },
-                  songs: {
-                    type: :array,
-                    items: {
-                      type: :object,
-                      properties: {
-                        song: {
-                          type: :object,
-                          properties: {
-                            id: { type: :integer },
-                            slug: { type: :string },
-                            name: { type: :string }
-                          },
-                          required: %w[id slug name]
-                        },
-                        position: { type: :integer },
-                        duration: { type: :integer },
-                        footnote: { type: :string },
-                        is_notable: { type: :boolean },
-                        notable_description: { type: :string },
-                        transition: { type: :string }
-                      },
-                      required: %w[song position duration is_notable]
-                    }
-                  }
-                },
-                required: %w[number set_type songs]
-              }
-            },
-            recordings: {
-              type: :array,
-              items: {
-                type: :object,
-                properties: {
-                  id: { type: :string },
-                  uploaded_at: { type: :string },
-                  type: { type: :string },
-                  source: { type: :string },
-                  lineage: { type: :string },
-                  taper: { type: :string },
-                  files_path_prefix: { type: :string },
-                  internet_archive: {
-                    type: :object,
-                    properties: {
-                      is_lma: { type: :boolean }
-                    },
-                    required: %w[is_lma]
-                  },
-                  files: {
-                    type: :array,
-                    items: {
-                      type: :object,
-                      properties: {
-                        filename: { type: :string },
-                        length: { type: :integer },
-                        title: { type: :string }
-                      },
-                      required: %w[filename length]
-                    }
-                  }
-                },
-                required: %w[id files_path_prefix files]
-              }
-            }
-          },
-          required: %w[id date order recordings sets]
+               properties: {
+                 id: { type: :string },
+                 date: { type: :string },
+                 order: { type: :integer },
+                 poster_url: { type: :string },
+                 notes: { type: :string },
+                 title: { type: :string },
+                 average_rating: { type: :number, format: :float },
+                 count_ratings: { type: :integer },
+                 weighted_rating: { type: :number, format: :float },
+                 kglw_net: {
+                   type: :object,
+                   properties: {
+                     id: { type: :string },
+                     permalink: { type: :string }
+                   },
+                   required: %w[id permalink]
+                 },
+                 venue_id: { type: :string },
+                 tour_id: { type: :string },
+                 sets: {
+                   type: :array,
+                   items: {
+                     type: :object,
+                     properties: {
+                       number: { type: :integer },
+                       set_type: { type: :string },
+                       set_type_id: { type: :integer },
+                       songs: {
+                         type: :array,
+                         items: {
+                           type: :object,
+                           properties: {
+                             song: {
+                               type: :object,
+                               properties: {
+                                 id: { type: :integer },
+                                 slug: { type: :string },
+                                 name: { type: :string }
+                               },
+                               required: %w[id slug name]
+                             },
+                             position: { type: :integer },
+                             duration: { type: :integer },
+                             footnote: { type: :string },
+                             is_notable: { type: :boolean },
+                             notable_description: { type: :string },
+                             transition: { type: :string }
+                           },
+                           required: %w[song position duration is_notable]
+                         }
+                       }
+                     },
+                     required: %w[number set_type songs]
+                   }
+                 },
+                 recordings: {
+                   type: :array,
+                   items: {
+                     type: :object,
+                     properties: {
+                       id: { type: :string },
+                       uploaded_at: { type: :string },
+                       type: { type: :string },
+                       source: { type: :string },
+                       lineage: { type: :string },
+                       taper: { type: :string },
+                       files_path_prefix: { type: :string },
+                       internet_archive: {
+                         type: :object,
+                         properties: {
+                           is_lma: { type: :boolean }
+                         },
+                         required: %w[is_lma]
+                       },
+                       files: {
+                         type: :array,
+                         items: {
+                           type: :object,
+                           properties: {
+                             filename: { type: :string },
+                             length: { type: :integer },
+                             title: { type: :string }
+                           },
+                           required: %w[filename length]
+                         }
+                       }
+                     },
+                     required: %w[id files_path_prefix files]
+                   }
+                 }
+               },
+               required: %w[id date order recordings sets]
 
         let(:id) { Show.where(is_active: true).order(date: :desc).first.slug }
 
@@ -152,15 +153,15 @@ RSpec.describe 'API', type: :request do
 
       response '200', 'hero photos found' do
         schema type: :array,
-          items: {
-            type: :object,
-            properties: {
-              credit: { type: :string },
-              vPosition: { type: :integer },
-              url: { type: :string }
-            },
-            required: %w[credit url]
-          }
+               items: {
+                 type: :object,
+                 properties: {
+                   credit: { type: :string },
+                   vPosition: { type: :integer },
+                   url: { type: :string }
+                 },
+                 required: %w[credit url]
+               }
 
         run_test!
       end
@@ -173,6 +174,7 @@ RSpec.describe 'API', type: :request do
       produces 'application/json'
 
       parameter name: :q, in: :query, type: :string
+      parameter name: :set_type_id, in: :query, type: :integer
 
       response '200', 'shows found' do
         schema type: :array,
@@ -339,15 +341,15 @@ RSpec.describe 'API', type: :request do
                  album_id: { type: :integer },
                  track_number: { type: :integer },
                  shows: {
-                    type: :array,
-                    items: {
-                      type: :object,
-                      properties: {
-                        id: { type: :string },
-                        is_notable: { type: :boolean },
-                        notable_description: { type: :string }
-                      }
-                    }
+                   type: :array,
+                   items: {
+                     type: :object,
+                     properties: {
+                       id: { type: :string },
+                       is_notable: { type: :boolean },
+                       notable_description: { type: :string }
+                     }
+                   }
                  }
                },
                required: %w[id name show_count]
@@ -382,6 +384,29 @@ RSpec.describe 'API', type: :request do
                    release_date: { type: :string }
                  },
                  required: %w[id title]
+               }
+
+        run_test!
+      end
+    end
+  end
+
+  path '/api/v1/set_types.json' do
+    get 'Retrieves set types' do
+      tags 'Misc.'
+
+      produces 'application/json'
+
+      response '200', 'set types found' do
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   id: { type: :integer },
+                   name: { type: :string },
+                   show_count: { type: :integer }
+                 },
+                 required: %w[id name show_count]
                }
 
         run_test!

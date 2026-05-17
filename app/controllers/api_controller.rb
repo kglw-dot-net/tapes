@@ -53,6 +53,7 @@ class ApiController < ApplicationController
         sets: show.setlists.map do |setlist|
           {
             number: setlist.setnumber,
+            set_type_id: setlist.set_type_id,
             set_type: setlist.set_type&.name,
             songs: setlist.set_songs.order(:position).map do |set_song|
               {
@@ -104,7 +105,10 @@ class ApiController < ApplicationController
   end
 
   def search
-    shows = Searcher.search(params[:q]&.strip)
+    query = params[:q]&.strip
+    set_type_id = params[:set_type_id].present? ? params[:set_type_id].to_i.presence : nil
+
+    shows = Searcher.search(query, set_type_id)
                     .map do |show|
       {
         id: show.slug,
@@ -228,6 +232,22 @@ class ApiController < ApplicationController
     end
 
     render json: albums
+  end
+
+  def set_types
+    set_types = Rails.cache.fetch("api/set_types.json", expires_in: 4.hours) do
+      SetType
+        .all
+        .map do |set_type|
+        {
+          id: set_type.id,
+          name: set_type.name,
+          show_count: set_type.setlists.joins(:show).where(shows: { is_active: true }).count
+        }
+      end
+    end
+
+    render json: set_types
   end
 
   private
