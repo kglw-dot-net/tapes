@@ -6,7 +6,7 @@
 
     <div class="card bg-base-100 shadow-xl mb-5">
         <div class="card-body pb-0 pt-5 px-3">
-            <div class="responsive-grid text-center pb-3">
+            <div class="responsive-grid-lg text-center pb-3">
                 <% @countries.each do |country| %>
                     <% 
                         show_count = country.venues.map{|v| v.shows.where(is_active: true).count}.sum
