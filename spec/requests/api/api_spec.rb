@@ -174,7 +174,11 @@ RSpec.describe 'API', type: :request do
       produces 'application/json'
 
       parameter name: :q, in: :query, type: :string
-      parameter name: :set_type_id, in: :query, type: :integer
+      parameter name: :set_type_id,
+                in: :query,
+                type: :array,
+                items: { type: :integer },
+                collectionFormat: :multi
 
       response '200', 'shows found' do
         schema type: :array,

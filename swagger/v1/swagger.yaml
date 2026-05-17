@@ -238,8 +238,11 @@ paths:
           type: string
       - name: set_type_id
         in: query
-        schema:
+        items:
           type: integer
+        collectionFormat: multi
+        schema:
+          type: array
       responses:
         '200':
           description: shows found
