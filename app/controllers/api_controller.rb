@@ -1,3 +1,5 @@
+require 'cgi'
+
 class ApiController < ApplicationController
   before_action :set_cache_headers
 
@@ -106,7 +108,10 @@ class ApiController < ApplicationController
 
   def search
     query = params[:q]&.strip
-    set_type_id = params[:set_type_id].present? ? params[:set_type_id].to_i.presence : nil
+
+    # Using CGI.parse as it can handle multiple set_type_id values, e.g. ?set_type_id=1&set_type_id=2
+    x = CGI.parse request.query_string
+    set_type_id = x["set_type_id"].present? ? x["set_type_id"].map(&:to_i).presence : nil
 
     shows = Searcher.search(query, set_type_id)
                     .map do |show|

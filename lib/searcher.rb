@@ -3,8 +3,8 @@
 class Searcher
   CACHE_DURATION = 4.hours
 
-  def self.search(query, set_type_id)
-    return [] if (query.blank? or query.length < 3) and set_type_id.nil?
+  def self.search(query, set_type_id = nil)
+    return [] if (query.blank? or query.length < 3) and (set_type_id.nil? or set_type_id.empty?)
 
     data = Show.joins(venue: :country)
                .joins(setlists: { set_songs: :song })
