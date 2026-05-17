@@ -1,4 +1,4 @@
-require 'cgi'
+require "cgi"
 
 class ApiController < ApplicationController
   before_action :set_cache_headers
