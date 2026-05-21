@@ -79,8 +79,8 @@
               <%= simple_format(@show.notes) %>
 
               <%
-                notables = @show.setlists.flat_map(&:set_songs).select(&:is_jamchart)
-                footnotes = @show.setlists.flat_map(&:set_songs).select { |s| s.footnote.present? }
+                notables = @show.setlists.flat_map(&:set_songs).select(&:is_jamchart).sort_by(&:position)
+                footnotes = @show.setlists.flat_map(&:set_songs).select { |s| s.footnote.present? }.sort_by(&:position)
               %>
 
               <% if notables.any? %>
