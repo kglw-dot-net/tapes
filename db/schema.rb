@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_09_120548) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_21_222342) do
   create_table "albums", force: :cascade do |t|
     t.string "title"
     t.string "cover_art_url"
@@ -115,6 +115,18 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_09_120548) do
     t.datetime "updated_at", null: false
     t.index ["set_type_id"], name: "index_setlists_on_set_type_id"
     t.index ["show_id"], name: "index_setlists_on_show_id"
+  end
+
+  create_table "show_tags", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "show_tags_shows", id: false, force: :cascade do |t|
+    t.integer "show_id", null: false
+    t.integer "show_tag_id", null: false
   end
 
   create_table "shows", force: :cascade do |t|

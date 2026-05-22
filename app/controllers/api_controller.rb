@@ -18,7 +18,8 @@ class ApiController < ApplicationController
           poster_url: show.poster_url,
           average_rating: show.average_rating,
           count_ratings: show.count_ratings,
-          weighted_rating: show.bayesian_rating
+          weighted_rating: show.bayesian_rating,
+          tags: show.show_tags.map(&:id)
         }
       end
     end
@@ -51,6 +52,8 @@ class ApiController < ApplicationController
 
         venue_id: show.venue_id,
         tour_id: show.tour_id,
+
+        tags: show.show_tags.map(&:id),
 
         sets: show.setlists.map do |setlist|
           {
@@ -111,9 +114,11 @@ class ApiController < ApplicationController
 
     # Using CGI.parse as it can handle multiple set_type_id values, e.g. ?set_type_id=1&set_type_id=2
     x = CGI.parse request.query_string
-    set_type_id = x["set_type_id"].present? ? x["set_type_id"].map(&:to_i).presence : nil
 
-    shows = Searcher.search(query, set_type_id)
+    set_type_id = x["set_type_id"].present? ? x["set_type_id"].map(&:to_i).presence : nil
+    show_tag_id = x["show_tag_id"].present? ? x["show_tag_id"].map(&:to_i).presence : nil
+
+    shows = Searcher.search(query, set_type_id, show_tag_id)
                     .map do |show|
       {
         id: show.slug,
@@ -125,7 +130,8 @@ class ApiController < ApplicationController
         poster_url: show.poster_url,
         average_rating: show.average_rating,
         count_ratings: show.count_ratings,
-        weighted_rating: show.bayesian_rating
+        weighted_rating: show.bayesian_rating,
+        tags: show.show_tags.map(&:id)
       }
     end
 
@@ -253,6 +259,24 @@ class ApiController < ApplicationController
     end
 
     render json: set_types
+  end
+
+  def show_tags
+    show_tags = Rails.cache.fetch("api/show_tags.json", expires_in: 4.hours) do
+      ShowTag
+        .joins(:shows)
+        .where(shows: { is_active: true })
+        .distinct
+        .map do |show_tag|
+        {
+          id: show_tag.id,
+          slug: show_tag.slug,
+          name: show_tag.name
+        }
+      end
+    end
+
+    render json: show_tags
   end
 
   private

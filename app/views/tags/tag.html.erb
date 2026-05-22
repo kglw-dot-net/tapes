@@ -1,8 +1,11 @@
-<% content_for :meta_title, "#{@set_type.name}s on Gizz Tapes" %>
+<%
+	title = ((@show_tag.name.downcase.include? 'show') ? @show_tag.name + 's' : @show_tag.name + ' Shows')
+	content_for :meta_title, "#{title} on Gizz Tapes"
+%>
 
 <div class="container mx-auto mt-8 px-5">
 	<h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white">
-		<%= @set_type.name %>s
+		<%= title %>
 	</h2>
 	
 	<h3 class="text-2xl font-bold mb-8 text-center">

@@ -89,12 +89,12 @@ Rails.application.routes.draw do
 
   get "venues/:country/:slug" => "venues#venue"
 
-  # Types controller
+  # Tags controller
 
-  get "types/:slug" => "types#type", constraints: lambda { |request|
+  get "tags/:slug" => "tags#tag", constraints: lambda { |request|
     slug = request.params[:slug]
-    Rails.cache.fetch("set_type_slug_exists_#{slug}", expires_in: 2.hours) do
-      SetType.exists?([ "LOWER(REPLACE(name, ' ', '-')) = ?", slug.downcase ])
+    Rails.cache.fetch("show_tag_slug_exists_#{slug}", expires_in: 2.hours) do
+      ShowTag.exists?([ "slug = ?", slug.downcase ])
     end
   }
 
@@ -134,6 +134,7 @@ Rails.application.routes.draw do
   get "api/v1/countries.json" => "api#countries"
 
   get "api/v1/set_types.json" => "api#set_types"
+  get "api/v1/show_tags.json" => "api#show_tags"
 
   get "api/v1/songs.json" => "api#songs"
   get "api/v1/songs/:slug.json" => "api#song"

@@ -3,15 +3,22 @@
 class Searcher
   CACHE_DURATION = 4.hours
 
-  def self.search(query, set_type_id = nil)
-    return [] if (query.blank? or query.length < 3) and (set_type_id.nil? or set_type_id.empty?)
+  def self.search(query, set_type_id = nil, show_tag_id = nil)
+    return [] if (query.blank? or query.length < 3) and
+                 (set_type_id.nil? or set_type_id.empty?) and
+                 (show_tag_id.nil? or show_tag_id.empty?)
 
     data = Show.joins(venue: :country)
                .joins(setlists: { set_songs: :song })
+               .joins(:show_tags)
                .where(is_active: true)
 
     if set_type_id.present?
       data = data.where(setlists: { set_type_id: set_type_id })
+    end
+
+    if show_tag_id.present?
+      data = data.where(show_tags: { id: show_tag_id })
     end
 
     if query.present? && query.length >= 3
@@ -22,6 +29,7 @@ class Searcher
         venues.city LIKE :q OR
         venues.region LIKE :q OR
         countries.name LIKE :q OR
+        show_tags.name LIKE :q OR
         songs.name LIKE :q",
         q: "%#{query}%"
       )

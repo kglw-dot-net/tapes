@@ -14,10 +14,10 @@
 				<li><a href="/january">Dates</a></li>
 				
 				<li>
-					<a>Show Types</a>
+					<a>Show Tags</a>
 					<ul class="p-2">
-						<% @set_types.each do |set_type| %>
-							<li><a href="/types/<%= set_type.name.parameterize %>"><%= set_type.name %>s</a></li>
+						<% @show_tags.each do |tag| %>
+							<li><a href="/tags/<%= tag.slug %>"><%= tag.name %></a></li>
 						<% end %>
 					</ul>
 				</li>
@@ -50,10 +50,10 @@
 			<li><a href="/january">Dates</a></li>
 			<li>
 				<details class="z-10">
-					<summary>Show Types</summary>
+					<summary>Show Tags</summary>
 					<ul class="p-2 shadow-xl top-8">
-						<% @set_types.each do |set_type| %>
-							<li><a href="/types/<%= set_type.name.parameterize %>"><%= set_type.name %>s</a></li>
+						<% @show_tags.each do |tag| %>
+							<li><a href="/tags/<%= tag.slug %>"><%= tag.name %></a></li>
 						<% end %>
 					</ul>
 				</details>

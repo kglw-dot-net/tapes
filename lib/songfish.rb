@@ -12,13 +12,14 @@ module Songfish
     updateSongs
     updateShows
     updateSetlists
+    Tapes.calculateWeightedRatings
   end
 
   def self.full_update
     updateVenues
     updateCountries
     updateSongs
-    updateShows(true, true)
+    updateShows(true)
     updateSetlists
     Tapes.calculateWeightedRatings
   end
@@ -194,10 +195,33 @@ module Songfish
     poster_link&.attr("href")
   end
 
-  def self.updateShows(is_replace_posters = false, is_update_ratings = false)
+  def self.getRatings
+    url = URI.join(@@url, "/charts/top-rated")
+    site = Faraday.new.get(url).body
+    doc = Nokogiri::HTML(site)
+    table = doc.at_css("table.table.table-striped.sortable")
+    return [] unless table
+
+    table.css("tbody tr").filter_map do |row|
+      cells = row.css("td")
+
+      rating = Float(cells[0]&.text&.strip) rescue nil
+      count  = Integer(cells[1]&.text&.strip) rescue nil
+
+      link = cells[2]&.at_css("a")
+      show_link = link&.[]("href")
+
+      next if rating.nil? || count.nil? || show_link.nil?
+
+      { rating: rating, count: count, show_link: show_link.sub!("/setlists/", "") }
+    end
+  end
+
+  def self.updateShows(is_replace_posters = false)
     puts "\tUpdating shows..."
 
     uploads = getUploads
+    ratings = getRatings
 
     # TODO: Don't hardcode starting year
     (2010..Time.current.year).each do |year|
@@ -229,6 +253,12 @@ module Songfish
         show.tour = Tour.find_or_create_by(songfishID: songfish_show["tour_id"])
         show.tour.update(name: songfish_show["tourname"]) if show.tour.name != songfish_show["tourname"]
 
+        show.show_tags = (songfish_show["show_tags"] || []).map do |tag_data|
+          tag = ShowTag.find_or_create_by(slug: tag_data["tag_slug"])
+          tag.update(name: tag_data["tag"]) if tag.name != tag_data["tag"]
+          tag
+        end
+
         # show.artist = Artist.find_by(songfishID: songfish_show["artist_id"])
         show.songfishPermalink = songfish_show["permalink"]
         show.title = songfish_show["showtitle"].empty? ? nil : songfish_show["showtitle"]
@@ -256,10 +286,16 @@ module Songfish
           end
         end
 
-        if is_update_ratings
+        rating = ratings.find { |r| r[:show_link] == show.songfishPermalink }
+
+        if rating.nil?
           doc = scrapeShowPage(show) if doc.nil?
+
           show.count_ratings = doc.at_css("#sf-rating-count").text.strip.to_i
           show.average_rating = show.count_ratings == 0 ? nil : doc.at_css("#sf-rating-avg").text.strip.to_f
+        else
+          show.count_ratings = rating[:count]
+          show.average_rating = rating[:rating]
         end
 
         show.save

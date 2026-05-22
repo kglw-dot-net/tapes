@@ -53,6 +53,16 @@
                 <a href="/venues/<%= @show.venue.country.slug %>" class="link link-hover link-primary"><%= @show.venue.country&.name %></a>
               </small>
 
+              <% if @show.show_tags.any? %>
+                <div class="flex gap-3 justify-center mb-3">
+                  <% @show.show_tags.each do |tag| %>
+                    <a href="/tags/<%= tag.slug %>" class="badge hover:bg-base-200 dark:badge-neutral dark:hover:bg-neutral-700">
+                      <%= tag.name %>
+                    </a>
+                  <% end %>
+                </div>
+              <% end %>
+
               <button
                 class="hidden btn btn-ghost btn-lg block mx-auto mb-4"
                 data-favourites-target="showFavouriteButton"
