@@ -271,7 +271,8 @@ class ApiController < ApplicationController
         {
           id: show_tag.id,
           slug: show_tag.slug,
-          name: show_tag.name
+          name: show_tag.name,
+          show_count: show_tag.shows.where(is_active: true).count
         }
       end
     end

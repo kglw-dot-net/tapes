@@ -41,6 +41,10 @@ paths:
                     weighted_rating:
                       type: number
                       format: float
+                    tags:
+                      type: array
+                      items:
+                        type: integer
                   required:
                   - id
                   - date
@@ -100,6 +104,10 @@ paths:
                     type: string
                   tour_id:
                     type: string
+                  tags:
+                    type: array
+                    items:
+                      type: integer
                   sets:
                     type: array
                     items:
@@ -243,6 +251,13 @@ paths:
         collectionFormat: multi
         schema:
           type: array
+      - name: show_tag_id
+        in: query
+        items:
+          type: integer
+        collectionFormat: multi
+        schema:
+          type: array
       responses:
         '200':
           description: shows found
@@ -275,6 +290,10 @@ paths:
                     weighted_rating:
                       type: number
                       format: float
+                    tags:
+                      type: array
+                      items:
+                        type: integer
                   required:
                   - id
                   - date
@@ -531,3 +550,30 @@ paths:
                   - id
                   - name
                   - show_count
+  "/api/v1/show_tags.json":
+    get:
+      summary: Retrieves show tags
+      tags:
+      - Misc.
+      responses:
+        '200':
+          description: show tags found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    slug:
+                      type: string
+                    name:
+                      type: string
+                    show_count:
+                      type: integer
+                  required:
+                  - id
+                  - slug
+                  - name

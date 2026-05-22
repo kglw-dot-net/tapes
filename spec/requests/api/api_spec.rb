@@ -20,7 +20,8 @@ RSpec.describe 'API', type: :request do
                    poster_url: { type: :string },
                    average_rating: { type: :number, format: :float },
                    count_ratings: { type: :integer },
-                   weighted_rating: { type: :number, format: :float }
+                   weighted_rating: { type: :number, format: :float },
+                   tags: { type: :array, items: { type: :integer } },
                  },
                  required: %w[id date venuename location order]
                }
@@ -59,6 +60,7 @@ RSpec.describe 'API', type: :request do
                  },
                  venue_id: { type: :string },
                  tour_id: { type: :string },
+                 tags: { type: :array, items: { type: :integer } },
                  sets: {
                    type: :array,
                    items: {
@@ -174,7 +176,14 @@ RSpec.describe 'API', type: :request do
       produces 'application/json'
 
       parameter name: :q, in: :query, type: :string
+
       parameter name: :set_type_id,
+                in: :query,
+                type: :array,
+                items: { type: :integer },
+                collectionFormat: :multi
+
+      parameter name: :show_tag_id,
                 in: :query,
                 type: :array,
                 items: { type: :integer },
@@ -194,7 +203,8 @@ RSpec.describe 'API', type: :request do
                    poster_url: { type: :string },
                    average_rating: { type: :number, format: :float },
                    count_ratings: { type: :integer },
-                   weighted_rating: { type: :number, format: :float }
+                   weighted_rating: { type: :number, format: :float },
+                   tags: { type: :array, items: { type: :integer } }
                  },
                  required: %w[id date venuename location order]
                }
@@ -411,6 +421,30 @@ RSpec.describe 'API', type: :request do
                    show_count: { type: :integer }
                  },
                  required: %w[id name show_count]
+               }
+
+        run_test!
+      end
+    end
+  end
+
+  path '/api/v1/show_tags.json' do
+    get 'Retrieves show tags' do
+      tags 'Misc.'
+
+      produces 'application/json'
+
+      response '200', 'show tags found' do
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   id: { type: :integer },
+                   slug: { type: :string },
+                   name: { type: :string },
+                   show_count: { type: :integer }
+                 },
+                 required: %w[id slug name]
                }
 
         run_test!
