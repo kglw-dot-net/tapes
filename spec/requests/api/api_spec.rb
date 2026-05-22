@@ -21,7 +21,7 @@ RSpec.describe 'API', type: :request do
                    average_rating: { type: :number, format: :float },
                    count_ratings: { type: :integer },
                    weighted_rating: { type: :number, format: :float },
-                   tags: { type: :array, items: { type: :integer } },
+                   tags: { type: :array, items: { type: :integer } }
                  },
                  required: %w[id date venuename location order]
                }
