@@ -95,6 +95,16 @@
           <%= render "featured_show", show: show %>
         <% end %>
       </div>
+
+      <h4 class="font-semibold text-black dark:text-white text-center">Browse by year:</h4>
+
+      <div class="bg-base-200 rounded-box w-full mb-4">
+        <ul class="menu menu-horizontal justify-center w-full">
+          <% (@earliest_year..@latest_year).each do |year| %>
+            <li><a href="/<%= year %>"><%= year %></a></li>
+          <% end %>
+        </ul>
+      </div>
     </div>
   </div>
 

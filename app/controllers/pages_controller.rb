@@ -94,6 +94,7 @@ class PagesController < ApplicationController
 
     @latest_year = stats[:latest_year]
     @earliest_year = stats[:earliest_year]
+
     @total_shows = stats[:total_shows]
     @total_recordings = stats[:total_recordings]
     @hours = stats[:hours]
