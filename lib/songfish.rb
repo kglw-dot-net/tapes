@@ -21,6 +21,7 @@ module Songfish
     updateSongs
     updateShows(true)
     updateSetlists
+    updateSongUpvotes
     Tapes.calculateWeightedRatings
   end
 
@@ -92,6 +93,95 @@ module Songfish
     end
   end
 
+  def self.updateSongUpvotes
+    puts "\tUpdating upvotes..."
+
+    Song.joins(set_songs: { setlist: :show })
+        .where(shows: { is_active: true })
+        .distinct
+        .each do |song|
+      url = URI.join(@@url, "/song/#{song.slug}")
+      page = Faraday.new.get(url).body
+      doc = Nokogiri::HTML(page)
+
+      table = doc.at_css("#tabletwitter\\:description")
+
+      next unless table
+
+      table.css("tbody tr").each do |row|
+        cells = row.css("td")
+
+        upvote_count = cells[0]&.at_css(".upvote-count")&.text&.to_i || 0
+        show_date = cells[1]&.at_css("a")&.[]("href")&.sub!("/setlists/?date=", "")
+        location = cells[2]&.text
+        track_time = cells[5]&.text
+
+        previous_song_name = cells[6]&.at_css("a")&.text
+        previous_song_slug = cells[6]&.at_css("a")&.[]("href")&.sub!("/song/", "")
+
+        next_song_name = cells[7]&.at_css("a")&.text
+        next_song_slug = cells[7]&.at_css("a")&.[]("href")&.sub!("/song/", "")
+
+        seconds = getDuration track_time
+        venue_name = location.nil? ? nil : location.split(', ')[0]
+
+        set_songs = SetSong
+                      .joins(setlist: { show: :venue })
+                      .where(shows: { date: show_date })
+                      .where(song_id: song.id)
+                      .all
+
+        set_songs = set_songs.where(duration: seconds)
+        set_songs = set_songs.where("venues.name LIKE ?", "#{venue_name}%") unless venue_name.nil?
+
+        if set_songs.length == 0
+          puts "\t\tCould not find SetSong for #{song.id} (#{song.name}) on #{show_date} with duration #{seconds} and venue #{venue_name}"
+          next
+        end
+
+        if set_songs.length > 1
+          if previous_song_name.nil?
+            set_songs = set_songs.where(position: 1)
+          else
+            previous_songs = SetSong
+                              .joins(setlist: { show: :venue })
+                              .joins(:song)
+                              .where(shows: { date: show_date })
+                              .where(song: { slug: previous_song_slug })
+                              .all
+            previous_songs = previous_songs.where("venues.name LIKE ?", "#{venue_name}%") unless venue_name.nil?
+
+            if previous_songs.length == 1
+              position = previous_songs.sole.position + 1
+              set_songs = set_songs.where(position: position)
+            else
+              next_songs = SetSong
+              .joins(setlist: { show: :venue })
+              .joins(:song)
+              .where(shows: { date: show_date })
+              .where(song: { slug: next_song_slug })
+              .all
+              next_songs = next_songs.where("venues.name LIKE ?", "#{venue_name}%") unless venue_name.nil?
+
+              if next_songs.length == 1
+                position = next_songs.sole.position - 1
+                set_songs = set_songs.where(position: position)
+              end
+            end
+          end
+
+          if set_songs.length > 1
+            puts set_songs.to_sql
+            puts "\t\tToo many SetSongs for #{song.id} (#{song.name}) on #{show_date} with duration #{seconds}, venue #{venue_name} and previous track #{previous_song_name}"
+            next
+          end
+        end
+
+        set_songs.sole.update(upvotes: upvote_count)
+      end
+    end
+  end
+
   # Convert string e.g. "1:23" to number of seconds e.g. 83.0
   def self.getDuration(time)
     return nil if time.blank?
@@ -108,12 +198,16 @@ module Songfish
   def self.updateSetlists
     puts "\tUpdating setlists..."
 
+    songfish_set_song_ids = []
+
     (2010..Time.current.year).each do |year|
       puts "\t\tUpdating setlists for #{year}..."
 
       setlists = getSetlistsForYear(year)
 
       setlists.each do |setlist|
+        songfish_set_song_ids << setlist["uniqueid"]
+
         show_id = Show.find_by(songfishID: setlist["show_id"])&.id
         set = Setlist.find_or_create_by(show_id: show_id, setnumber: setlist["setnumber"])
 
@@ -154,6 +248,8 @@ module Songfish
         # css_class	null
       end
     end
+
+    SetSong.where.not(songfishID: songfish_set_song_ids).destroy_all
   end
 
   def self.getUploads
@@ -206,7 +302,7 @@ module Songfish
       cells = row.css("td")
 
       rating = Float(cells[0]&.text&.strip) rescue nil
-      count  = Integer(cells[1]&.text&.strip) rescue nil
+      count = Integer(cells[1]&.text&.strip) rescue nil
 
       link = cells[2]&.at_css("a")
       show_link = link&.[]("href")

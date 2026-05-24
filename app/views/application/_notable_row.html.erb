@@ -1,4 +1,4 @@
-<% 
+<%
     show = set_song.setlist.show
     venue = set_song.setlist.show.venue
 
@@ -13,7 +13,7 @@
     hide_song_name = false if local_assigns[:hide_song_name].nil?
  %>
 
-<a 
+<a
     class="
     flex 
     cursor-pointer 
@@ -22,14 +22,19 @@
     py-1 lg:py-0
     hover:bg-base-200 transition 
     rounded 
-    items-center" 
-    href="/<%= set_song.setlist.show.slug %>" 
+    items-center"
+    href="/<%= set_song.setlist.show.slug %>"
 >
-  <span class="w-16 lg:w-8 align-middle pl-3 text-sm"><%= set_song.position %>&nbsp;</span>
-
-  <span class="h-[2.875rem] w-16 lg:h-32 lg:my-4 lg:w-[15%]">
+  <span class="h-[2.875rem] hidden lg:block h-32 my-4 w-[15%]">
     <img class="h-full mx-auto rounded" src="<%= show.poster_url.blank? ? asset_path('missing.png') : show.poster_url %>" />
   </span>
+
+  <span class="pr-8 py-2 whitespace-nowrap <% if hide_song_name %> w-[30%] max-lg:w-3/5 <% else %> w-2/5 hidden lg:block <% end %>">
+    <span class="block text-black dark:text-white"><%= show.date.strftime("%Y-%m-%d") %><%=raw '&mdash;' unless show.title.blank? %><%= show.title %></span>
+    <span class="block text-sm"><%= [venue.name, venue.city, venue.region, venue.country.name].reject(&:blank?).join(', ') %></span>
+  </span>
+
+  <span class="w-16 align-middle pl-3 text-sm">#<%= set_song.position %>&nbsp;</span>
 
   <% unless hide_song_name %>
     <span class="align-middle w-4/5 lg:w-2/5">
@@ -41,18 +46,29 @@
       </span>
     </span>
   <% end %>
-  
-  <span class="pr-8 py-2 whitespace-nowrap <% if hide_song_name %> w-[30%] max-lg:w-3/5 <% else %> w-2/5 hidden lg:block <% end %>">
-    <span class="block text-black dark:text-white"><%= show.date.strftime("%Y-%m-%d") %><%=raw '&mdash;' unless show.title.blank? %><%= show.title %></span>
-    <span class="block text-sm"><%= [venue.name, venue.city, venue.region, venue.country.name].reject(&:blank?).join(', ') %></span>
-  </span>
 
   <% unless local_assigns[:extra_html].nil? %>
     <span class="w-2/5 align-middle text-sm pr-3 hidden lg:block">
       <%= raw extra_html %>
     </span>
   <% end %>
-  
+
+  <% if local_assigns[:show_upvotes] %>
+    <span class="<%= local_assigns[:extra_html] ? 'w-1/5' : 'w-2/5' %> align-middle text-sm pr-3">
+      <% if set_song.upvotes > 0  %>
+        <div class="flex float-end lg:mr-3">
+          <span class="leading-6 mr-1">
+            <%= set_song.upvotes %>
+          </span>
+
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-primary">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
+          </svg>
+        </div>
+       <% end %>
+    </span>
+  <% end %>
+
   <span class="w-16 align-middle text-sm text-end pr-3"><%= format('%02d', minutes) %>:<%= format('%02d', seconds) %></span>
 </a>
 

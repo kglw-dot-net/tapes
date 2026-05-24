@@ -1,0 +1,18 @@
+<% content_for :meta_title, "Top Song Performances on Gizz Tapes" %>
+
+<div class="container mx-auto mt-8 px-5">
+  <h2 class="text-3xl font-bold mb-8 text-center text-black dark:text-white">
+    KGLW.net User Upvoted Tracks Chart
+  </h2>
+
+  <%= render "notable_links", current: 'upvoted' %>
+
+  <p class="mb-8">Cast your votes on the main <a href="https://kglw.net" target="_blank">KGLW.net</a> site, and this chart will update automatically every hour or so.</p>
+
+  <div class="bg-base-100 rounded-xl shadow-xl py-5 px-2">
+    <% @set_songs.each do |song| %>
+      <%= render "notable_row", set_song: song, show_upvotes: true %>
+    <% end %>
+  </div>
+</div>
+

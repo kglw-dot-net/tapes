@@ -102,6 +102,7 @@ Rails.application.routes.draw do
 
   get "notables/20-minute-jams" => "notables#twenty_minute_jams"
   get "notables/curated" => "notables#curated"
+  get "notables/upvoted" => "notables#upvoted"
 
   # get "notables" => "notables#index"
   # get "notables/longest-shows" => "notables#longest_shows"

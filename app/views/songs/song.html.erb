@@ -26,11 +26,11 @@
   <% unless notables.empty? %>
     <div class="bg-base-100 rounded-xl shadow-xl p-5 mb-5">
       <h3 class="card-title mb-2 text-black dark:text-white px-2">
-        Notable performances
+        KGLW.net team curated notable performances
       </h3>
 
       <% notables.each do |set_song| %>
-        <%= render "notable_row", set_song: set_song, hide_song_name: true, extra_html: set_song.jamchart_notes %>
+        <%= render "notable_row", set_song: set_song, hide_song_name: true, extra_html: set_song.jamchart_notes, show_upvotes: true %>
       <% end %>
     </div>
   <% end %>
@@ -42,10 +42,8 @@
       </h3>
     <% end %>
 
-    <div class="responsive-grid">
-      <% @set_songs.where(is_jamchart: false).map(&:setlist).map(&:show).uniq.each do |show| %>
-        <%= render "featured_show", show: show %>
-      <% end %>
-    </div>
+    <% @set_songs.where(is_jamchart: false).each do |set_song| %>
+      <%= render "notable_row", set_song: set_song, hide_song_name: true, show_upvotes: true %>
+    <% end %>
   </div>
 </div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_21_222342) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_22_225102) do
   create_table "albums", force: :cascade do |t|
     t.string "title"
     t.string "cover_art_url"
@@ -95,6 +95,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_21_222342) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "setlist_id", null: false
+    t.integer "upvotes"
     t.index ["setlist_id"], name: "index_set_songs_on_setlist_id"
     t.index ["song_id"], name: "index_set_songs_on_song_id"
     t.index ["transition_id"], name: "index_set_songs_on_transition_id"
