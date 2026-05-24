@@ -123,7 +123,7 @@ module Songfish
         next_song_slug = cells[7]&.at_css("a")&.[]("href")&.sub!("/song/", "")
 
         seconds = getDuration track_time
-        venue_name = location.nil? ? nil : location.split(', ')[0]
+        venue_name = location.nil? ? nil : location.split(", ")[0]
 
         set_songs = SetSong
                       .joins(setlist: { show: :venue })
