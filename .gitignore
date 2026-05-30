@@ -47,3 +47,4 @@ node_modules
 vite.config.ts.timestamp-*.mjs
 /.idea/*
 /hs_err_pid*.log
+/*.sqlite
