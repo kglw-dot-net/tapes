@@ -2,6 +2,22 @@ require "internet_archive"
 require "songfish"
 
 namespace :tapes do
+  desc "List things to do"
+  task todo: [ :environment ] do
+    puts "Inactive recordings:"
+    Recording.where(is_active: nil)
+             .each do |recording|
+      puts "\t#{recording.id}"
+    end
+
+    puts "Shows without posters:"
+    Show.where(poster_url: [ nil, "" ])
+        .where(is_active: true)
+        .each do |show|
+      puts "\t#{show.slug}"
+    end
+  end
+
   desc "Set default values for shows & recordings"
   task setDefaults: [ :environment ] do
     puts "Setting default values for shows & recordings..."
