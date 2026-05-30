@@ -4,7 +4,7 @@ require "json"
 require "faraday"
 
 module InternetArchive
-  @@searchQuery = 'collection:KingGizzardAndTheLizardWizard OR creator:"King Gizzard & The Lizard Wizard" OR subject:"KGLW" OR subject:"kgatlw" OR subject:"king gizzard" OR subject:"king gizzard & the lizard wizard"'
+  @@searchQuery = 'collection:KingGizzardAndTheLizardWizard OR creator:"King Gizzard & The Lizard Wizard" OR subject:"KGLW" OR subject:"kgatlw" OR subject:"king gizzard" OR subject:"king gizzard & the lizard wizard" OR creator:"Stu Mackenzie"'
 
   def self.update(is_create_only)
     identifiers = getUploads
