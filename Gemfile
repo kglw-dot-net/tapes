@@ -49,7 +49,7 @@ gem "vite_rails"
 # gem "image_processing", "~> 1.2"
 
 gem "rswag-api"
-gem "scalar_ruby", "~> 1.1.0"
+gem "scalar_ruby", "~> 2.0.0"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
