@@ -28,7 +28,7 @@
         <span class="w-4/5 lg:w-full pl-2 md:pl-4 lg:pl-4 xl:pl-0">
           <span class="text-lg text-black dark:text-white"><%= show.date.strftime("%Y-%m-%d") %><%= raw '&mdash;' unless show.title.blank? %><%= show.title %></span>
           <br/>
-          <span class="text-sm"><%= [venue.name, venue.city, venue.region, venue.country.name].reject(&:blank?).join(', ') %></span>
+          <span class="text-sm"><%= CGI.unescapeHTML [venue.name, venue.city, venue.region, venue.country.name].reject(&:blank?).join(', ') %></span>
         </span>
 
         <span class="w-32 lg:w-64 align-middle text-sm text-end pr-3">

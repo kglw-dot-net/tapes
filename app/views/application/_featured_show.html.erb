@@ -55,7 +55,7 @@
     </h4>
 
     <small>
-        <%= show.venue.name %> &bull; 
-        <%= [show.venue.city, show.venue.region, show.venue.country.name].reject(&:blank?).join(', ') %>
+        <%= CGI.unescapeHTML show.venue.name %> &bull;
+        <%= CGI.unescapeHTML [show.venue.city, show.venue.region, show.venue.country.name].reject(&:blank?).join(', ') %>
     </small>
 </a>

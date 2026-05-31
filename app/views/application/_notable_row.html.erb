@@ -31,7 +31,7 @@
 
   <span class="pr-8 py-2 whitespace-nowrap <% if hide_song_name %> grow <% else %> w-1/3 hidden lg:grid <% end %>">
     <span class="block text-black dark:text-white truncate"><%= show.date.strftime("%Y-%m-%d") %><%=raw '&mdash;' unless show.title.blank? %><%= show.title %></span>
-    <span class="block text-sm truncate"><%= [venue.name, venue.city, venue.region, venue.country.name].reject(&:blank?).join(', ') %></span>
+    <span class="block text-sm truncate"><%= CGI.unescapeHTML [venue.name, venue.city, venue.region, venue.country.name].reject(&:blank?).join(', ') %></span>
   </span>
 
   <span class="w-16 align-argh pl-3 text-sm">#<%= set_song.position %>&nbsp;</span>
@@ -42,7 +42,7 @@
       <span class="lg:hidden">
         <br />
         <span class="text-sm"><%= show.date.strftime("%Y-%m-%d") %><%=raw '&mdash;' unless show.title.blank? %><%= show.title %></span> &bull;
-        <span class="text-sm"><%= [venue.name, venue.city, venue.region, venue.country.name].reject(&:blank?).join(', ') %></span>
+        <span class="text-sm"><%= CGI.unescapeHTML [venue.name, venue.city, venue.region, venue.country.name].reject(&:blank?).join(', ') %></span>
       </span>
     </span>
   <% end %>

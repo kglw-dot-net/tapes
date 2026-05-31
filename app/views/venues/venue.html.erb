@@ -1,10 +1,10 @@
 <% content_for :meta_title, "#{@venue.name} on Gizz Tapes" %>
 
-<% location = [@venue.city, @venue.region, @venue.country.name].reject { |s| s.blank? }.join(', ') %>
+<% location = CGI.unescapeHTML [@venue.city, @venue.region, @venue.country.name].reject { |s| s.blank? }.join(', ') %>
 
 <div class="container mx-auto mt-8 px-5">
     <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white">
-        <%= @venue.name %>&mdash;<%= location %>
+        <%= CGI.unescapeHTML @venue.name %>&mdash;<%= location %>
     </h2>
     
     <h3 class="text-2xl font-bold mb-8 text-center">
@@ -33,7 +33,7 @@
         <div class="card-body py-5 px-3">
             <div class="responsive-grid">
                 <% @shows.each do |show| %>
-                    <%= render "featured_show" , show: show %>
+                    <%= render "featured_show", show: show %>
                 <% end %>
             </div>
         </div>
