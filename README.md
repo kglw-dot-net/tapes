@@ -1,37 +1,23 @@
-# README
+<div align="center">
+    <img src="app/assets/images/logo.png" alt="Logo" style="max-width: 8rem; margin-bottom:-3rem;">
+    <h1>Gizz Tapes 2</h1>
+    <p>
+        Live music streaming web app
+        <br />
+        <a href="https://tapes.kglw.net"><strong>Visit live site »</strong></a> &bull;
+        <a href="https://gizztapes2-staging.fly.dev/"><strong>Visit staging site »</strong></a>
+    </p>
 
-A web app for streaming live music recordings. Rewrite of a previous version, now using Rails 8, Tailwind, Hotwire, etc.. Code licensed under AGPL. Currently hardcoded to cater for King Gizzard.
+[![GitHub Issues](https://img.shields.io/github/issues/kglw-dot-net/tapes.svg)](https://github.com/kglw-dot-net/tapes/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kglw-dot-net/tapes.svg)](https://github.com/kglw-dot-net/tapes/pulls)
+[![GitHub branch check runs](https://img.shields.io/github/check-runs/kglw-dot-net/tapes/master)](https://github.com/kglw-dot-net/tapes/actions)
+[![License](https://img.shields.io/badge/license-AGPL--3.0-blue)](https://github.com/kglw-dot-net/tapes/blob/master/LICENSE)
+</div>
 
-# Live instances
+Uses Rails 8, Tailwind, daisyUI, Hotwire (Turbo and Stimulus) and SQLite. Currently hardcoded to cater for King Gizzard, using the Internet Archive as a backend for recordings and KGLW.net for setlist and other data. Built without AI.
 
-* [Gizz Tapes](https://tapes.kglw.net/)
-* [Gizz Tapes (staging)](https://gizztapes2-staging.fly.dev/)
+## Contributing
 
-# Commands
+We welcome any and all contributions! Feel free to [open an issue to report a bug or request a new feature](https://github.com/kglw-dot-net/tapes/issues), or [open a pull request](https://github.com/kglw-dot-net/tapes/pulls) to contribute directly.
 
-## Running
-
-Start with `foreman start -f Procfile.dev`
-
-## Rake tasks
-
-* `tapes:setShowColors` -- sets background colors for all shows based on posters
-* `tapes:setDefaults` -- tries to match recordings to shows where possible, and pick a preferred recording format -- not necessary if purely mirroring from a live instance with `tapes:update`
-* `tapes:update` -- fetches recordings settings from a live instance of the website
-* `tapes:ia:loadOverrides["~/path"]` -- loads overrides from GT1
-* `tapes:ia:update` -- refetches all recordings from the Internet Archive
-* `tapes:ia:fetchNew` -- fetches new recordings from the Internet Archive
-* `tapes:songfish:loadOverrides["~/path"]` -- loads overrides from GT1
-* `tapes:songfish:update` -- fetches latest show, setlist, etc. data from a Songfish instance
-* `tapes:songfish:fullUpdate` -- also fetches latest user ratings of shows, which relies on a web scraper; is also run as a Solid Queue recurring job
-
-### Rswag
-
-* `rake rswag` -- update the API docs page based on `/spec/requests/api/api_spec.rb`
-
-## Fly.io
-
-* `fly deploy`
-* `fly status`
-* `fly ssh sftp shell`
-* `fly ssh console`
+When contributing code, please follow conventional commit messages, and do not submit any AI-generated pull requests. Instead, please ensure that a human has reviewed, tested, and fully understands all the code changes being submitted.
