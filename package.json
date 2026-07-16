@@ -13,7 +13,7 @@
     "stimulus-use": "^0.52.3",
     "stimulus-vite-helpers": "^3.1.0",
     "typescript": "^5.9.3",
-    "vite": "^8.0.16",
+    "vite": "^8.1.5",
     "vite-plugin-rails": "^0.6.0",
     "vite-plugin-ruby": "^5.2.2"
   },
