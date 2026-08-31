@@ -7,7 +7,7 @@ module Songfish
   @@url = "https://kglw.net"
 
   def self.update
-    Faraday.default_connection_options = { headers: { user_agent: 'Gizz Tapes 2.0.0' } }
+    Faraday.default_connection_options = { headers: { user_agent: "Gizz Tapes 2" } }
 
     updateVenues
     updateCountries
@@ -18,7 +18,7 @@ module Songfish
   end
 
   def self.full_update
-    Faraday.default_connection_options = { headers: { user_agent: 'Gizz Tapes 2.0.0' } }
+    Faraday.default_connection_options = { headers: { user_agent: "Gizz Tapes 2" } }
 
     updateVenues
     updateCountries
