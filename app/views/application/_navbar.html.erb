@@ -14,6 +14,15 @@
 				<li><a href="/january">Dates</a></li>
 
 				<li>
+					<a>Artists</a>
+					<ul class="p-2">
+						<% @artists.each do |a| %>
+							<li><%= link_to a %></li>
+						<% end %>
+					</ul>
+				</li>
+
+				<li>
 					<a>Show Tags</a>
 					<ul class="p-2">
 						<% @show_tags.each do |tag| %>
@@ -49,6 +58,16 @@
 			<li><a href="/venues">Venues</a></li>
 			<li><a href="/songs">Songs</a></li>
 			<li><a href="/january">Dates</a></li>
+			<li>
+				<details class="z-10">
+					<summary>Artists</summary>
+					<ul class="p-2 shadow-xl top-8">
+						<% @artists.each do |a| %>
+							<li><%= link_to a %></li>
+						<% end %>
+					</ul>
+				</details>
+			</li>
 			<li>
 				<details class="z-10">
 					<summary>Show Tags</summary>

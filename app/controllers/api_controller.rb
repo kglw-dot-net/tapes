@@ -3,6 +3,10 @@ require "cgi"
 class ApiController < ApplicationController
   before_action :set_cache_headers
 
+  def docs
+    redirect_to "/api/docs"
+  end
+
   def shows
     shows = Rails.cache.fetch("api/shows.json", expires_in: 4.hours) do
       Show
@@ -12,6 +16,7 @@ class ApiController < ApplicationController
           id: show.slug,
           date: show.date,
           venuename: show.venue.name,
+          artist_name: show.artist&.name,
           location: [ show.venue.city, show.venue.region, show.venue.country&.name ].reject { |s| s.blank? }.join(", "),
           title: show.title,
           order: show.order,
@@ -50,6 +55,7 @@ class ApiController < ApplicationController
           permalink: show.songfishPermalink
         },
 
+        artist_id: show.artist.id,
         venue_id: show.venue_id,
         tour_id: show.tour_id,
 
@@ -124,6 +130,7 @@ class ApiController < ApplicationController
         id: show.slug,
         date: show.date,
         venuename: show.venue.name,
+        artist_name: show.artist&.name,
         location: [ show.venue.city, show.venue.region, show.venue.country&.name ].reject { |s| s.blank? }.join(", "),
         title: show.title,
         order: show.order,
@@ -166,6 +173,25 @@ class ApiController < ApplicationController
     end
 
     render json: venues
+  end
+
+  def artists
+    artists = Rails.cache.fetch("api/artists.json", expires_in: 4.hours) do
+      Artist
+      .joins(:shows)
+      .where(shows: { is_active: true })
+      .distinct
+      .map do |artist|
+        {
+          id: artist.id,
+          slug: artist.slug,
+          name: artist.name,
+          show_count: artist.shows.where(is_active: true).count
+        }
+      end
+    end
+
+    render json: artists
   end
 
   def countries

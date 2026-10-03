@@ -122,7 +122,12 @@ Rails.application.routes.draw do
 
   get "search" => "search#index"
 
+  # Artists controller
+  resources "artists", only: [:index, :show]
+
   # API
+
+  get "api" => "api#docs"
 
   get "api/v1/shows.json" => "api#shows"
   get "api/v1/shows/:id.json" => "api#show"
@@ -133,6 +138,8 @@ Rails.application.routes.draw do
 
   get "api/v1/venues.json" => "api#venues"
   get "api/v1/countries.json" => "api#countries"
+
+  get "api/v1/artists.json" => "api#artists"
 
   get "api/v1/set_types.json" => "api#set_types"
   get "api/v1/show_tags.json" => "api#show_tags"

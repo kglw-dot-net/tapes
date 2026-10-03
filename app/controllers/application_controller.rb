@@ -23,13 +23,25 @@ class ApplicationController < ActionController::Base
   private
 
   def set_layout_data
+    @artists = Rails.cache.fetch("non_main_artists_with_active_shows", expires_in: 1.day) do
+      Artist
+        .joins(:shows)
+        .where(shows: { is_active: true })
+        .select("artists.*, COUNT(shows.id) as show_count, MAX(shows.poster_url) as poster_url")
+        .group("artists.id")
+        .order(Arel.sql("show_count DESC"))
+        .to_a
+        .drop(1)
+        .sort_by(&:name)
+    end
+
     @show_tags = Rails.cache.fetch("show_tags_with_active_shows", expires_in: 2.hours) do
       ShowTag
-       .joins(:shows)
-       .where(shows: { is_active: true })
-       .distinct
-       .order(:name)
-       .to_a
+        .joins(:shows)
+        .where(shows: { is_active: true })
+        .distinct
+        .order(:name)
+        .to_a
     end
   end
 end

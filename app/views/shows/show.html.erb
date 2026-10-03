@@ -46,6 +46,12 @@
                 <h3 class="text-2xl font-bold text-center text-black dark:text-white mb-2"><%= @show.title %></h3>
               <% end %>
 
+              <% if @show.artist.present? && @artists.include?(@show.artist) %>
+                <h3 class="text-2xl font-bold text-center mb-2">
+                  <%= link_to @show.artist.name, @show.artist, class: "link link-hover link-primary" %>
+                </h3>
+              <% end %>
+
               <a href="/<%= @show.date.strftime("%Y") %>#<%= @show.tour.name.parameterize %>" class="block text-center link link-hover link-primary mb-2"><%= @show.tour.name %></a>
               <small class="block text-center mb-4">
                 <a href="/venues/<%= @show.venue.country.slug %>/<%= @show.venue.slug %>" class="link link-hover link-primary"><%= CGI.unescapeHTML @show.venue.name %></a> &bull;

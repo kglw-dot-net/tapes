@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_22_225102) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_03_150132) do
   create_table "albums", force: :cascade do |t|
     t.string "title"
     t.string "cover_art_url"
@@ -18,6 +18,14 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_22_225102) do
     t.datetime "updated_at", null: false
     t.string "subtitle"
     t.date "release_date"
+  end
+
+  create_table "artists", force: :cascade do |t|
+    t.string "name"
+    t.integer "songfishID"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "slug"
   end
 
   create_table "continents", force: :cascade do |t|
@@ -148,6 +156,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_22_225102) do
     t.float "average_rating"
     t.integer "count_ratings"
     t.float "bayesian_rating"
+    t.integer "artist_id"
+    t.index ["artist_id"], name: "index_shows_on_artist_id"
     t.index ["tour_id"], name: "index_shows_on_tour_id"
     t.index ["venue_id"], name: "index_shows_on_venue_id"
   end
@@ -216,6 +226,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_22_225102) do
   add_foreign_key "set_songs", "transitions"
   add_foreign_key "setlists", "set_types"
   add_foreign_key "setlists", "shows"
+  add_foreign_key "shows", "artists"
   add_foreign_key "shows", "tours"
   add_foreign_key "shows", "venues"
   add_foreign_key "songs", "albums"

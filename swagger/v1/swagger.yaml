@@ -25,6 +25,8 @@ paths:
                       type: string
                     venuename:
                       type: string
+                    artist_name:
+                      type: string
                     location:
                       type: string
                     title:
@@ -100,10 +102,12 @@ paths:
                     required:
                     - id
                     - permalink
+                  artist_id:
+                    type: integer
                   venue_id:
-                    type: string
+                    type: integer
                   tour_id:
-                    type: string
+                    type: integer
                   tags:
                     type: array
                     items:
@@ -274,6 +278,8 @@ paths:
                       type: string
                     venuename:
                       type: string
+                    artist_name:
+                      type: string
                     location:
                       type: string
                     title:
@@ -394,6 +400,34 @@ paths:
                   required:
                   - id
                   - name
+                  - show_count
+  "/api/v1/artists.json":
+    get:
+      summary: Retrieves artists
+      tags:
+      - Artists
+      responses:
+        '200':
+          description: artists found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    slug:
+                      type: string
+                    show_count:
+                      type: integer
+                  required:
+                  - id
+                  - name
+                  - slug
                   - show_count
   "/api/v1/countries.json":
     get:

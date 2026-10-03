@@ -8,9 +8,10 @@ class Searcher
                  (set_type_id.nil? or set_type_id.empty?) and
                  (show_tag_id.nil? or show_tag_id.empty?)
 
-    data = Show.joins(venue: :country)
-               .joins(setlists: { set_songs: :song })
-               .joins(:show_tags)
+    data = Show.left_joins(venue: :country)
+               .left_joins(setlists: { set_songs: :song })
+               .left_joins(:show_tags)
+               .left_joins(:artist)
                .where(is_active: true)
 
     if set_type_id.present?
@@ -30,7 +31,8 @@ class Searcher
         venues.region LIKE :q OR
         countries.name LIKE :q OR
         show_tags.name LIKE :q OR
-        songs.name LIKE :q",
+        songs.name LIKE :q OR
+        artists.name LIKE :q",
         q: "%#{query}%"
       )
     end

@@ -359,10 +359,17 @@ module Songfish
           tag
         end
 
-        # show.artist = Artist.find_by(songfishID: songfish_show["artist_id"])
         show.songfishPermalink = songfish_show["permalink"]
         show.title = songfish_show["showtitle"].empty? ? nil : songfish_show["showtitle"]
         show.order = songfish_show["showorder"]
+
+        show.artist = Artist.find_or_create_by(songfishID: songfish_show["artist_id"])
+
+        unless show.artist.name == songfish_show["artist"]
+          show.artist.name = songfish_show["artist"]
+          show.artist.slug = show.artist.name.parameterize
+          show.artist.save
+        end
 
         setlist = setlists.find { |s| s["show_id"] == songfish_show["show_id"] }
 

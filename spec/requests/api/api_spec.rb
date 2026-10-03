@@ -14,6 +14,7 @@ RSpec.describe 'API', type: :request do
                    id: { type: :string },
                    date: { type: :string },
                    venuename: { type: :string },
+                   artist_name: { type: :string },
                    location: { type: :string },
                    title: { type: :string },
                    order: { type: :integer },
@@ -58,8 +59,9 @@ RSpec.describe 'API', type: :request do
                    },
                    required: %w[id permalink]
                  },
-                 venue_id: { type: :string },
-                 tour_id: { type: :string },
+                 artist_id: { type: :integer },
+                 venue_id: { type: :integer },
+                 tour_id: { type: :integer },
                  tags: { type: :array, items: { type: :integer } },
                  sets: {
                    type: :array,
@@ -197,6 +199,7 @@ RSpec.describe 'API', type: :request do
                    id: { type: :string },
                    date: { type: :string },
                    venuename: { type: :string },
+                   artist_name: { type: :string },
                    location: { type: :string },
                    title: { type: :string },
                    order: { type: :integer },
@@ -282,6 +285,30 @@ RSpec.describe 'API', type: :request do
                    show_count: { type: :integer }
                  },
                  required: %w[id name show_count]
+               }
+
+        run_test!
+      end
+    end
+  end
+
+  path '/api/v1/artists.json' do
+    get 'Retrieves artists' do
+      tags 'Artists'
+
+      produces 'application/json'
+
+      response '200', 'artists found' do
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   id: { type: :integer },
+                   name: { type: :string },
+                   slug: { type: :string },
+                   show_count: { type: :integer }
+                 },
+                 required: %w[id name slug show_count]
                }
 
         run_test!
