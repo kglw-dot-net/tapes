@@ -3,39 +3,38 @@
 <% location = CGI.unescapeHTML [@venue.city, @venue.region, @venue.country.name].reject { |s| s.blank? }.join(', ') %>
 
 <div class="container mx-auto mt-8 px-5">
-    <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white">
-        <%= CGI.unescapeHTML @venue.name %>&mdash;<%= location %>
-    </h2>
-    
-    <h3 class="text-2xl font-bold mb-8 text-center">
-        <%= @shows.length %> show<%= 's' unless @shows.length == 1 %>
-    </h3>
+  <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white">
+    <%= CGI.unescapeHTML @venue.name %>&mdash;<%= location %>
+  </h2>
 
-    <div class="flex mb-8">
-        <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
-            <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
-                <li><a href="https://kglw.net/venues/<%= @venue.slug %>" target="_blank" class="text-black dark:text-white">View venue on KGLW.net</a></li>
+  <h3 class="text-2xl font-bold mb-8 text-center">
+    <%= @shows.length %> show<%= 's' unless @shows.length == 1 %>
+  </h3>
 
-                <%
-                    is_only_venue_in_country = @venue.country.venues.joins(:shows).where(shows: {is_active: true}).distinct.count == 1
-                %>
+  <div class="flex mb-8">
+    <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
+      <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
+        <li><a href="https://kglw.net/venues/<%= @venue.slug %>" target="_blank" class="text-black dark:text-white">View
+          venue on KGLW.net</a></li>
 
-                <% if is_only_venue_in_country %>
-                    <li><a href="/venues/" class="text-black dark:text-white">Back to venues index</a></li>
-                <% else %>
-                    <li><a href="/venues/<%= @venue.country.slug %>" class="text-black dark:text-white">Back to country</a></li>
-                <% end %>
-            </ul>
-        </div>
+        <%
+          is_only_venue_in_country = @venue.country.venues.joins(:shows).where(shows: { is_active: true }).distinct.count == 1
+        %>
+
+        <% if is_only_venue_in_country %>
+          <li><a href="/venues/" class="text-black dark:text-white">Back to venues index</a></li>
+        <% else %>
+          <li><a href="/venues/<%= @venue.country.slug %>" class="text-black dark:text-white">Back to country</a></li>
+        <% end %>
+      </ul>
     </div>
+  </div>
 
-    <div class="card bg-base-100 shadow-xl mb-5">
-        <div class="card-body py-5 px-3">
-            <div class="responsive-grid">
-                <% @shows.each do |show| %>
-                    <%= render "featured_show", show: show %>
-                <% end %>
-            </div>
-        </div>
+  <div class="card bg-base-100 shadow-xl mb-5">
+    <div class="card-body py-5 px-3">
+      <div class="responsive-grid">
+        <%= render @shows %>
+      </div>
     </div>
+  </div>
 </div>

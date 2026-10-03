@@ -91,9 +91,7 @@
       </h3>
 
       <div class="horizontal-scroll lg:responsive-grid text-center pb-3" data-controller="scroll-fade">
-        <% @most_recent_shows.each do |show| %>
-          <%= render "featured_show", show: show %>
-        <% end %>
+        <%= render @most_recent_shows %>
       </div>
 
       <h4 class="font-semibold text-black dark:text-white text-center">Browse by year:</h4>
@@ -116,9 +114,7 @@
       </h3>
 
       <div class="horizontal-scroll lg:responsive-grid text-center pb-3" data-controller="scroll-fade">
-        <% @recently_uploaded_shows.each do |show| %>
-          <%= render "featured_show", show: show %>
-        <% end %>
+        <%= render @recently_uploaded_shows %>
       </div>
     </div>
   </div>
@@ -133,9 +129,7 @@
       </h3>
 
       <div class="horizontal-scroll lg:responsive-grid text-center pb-3" data-controller="scroll-fade">
-        <% @top_shows.each do |show| %>
-          <%= render "featured_show", show: show %>
-        <% end %>
+        <%= render @top_shows %>
       </div>
     </div>
   </div>
@@ -157,9 +151,7 @@
 
       <%= turbo_frame_tag "random_shows" do %>
         <div class="horizontal-scroll lg:responsive-grid text-center pb-3" data-controller="scroll-fade">
-          <% @random_shows.each do |show| %>
-            <%= render "featured_show", show: show %>
-          <% end %>
+          <%= render @random_shows %>
         </div>
       <% end %>
 

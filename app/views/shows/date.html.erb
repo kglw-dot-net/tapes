@@ -32,9 +32,7 @@
     <div class="card bg-base-100 shadow-xl mb-5">
         <div class="card-body py-5 px-3">
             <div class="responsive-grid">
-                <% @shows.each do |show| %>
-                    <%= render "featured_show" , show: show %>
-                <% end %>
+              <%= render @shows %>
             </div>
         </div>
     </div>

@@ -1,54 +1,56 @@
 <% content_for :meta_title, "#{@year} on Gizz Tapes" %>
 
 <div class="container mx-auto mt-8 px-5">
-    <div class="flex mb-8">
-        <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
-            <ul class="menu menu-horizontal justify-center">
-                <% @years.sort.each do |year| %>
-                    <li><a href="/<%= year %>" class="<%= 'bg-primary hover:bg-primary text-white dark:text-black' if year == @year %>"><%= year %></a></li>
-                <% end %>
-            </ul>
-        </div>
+  <div class="flex mb-8">
+    <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
+      <ul class="menu menu-horizontal justify-center">
+        <% @years.sort.each do |year| %>
+          <li>
+            <a href="/<%= year %>" class="<%= 'bg-primary hover:bg-primary text-white dark:text-black' if year == @year %>"><%= year %></a>
+          </li>
+        <% end %>
+      </ul>
     </div>
+  </div>
 
-    <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white">
-        Year of <%= @year %>
-    </h2>
-    
-    <h3 class="text-2xl font-bold mb-8 text-center">
-        <%= @shows.length %> show<%= 's' unless @shows.length == 1 %> &mdash; <a class="text-primary" href="/<%= @year %>/random">pick one at random!</a>
-    </h3>
+  <h2 class="text-3xl font-bold mb-3 text-center text-black dark:text-white">
+    Year of <%= @year %>
+  </h2>
 
-    <% if @tours.length > 1 %>
-        <div class="flex mb-8">
-            <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
-                <label class="text-center block mt-3">Jump to:</label>
-                <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
-                    <% @tours.each do |tour| %>
-                        <% tour_shows = @shows.filter { |show| show.tour_id == tour.id }.count %>
-                        <li><a href="#<%= tour.name.parameterize %>"><%= tour.name %> <span class="badge badge-neutral"><%= tour_shows %></span></a></li>
-                    <% end %>
-                </ul>
-            </div>
+  <h3 class="text-2xl font-bold mb-8 text-center">
+    <%= @shows.length %> show<%= 's' unless @shows.length == 1 %> &mdash;
+    <a class="text-primary" href="/<%= @year %>/random">pick one at random!</a>
+  </h3>
+
+  <% if @tours.length > 1 %>
+    <div class="flex mb-8">
+      <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">
+        <label class="text-center block mt-3">Jump to:</label>
+        <ul class="menu menu-vertical lg:menu-horizontal lg:justify-center">
+          <% @tours.each do |tour| %>
+            <% tour_shows = @shows.filter { |show| show.tour_id == tour.id }.count %>
+            <li><a href="#<%= tour.name.parameterize %>"><%= tour.name %>
+              <span class="badge badge-neutral"><%= tour_shows %></span></a></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <% @tours.each do |tour| %>
+    <% tour_shows = @shows.filter { |show| show.tour_id == tour.id }.sort_by(&:date).reverse %>
+
+    <div class="card bg-base-100 shadow-xl mb-5">
+      <div class="card-body pb-4 pt-5 px-3">
+        <h2 class="card-title mb-2 text-black dark:text-white flex px-2" id="<%= tour.name.parameterize %>">
+          <span class="grow"><%= tour.name %> </span>
+          <span class="text-end opacity-50"><%= tour_shows.length %>&nbsp;show<%= 's' unless tour_shows.length == 1 %></span>
+        </h2>
+
+        <div class="responsive-grid">
+          <%= render tour_shows %>
         </div>
-    <% end %>
-
-    <% @tours.each do |tour| %>
-        <% tour_shows = @shows.filter { |show| show.tour_id == tour.id }.sort_by(&:date).reverse %>
-
-        <div class="card bg-base-100 shadow-xl mb-5">
-            <div class="card-body pb-4 pt-5 px-3">
-                <h2 class="card-title mb-2 text-black dark:text-white flex px-2" id="<%= tour.name.parameterize %>">
-                    <span class="grow"><%= tour.name %> </span>
-                    <span class="text-end opacity-50"><%= tour_shows.length %>&nbsp;show<%= 's' unless tour_shows.length == 1 %></span>
-                </h2>
-
-                <div class="responsive-grid">
-                    <% tour_shows.each do |show| %>
-                        <%= render "featured_show" , show: show %>
-                    <% end %>
-                </div>
-            </div>
-        </div>
-    <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>

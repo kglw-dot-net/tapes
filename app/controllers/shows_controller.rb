@@ -115,7 +115,7 @@ class ShowsController < ApplicationController
       format.turbo_stream {
          render turbo_stream: turbo_stream.append(
           "favourites-grid",
-          partial: "featured_show",
+          partial: "show",
           locals: { show: @show }
         )
       }
