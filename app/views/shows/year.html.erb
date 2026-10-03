@@ -38,7 +38,7 @@
   <% end %>
 
   <% @tours.each do |tour| %>
-    <% tour_shows = @shows.filter { |show| show.tour_id == tour.id }.sort_by(&:date).reverse %>
+    <% tour_shows = @shows.filter { |show| show.tour_id == tour.id }.sort_by(&:date) %>
 
     <div class="card bg-base-100 shadow-xl mb-5">
       <div class="card-body pb-4 pt-5 px-3">

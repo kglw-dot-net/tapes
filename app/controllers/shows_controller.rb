@@ -16,20 +16,14 @@ class ShowsController < ApplicationController
 
     @shows = all_shows
       .includes(venue: :country)
-      # .joins(:recordings)
-      # .select("shows.*, COUNT(recordings.id) AS recording_count")
       .distinct
 
     @tours = Tour
       .joins(:shows)
       .where("shows.id IN (?)", all_shows.pluck(:id))
-      .select("tours.*, MAX(shows.date) AS max_show_date")
+      .select("tours.*, MIN(shows.date) AS min_show_date")
       .group("tours.id")
-      .order("max_show_date DESC")
-
-    # @tours.each do |tour|
-    #   puts "#{tour.name} - #{tour.max_show_date}"
-    # end
+      .order("min_show_date ASC")
   end
 
   # GET /:year/random
