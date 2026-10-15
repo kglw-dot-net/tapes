@@ -110,6 +110,7 @@ RSpec.describe 'API', type: :request do
                        source: { type: :string },
                        lineage: { type: :string },
                        taper: { type: :string },
+                       taper_id: { type: :integer },
                        files_path_prefix: { type: :string },
                        internet_archive: {
                          type: :object,
@@ -309,6 +310,38 @@ RSpec.describe 'API', type: :request do
                    show_count: { type: :integer }
                  },
                  required: %w[id name slug show_count]
+               }
+
+        run_test!
+      end
+    end
+  end
+
+  path '/api/v1/tapers.json' do
+    get 'Retrieves tapers' do
+      tags 'Tapers'
+
+      produces 'application/json'
+
+      response '200', 'tapers found' do
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   id: { type: :integer },
+                   name: { type: :string },
+                   is_anon: { type: :boolean },
+                   recordings: {
+                     type: :array,
+                     items: {
+                       type: :object,
+                       properties: {
+                         id: { type: :integer },
+                         show_id: { type: :integer }
+                       }
+                     }
+                   }
+                 }
                }
 
         run_test!

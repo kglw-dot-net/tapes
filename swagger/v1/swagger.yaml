@@ -179,6 +179,8 @@ paths:
                           type: string
                         taper:
                           type: string
+                        taper_id:
+                          type: integer
                         files_path_prefix:
                           type: string
                         internet_archive:
@@ -429,6 +431,36 @@ paths:
                   - name
                   - slug
                   - show_count
+  "/api/v1/tapers.json":
+    get:
+      summary: Retrieves tapers
+      tags:
+      - Tapers
+      responses:
+        '200':
+          description: tapers found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    is_anon:
+                      type: boolean
+                    recordings:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          show_id:
+                            type: integer
   "/api/v1/countries.json":
     get:
       summary: Retrieves countries

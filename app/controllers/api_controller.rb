@@ -92,6 +92,7 @@ class ApiController < ApplicationController
             source: recording.source,
             lineage: recording.lineage,
             taper: recording.taper&.name,
+            taper_id: recording.taper_id,
             files_path_prefix: "https://archive.org/download/" + recording.id + "/",
 
             internet_archive: {
@@ -178,10 +179,10 @@ class ApiController < ApplicationController
   def artists
     artists = Rails.cache.fetch("api/artists.json", expires_in: 4.hours) do
       Artist
-      .joins(:shows)
-      .where(shows: { is_active: true })
-      .distinct
-      .map do |artist|
+        .joins(:shows)
+        .where(shows: { is_active: true })
+        .distinct
+        .map do |artist|
         {
           id: artist.id,
           slug: artist.slug,
@@ -192,6 +193,35 @@ class ApiController < ApplicationController
     end
 
     render json: artists
+  end
+
+  def tapers
+    tapers = Rails.cache.fetch("api/tapers.json", expires_in: 4.hours) do
+      Taper.joins(recordings: :show)
+           .where(recordings: { is_active: true, shows: { is_active: true } })
+           .distinct
+           .map do |taper|
+        {
+          id: taper.id,
+          name: taper.name,
+          is_anon: taper.is_anon,
+          recordings: taper.recordings
+                           .joins(:show)
+                           .where(
+                             recordings: { is_active: true },
+                             shows: { is_active: true }
+                           )
+                           .map do |recording|
+                            {
+                              id: recording.id,
+                              show_id: recording.show.id
+                            }
+                          end
+        }
+      end
+    end
+
+    render json: tapers
   end
 
   def countries
