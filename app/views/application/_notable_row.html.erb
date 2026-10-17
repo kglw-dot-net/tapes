@@ -55,7 +55,7 @@
 
   <% if local_assigns[:show_upvotes] %>
     <span class="w-16 align-middle text-sm pr-3">
-      <% if set_song.upvotes > 0  %>
+      <% if !set_song.upvotes.nil? and set_song.upvotes > 0  %>
         <div class="flex float-end lg:mr-3">
           <span class="leading-6 mr-1">
             <%= set_song.upvotes %>
