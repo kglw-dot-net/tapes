@@ -144,12 +144,18 @@ class Searcher
 
   def self.songs
     Rails.cache.fetch("Searcher.songs", expires_in: CACHE_DURATION) do
+      dj_show_ids = Show
+                      .includes(:show_tags)
+                      .where(show_tags: { name: 'DJ' })
+                      .pluck(:id)
+
       Song
         .includes(:album)
         .joins(set_songs: { setlist: :show })
         .joins(set_songs: { setlist: :set_type })
         .where(shows: { is_active: true })
         .where.not(set_types: { name: "DJ Set" })
+        .where.not(setlist: { show_id: dj_show_ids })
         .select("songs.*, COUNT(DISTINCT shows.id) AS show_count")
         .group("songs.id")
         .to_a
