@@ -12,6 +12,10 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
+  # iOS universal links / Android app links
+  get ".well-known/apple-app-site-association" => "well_known#apple_app_site_association", format: false
+  get ".well-known/assetlinks.json" => "well_known#assetlinks", format: false
+
   # Application controller
 
   get "feed.xml" => "application#feed", defaults: { format: "xml" }
