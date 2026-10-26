@@ -141,7 +141,7 @@ class ApiController < ApplicationController
         count_ratings: show.count_ratings,
         weighted_rating: show.bayesian_rating,
         tags: show.show_tags.map(&:id),
-        recording_type_ids: show.recordings.map(&:recording_type_id).uniq,
+        recording_type_ids: show.recordings.map(&:recording_type_id).uniq
       }
     end
 

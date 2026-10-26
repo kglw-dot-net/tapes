@@ -12,11 +12,11 @@ class SongsController < ApplicationController
 
     dj_show_ids = Show
                     .includes(:show_tags)
-                    .where(show_tags: { name: 'DJ' })
+                    .where(show_tags: { name: "DJ" })
                     .pluck(:id)
 
     @set_songs = SetSong
-                   .includes(setlist: [{ show: [{ venue: :country }, :show_tags] }, :set_type])
+                   .includes(setlist: [ { show: [ { venue: :country }, :show_tags ] }, :set_type ])
                    .where(song_id: @song.id, setlists: { shows: { is_active: true } })
                    .where.not(setlist: { set_types: { name: "DJ Set" } })
                    .where.not(setlist: { show_id: dj_show_ids })

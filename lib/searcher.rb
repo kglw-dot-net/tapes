@@ -4,7 +4,6 @@ class Searcher
   CACHE_DURATION = 4.hours
 
   def self.search(query, set_type_id = nil, show_tag_id = nil, recording_type_id = nil)
-
     return [] if (query.blank? or query.length < 3) and
                  (recording_type_id.nil? or recording_type_id.empty?) and
                  (set_type_id.nil? or set_type_id.empty?) and
@@ -154,7 +153,7 @@ class Searcher
     Rails.cache.fetch("Searcher.songs", expires_in: CACHE_DURATION) do
       dj_show_ids = Show
                       .includes(:show_tags)
-                      .where(show_tags: { name: 'DJ' })
+                      .where(show_tags: { name: "DJ" })
                       .pluck(:id)
 
       Song
