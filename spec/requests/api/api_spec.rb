@@ -180,6 +180,12 @@ RSpec.describe 'API', type: :request do
 
       parameter name: :q, in: :query, type: :string
 
+      parameter name: :recording_type_id,
+                in: :query,
+                type: :array,
+                items: { type: :integer },
+                collectionFormat: :multi
+
       parameter name: :set_type_id,
                 in: :query,
                 type: :array,
@@ -208,7 +214,8 @@ RSpec.describe 'API', type: :request do
                    average_rating: { type: :number, format: :float },
                    count_ratings: { type: :integer },
                    weighted_rating: { type: :number, format: :float },
-                   tags: { type: :array, items: { type: :integer } }
+                   tags: { type: :array, items: { type: :integer } },
+                   recording_type_ids: { type: :array, items: { type: :integer } }
                  },
                  required: %w[id date venuename location order]
                }
@@ -458,6 +465,28 @@ RSpec.describe 'API', type: :request do
                    release_date: { type: :string }
                  },
                  required: %w[id title]
+               }
+
+        run_test!
+      end
+    end
+  end
+
+  path '/api/v1/recording_types.json' do
+    get 'Retrieves recording types' do
+      tags 'Misc.'
+
+      produces 'application/json'
+
+      response '200', 'recording types found' do
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   id: { type: :integer },
+                   name: { type: :string }
+                 },
+                 required: %w[id name]
                }
 
         run_test!

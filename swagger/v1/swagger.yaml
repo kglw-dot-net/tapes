@@ -250,6 +250,13 @@ paths:
         in: query
         schema:
           type: string
+      - name: recording_type_id
+        in: query
+        items:
+          type: integer
+        collectionFormat: multi
+        schema:
+          type: array
       - name: set_type_id
         in: query
         items:
@@ -299,6 +306,10 @@ paths:
                       type: number
                       format: float
                     tags:
+                      type: array
+                      items:
+                        type: integer
+                    recording_type_ids:
                       type: array
                       items:
                         type: integer
@@ -591,6 +602,28 @@ paths:
                   required:
                   - id
                   - title
+  "/api/v1/recording_types.json":
+    get:
+      summary: Retrieves recording types
+      tags:
+      - Misc.
+      responses:
+        '200':
+          description: recording types found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                  required:
+                  - id
+                  - name
   "/api/v1/set_types.json":
     get:
       summary: Retrieves set types

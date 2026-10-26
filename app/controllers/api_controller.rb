@@ -122,10 +122,11 @@ class ApiController < ApplicationController
     # Using CGI.parse as it can handle multiple set_type_id values, e.g. ?set_type_id=1&set_type_id=2
     x = CGI.parse request.query_string
 
+    recording_type_id = x["recording_type_id"].present? ? x["recording_type_id"].map(&:to_i).presence : nil
     set_type_id = x["set_type_id"].present? ? x["set_type_id"].map(&:to_i).presence : nil
     show_tag_id = x["show_tag_id"].present? ? x["show_tag_id"].map(&:to_i).presence : nil
 
-    shows = Searcher.search(query, set_type_id, show_tag_id)
+    shows = Searcher.search(query, set_type_id, show_tag_id, recording_type_id)
                     .map do |show|
       {
         id: show.slug,
@@ -139,7 +140,8 @@ class ApiController < ApplicationController
         average_rating: show.average_rating,
         count_ratings: show.count_ratings,
         weighted_rating: show.bayesian_rating,
-        tags: show.show_tags.map(&:id)
+        tags: show.show_tags.map(&:id),
+        recording_type_ids: show.recordings.map(&:recording_type_id).uniq,
       }
     end
 
@@ -299,6 +301,21 @@ class ApiController < ApplicationController
     end
 
     render json: albums
+  end
+
+  def recording_types
+    recording_types = Rails.cache.fetch("api/recording_types.json", expires_in: 4.hours) do
+      RecordingType
+        .all
+        .map do |recording_type|
+        {
+          id: recording_type.id,
+          name: recording_type.name
+        }
+      end
+    end
+
+    render json: recording_types
   end
 
   def set_types

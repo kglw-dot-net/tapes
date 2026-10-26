@@ -3,8 +3,10 @@
 class Searcher
   CACHE_DURATION = 4.hours
 
-  def self.search(query, set_type_id = nil, show_tag_id = nil)
+  def self.search(query, set_type_id = nil, show_tag_id = nil, recording_type_id = nil)
+
     return [] if (query.blank? or query.length < 3) and
+                 (recording_type_id.nil? or recording_type_id.empty?) and
                  (set_type_id.nil? or set_type_id.empty?) and
                  (show_tag_id.nil? or show_tag_id.empty?)
 
@@ -12,7 +14,12 @@ class Searcher
                .left_joins(setlists: { set_songs: :song })
                .left_joins(:show_tags)
                .left_joins(:artist)
+               .left_joins(recordings: :recording_type)
                .where(is_active: true)
+
+    if recording_type_id.present?
+      data = data.where(recording_types: { id: recording_type_id })
+    end
 
     if set_type_id.present?
       data = data.where(setlists: { set_type_id: set_type_id })
@@ -32,7 +39,8 @@ class Searcher
         countries.name LIKE :q OR
         show_tags.name LIKE :q OR
         songs.name LIKE :q OR
-        artists.name LIKE :q",
+        artists.name LIKE :q OR
+        recording_types.name LIKE :q",
         q: "%#{query}%"
       )
     end

@@ -142,6 +142,7 @@ Rails.application.routes.draw do
   get "api/v1/artists.json" => "api#artists"
   get "api/v1/tapers.json" => "api#tapers"
 
+  get "api/v1/recording_types.json" => "api#recording_types"
   get "api/v1/set_types.json" => "api#set_types"
   get "api/v1/show_tags.json" => "api#show_tags"
 
