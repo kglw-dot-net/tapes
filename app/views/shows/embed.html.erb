@@ -1,7 +1,7 @@
 <% content_for :hide_navbar, true %>
 <% show_full_title = "#{@show.date.strftime("%Y-%m-%d")}#{(@show.title.present? ? '—' + @show.title : '')}" %>
 
-<div class="flex items-center gap-3 mb-1 py-1 px-2 bg-primary-content dark:bg-black" data-controller="player"
+<div class="flex items-center gap-3 mb-1 py-1 px-2 bg-primary-content dark:bg-black fixed top-0 w-full z-[1]" data-controller="player"
      data-action="playlist:playTrack@window->player#playPlaylist" data-is-embed-player="true">
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
        class="size-6 cursor-pointer"
@@ -41,7 +41,7 @@
   </a>
 </div>
 
-<div data-controller="show" class="px-1">
+<div data-controller="show" class="px-1 pt-[60px]">
   <% recordings_count = @show.recordings.where(is_active: true).count %>
   <% @show.recordings.where(is_active: true).each do |recording| %>
     <% taper = recording.taper&.parent_id.nil? ? recording.taper : recording.taper.parent %>
