@@ -1,0 +1,106 @@
+<% content_for :hide_navbar, true %>
+<% show_full_title = "#{@show.date.strftime("%Y-%m-%d")}#{(@show.title.present? ? '—' + @show.title : '')}" %>
+
+<div class="flex items-center gap-3 mb-1 py-1 px-2 bg-primary-content dark:bg-black" data-controller="player"
+     data-action="playlist:playTrack@window->player#playPlaylist" data-is-embed-player="true">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+       class="size-6 cursor-pointer"
+       data-action="click->player#previousTrack">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
+  </svg>
+
+  <label class="swap hover:text-black dark:hover:text-white transition" data-action="click->player#playPause">
+    <input type="checkbox" disabled data-player-target="isPlaying" class="hidden"/>
+
+    <%# Pause icon %>
+    <svg class="swap-on fill-current size-8 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5"/>
+    </svg>
+
+    <%# Play icon %>
+    <svg class="swap-off fill-current size-8 cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"/>
+    </svg>
+  </label>
+
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+       class="size-6 cursor-pointer"
+       data-action="click->player#nextTrack">
+    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
+  </svg>
+
+  <label for="progress" class="text-xs w-10 text-center" data-player-target="currentTime">0:00</label>
+
+  <progress class="progress progress-primary h-1 hover:h-2 transition-all flex-grow cursor-pointer" data-player-target="progress"
+            data-action="click->player#seek" value="0" max="100"></progress>
+
+
+  <a href="/<%= @show.slug %>" class="btn btn-ghost p-1" target="_blank">
+    <img src="<%= asset_path('logo.png') %>" alt="Gizz Tapes logo" title="Listen on Gizz Tapes" class="h-8 w-8" />
+  </a>
+</div>
+
+<div data-controller="show" class="px-1">
+  <% recordings_count = @show.recordings.where(is_active: true).count %>
+  <% @show.recordings.where(is_active: true).each do |recording| %>
+    <% taper = recording.taper&.parent_id.nil? ? recording.taper : recording.taper.parent %>
+    <% taper = nil if taper&.is_anon? %>
+
+    <% color = case recording.recording_type.name
+               when 'SBD' then 'primary'
+               when 'AUD' then 'secondary'
+               when 'MTX' then 'accent'
+               else 'neutral'
+               end
+    %>
+
+    <div
+      data-controller="playlist"
+      data-playlist-id="<%= recording.id %>"
+      data-playlist-title="<%= show_full_title %>"
+      data-playlist-artist="<%= @show.artist.name %>"
+      data-playlist-thumbnail="<%= @show.poster_url %>"
+      class="hidden"
+    >
+      <% files = recording
+        .recording_files
+        .matching_format(recording.preferred_format)
+         # .with_all_ancestors_present(recording.id)
+
+         # TODO: remove these recording specific hacks
+
+         if recording.id == 'kglw2025-05-18.KGLWLisbon25N1' or
+            recording.id == 'kglw2025-05-19.KGLWLisbon25N2' or
+            recording.id == 'kglw2025-05-23.Spain2025N1'
+           files = files.where("name GLOB '[0-9][0-9]*'")
+         end
+
+         if recording.id == 'kglw2025-08-02'
+           files = files.order(name: :asc)
+         end
+      %>
+
+      <% files.each_with_index do |file, idx| %>
+        <% track_title = (file.title_override || file.title || file.name).gsub('->', '→').upcase_first %>
+        <a class="track py-1 px-2"
+           data-action="playlist#playTrack"
+           data-track-title="<%= track_title %>"
+           data-recording-url="/<%= @show.slug %>#<%= recording.id %>"
+           href="<%= raw file.url %>">
+          <small><%= idx + 1 %></small>
+          <span><%= track_title %></span>
+          <small><%= Time.at(file.length).strftime("%-M:%S") %></small>
+        </a>
+      <% end %>
+
+      <div class="w-full text-sm text-center my-1">
+        <span class="badge badge-xs badge-<%= color %>"><%= recording.recording_type.name %></span>
+        by <%= taper.name %> &bull;
+        <a href="/<%= @show.slug %>" class="link link-primary link-hover" target="_blank">
+          <%= recordings_count %> other recording<%= 's' unless recordings_count == 1 %> on Gizz Tapes &raquo;
+        </a>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -1,75 +1,77 @@
 <!DOCTYPE html>
 <html lang="en" class="bg-zinc-200 dark:bg-zinc-900">
-  <head>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-		
-		<%
-			default_title = 'Gizz Tapes'
-			default_description = 'Gizz Tapes is a jukebox for recordings of King Gizzard and the Lizard Wizard shows built and run by the KGLW.net team.'
-		%>
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
 
-    <title><%= content_for?(:meta_title) ? yield(:meta_title) : default_title %></title>
-		<meta property="og:title" content="<%= content_for?(:meta_title) ? yield(:meta_title) : default_title %>" />
-		<meta name="twitter:title" content="<%= content_for?(:meta_title) ? yield(:meta_title) : default_title %>" />
-		
-		<meta name="description" content="<%= content_for?(:meta_description) ? yield(:meta_description) : default_description %>" />
-		<meta property="og:description" content="<%= content_for?(:meta_description) ? yield(:meta_description) : default_description %>" />
-		<meta name="twitter:description" content="<%= content_for?(:meta_description) ? yield(:meta_description) : default_description %>" />
-		
-		<meta name="twitter:image" content="<%= content_for?(:meta_image) ? yield(:meta_image) : asset_path('logo.png') %>" />
-		<meta property="og:image" content="<%= content_for?(:meta_image) ? yield(:meta_image) : asset_path('logo.png') %>" />
-		
-		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content="Gizz Tapes" />
-		
-		<meta name="twitter:card" content="summary_large_image" />
-		
-		<meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+  <%
+    default_title = 'Gizz Tapes'
+    default_description = 'Gizz Tapes is a jukebox for recordings of King Gizzard and the Lizard Wizard shows built and run by the KGLW.net team.'
+  %>
 
-    <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+  <title><%= content_for?(:meta_title) ? yield(:meta_title) : default_title %></title>
+  <meta property="og:title" content="<%= content_for?(:meta_title) ? yield(:meta_title) : default_title %>"/>
+  <meta name="twitter:title" content="<%= content_for?(:meta_title) ? yield(:meta_title) : default_title %>"/>
 
-		<link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
-		<link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
-		<link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#87CEEB">
-		<meta name="msapplication-TileColor" content="#da532c">
-		
-		<meta name="theme-color" content="<%= content_for?(:meta_color) ? yield(:meta_color) : "#87CEEB" %>">
+  <meta name="description" content="<%= content_for?(:meta_description) ? yield(:meta_description) : default_description %>"/>
+  <meta property="og:description" content="<%= content_for?(:meta_description) ? yield(:meta_description) : default_description %>"/>
+  <meta name="twitter:description" content="<%= content_for?(:meta_description) ? yield(:meta_description) : default_description %>"/>
 
-    <%= vite_client_tag %>
-    <%= vite_javascript_tag "application", media: "all", "data-turbo-track": "reload" %>
-    <%# vite_stylesheet_tag "application.css", media: "all", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+  <meta name="twitter:image" content="<%= content_for?(:meta_image) ? yield(:meta_image) : asset_path('logo.png') %>"/>
+  <meta property="og:image" content="<%= content_for?(:meta_image) ? yield(:meta_image) : asset_path('logo.png') %>"/>
 
-    <%= yield :head %>
-  </head>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="Gizz Tapes"/>
 
-  <body>
-    <%= render "application/navbar" %>
+  <meta name="twitter:card" content="summary_large_image"/>
 
-    <main 
-      data-controller="favourites"
-      data-action="player:toggleFavourite@window->favourites#togglePlayerFavourite"
-    >
-      <%= yield %>
-    </main>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
 
-    <%= render "application/footer" %>
+  <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
-    <%= render "application/login_modal" %>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+  <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#87CEEB">
+  <meta name="msapplication-TileColor" content="#da532c">
 
-    <%= render "application/player" %>
+  <meta name="theme-color" content="<%= content_for?(:meta_color) ? yield(:meta_color) : "#87CEEB" %>">
 
-    <script type="text/javascript">
-			window.goatcounter = {
-				path: window.location.host + window.location.pathname,
-				no_onload: true
-			};
-		</script>
+  <%= vite_client_tag %>
+  <%= vite_javascript_tag "application", media: "all", "data-turbo-track": "reload" %>
+  <%# vite_stylesheet_tag "application.css", media: "all", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
 
-		<script data-goatcounter="https://kglw.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
-  </body>
+  <%= yield :head %>
+</head>
+
+<body>
+<%= render "application/navbar" unless content_for?(:hide_navbar) %>
+
+<main
+  data-controller="favourites"
+  data-action="player:toggleFavourite@window->favourites#togglePlayerFavourite"
+>
+  <%= yield %>
+</main>
+
+<%= render "application/footer" unless content_for?(:hide_navbar) %>
+
+<%#= render "application/login_modal" %>
+
+<%= render "application/player" unless content_for?(:hide_navbar) %>
+
+<% unless content_for?(:hide_navbar) %>
+  <script type="text/javascript">
+      window.goatcounter = {
+          path: window.location.host + window.location.pathname,
+          no_onload: true
+      };
+  </script>
+
+  <script data-goatcounter="https://kglw.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
+<% end %>
+</body>
 </html>

@@ -76,6 +76,11 @@ Rails.application.routes.draw do
   get "archival" => "shows#archival"
   get "top" => "shows#top"
 
+  get ":slug/embed" => "shows#embed",
+      constraints: lambda { |request|
+        Show.where.not(slug: nil).where(is_active: true).pluck(:slug).include?(request.params[:slug])
+      }
+
   # Discography controller
 
   get "songs" => "songs#index"

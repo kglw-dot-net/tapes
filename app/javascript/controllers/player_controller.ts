@@ -1,6 +1,6 @@
-import { Controller } from "@hotwired/stimulus"
-import { IsSlugFavourited } from "../db"
-import { Howl, Howler } from 'howler'
+import {Controller} from "@hotwired/stimulus"
+import {IsSlugFavourited} from "../db"
+import {Howl, Howler} from 'howler'
 import {Playlist, Track} from "../interfaces"
 
 Howler.autoSuspend = false;
@@ -8,8 +8,8 @@ Howler.autoSuspend = false;
 export default class PlayerController extends Controller<HTMLElement> {
   static targets = [
     "container", "currentTime", "duration", "progress", "trackTitle", "trackSubtitle", "isPlaying", "isPlayingMobile",
-    "thumbnail", "mobilePlayer", "mobilePlayerThumbnail", "mobilePlayerBackdrop", "mobilePlayerTrackTitle", 
-    "mobilePlayerTrackSubtitle", "mobilePlayerProgress", "mobilePlayerCurrentTime", "mobilePlayerDuration", 
+    "thumbnail", "mobilePlayer", "mobilePlayerThumbnail", "mobilePlayerBackdrop", "mobilePlayerTrackTitle",
+    "mobilePlayerTrackSubtitle", "mobilePlayerProgress", "mobilePlayerCurrentTime", "mobilePlayerDuration",
     "mobilePlayerIsPlaying", "favouriteIcon", "mobilePlayerFavouriteIcon", "volumeControl", "isMuted"
   ];
 
@@ -36,6 +36,27 @@ export default class PlayerController extends Controller<HTMLElement> {
   declare readonly volumeControlTarget: HTMLInputElement;
   declare readonly isMutedTarget: HTMLInputElement
 
+  declare readonly hasContainerTarget: boolean;
+  declare readonly hasDurationTarget: boolean;
+  declare readonly hasTrackTitleTarget: boolean;
+  declare readonly hasTrackSubtitleTarget: boolean;
+  declare readonly hasIsPlayingMobileTarget: boolean;
+  declare readonly hasThumbnailTarget: boolean;
+  declare readonly hasFavouriteIconTarget: boolean;
+  declare readonly hasVolumeControlTarget: boolean;
+  declare readonly hasIsMutedTarget: boolean;
+
+  declare readonly hasMobilePlayerTarget: boolean;
+  declare readonly hasMobileFavouriteIconTarget: boolean;
+  declare readonly hasMobilePlayerIsPlayingTarget: boolean;
+  declare readonly hasMobilePlayerCurrentTimeTarget: boolean;
+  declare readonly hasMobilePlayerDurationTarget: boolean;
+  declare readonly hasMobilePlayerProgressTarget: boolean;
+  declare readonly hasMobilePlayerTrackTitleTarget: boolean;
+  declare readonly hasMobilePlayerTrackSubtitleTarget: boolean;
+  declare readonly hasMobilePlayerThumbnailTarget: boolean;
+  declare readonly hasMobilePlayerBackdropTarget: boolean;
+
   mobileBreakpointPx: number;
   iOS: boolean;
 
@@ -44,6 +65,8 @@ export default class PlayerController extends Controller<HTMLElement> {
   currentTrackIdx: number | null;
   interval: number | null; // Used to update timestamp and progress bar
 
+  isEmbedPlayer: boolean;
+
   // Events
   showMobilePlayerUIIfMobile() {
     // If screen width is wider than mobileBreakpointPx, don't show mobile player UI
@@ -51,16 +74,18 @@ export default class PlayerController extends Controller<HTMLElement> {
 
     this.showMobilePlayerUI();
   }
-  
+
   showMobilePlayerUI() {
+    if (!this.hasMobilePlayerTarget) return;
     this.mobilePlayerTarget.classList.remove('translate-y-full');
   }
 
   hideMobilePlayerUI() {
+    if (!this.hasMobilePlayerTarget) return;
     this.mobilePlayerTarget.classList.add('translate-y-full');
   }
 
-  playPlaylist({ detail: { playlist, trackIdx } }: { detail: { playlist: Playlist; trackIdx: number } }) {
+  playPlaylist({detail: {playlist, trackIdx}}: { detail: { playlist: Playlist; trackIdx: number } }) {
     if (this.playlist == null || this.playlist.id !== playlist.id) {
       this.resetAll();
 
@@ -69,8 +94,10 @@ export default class PlayerController extends Controller<HTMLElement> {
       this.element.dataset.id = playlist.id;
       this.element.dataset.slug = this.getCurrentPlaylistSlug();
 
-      this.containerTarget.classList.remove('invisible');
-      this.containerTarget.classList.remove('opacity-0');
+      if (this.hasContainerTarget) {
+        this.containerTarget.classList.remove('invisible');
+        this.containerTarget.classList.remove('opacity-0');
+      }
 
       this.setTrackSubtitle(playlist.title);
       this.setImageUrl(playlist.thumbnail);
@@ -82,6 +109,8 @@ export default class PlayerController extends Controller<HTMLElement> {
   }
 
   seek(event) {
+    if (this.playlist === null || this.currentTrackIdx === null) return;
+
     const progressBar = event.currentTarget;
 
     const currentTrack = this.playlist.tracks[this.currentTrackIdx].howl;
@@ -99,6 +128,15 @@ export default class PlayerController extends Controller<HTMLElement> {
   }
 
   playPause() {
+    if (this.playlist === null || this.currentTrackIdx === null) {
+      if (!this.isEmbedPlayer)
+        return;
+
+      document.querySelector<HTMLElement>(
+        '[data-controller="playlist"]:not(.hidden) .track'
+      )?.click();
+    }
+
     const isPlaying = !this.isPlayingTarget.checked;
 
     this.setIsPlayingDisplay(isPlaying);
@@ -137,28 +175,33 @@ export default class PlayerController extends Controller<HTMLElement> {
   }
 
   setVolume(value: number) {
-    this.volumeControlTarget.value = (value * 100).toString();
+    if (this.hasVolumeControlTarget)
+      this.volumeControlTarget.value = (value * 100).toString();
+
     Howler.volume(value);
   }
 
   toggleFavourite() {
     const slug = this.getCurrentPlaylistSlug();
-    this.dispatch('toggleFavourite', { detail: { slug } });
+    this.dispatch('toggleFavourite', {detail: {slug}});
   }
 
   toggleMuted() {
-    const isMuted = !this.isMutedTarget.checked;
+    const isMuted = this.hasIsMutedTarget && !this.isMutedTarget.checked;
     this.setIsMuted(isMuted);
   }
 
   setIsMuted(isMuted: boolean) {
-    this.isMutedTarget.checked = isMuted;
-    
+    if (this.hasIsMutedTarget)
+      this.isMutedTarget.checked = isMuted;
+
     Howler.mute(isMuted);
 
-    this.volumeControlTarget.disabled = isMuted;
-    this.volumeControlTarget.classList.toggle('cursor-not-allowed', isMuted);
-    this.volumeControlTarget.classList.toggle('opacity-50', isMuted);
+    if (this.hasVolumeControlTarget) {
+      this.volumeControlTarget.disabled = isMuted;
+      this.volumeControlTarget.classList.toggle('cursor-not-allowed', isMuted);
+      this.volumeControlTarget.classList.toggle('opacity-50', isMuted);
+    }
   }
 
   // Internal
@@ -178,26 +221,29 @@ export default class PlayerController extends Controller<HTMLElement> {
       // iPad on iOS 13 detection
       || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
 
+    this.isEmbedPlayer = this.element.dataset.isEmbedPlayer?.toLowerCase() === 'true';
+
     this.resetAll();
+    this.setProgressBar(0);
 
     this.setVolume(1.0);
 
     navigator.mediaSession.setActionHandler("play", this.playPause.bind(this));
     navigator.mediaSession.setActionHandler("pause", this.playPause.bind(this));
     navigator.mediaSession.setActionHandler("stop", this.resetAll.bind(this));
-  
+
     // navigator.mediaSession.setActionHandler("seekbackward", () => {});
     // navigator.mediaSession.setActionHandler("seekforward", () => {});
-  
+
     navigator.mediaSession.setActionHandler("seekto", (x) => {
       const currentTrack = this.playlist[this.currentTrackIdx].track;
       if (currentTrack == null) return;
       currentTrack.seek(x.seekTime);
       this.updateTrackPosition();
     });
-  
+
     navigator.mediaSession.setActionHandler("previoustrack", this.previousTrack.bind(this));
-    navigator.mediaSession.setActionHandler("nexttrack", this.nextTrack.bind(this));  
+    navigator.mediaSession.setActionHandler("nexttrack", this.nextTrack.bind(this));
   }
 
   // Called on all page loads
@@ -219,7 +265,7 @@ export default class PlayerController extends Controller<HTMLElement> {
       if (currentTrack)
         currentTrack.stop();
     }
-    
+
     this.currentTrackIdx = null;
 
     this.setIsPlayingDisplay(false);
@@ -250,28 +296,42 @@ export default class PlayerController extends Controller<HTMLElement> {
   }
 
   setFavouriteIcon(isFavourite: boolean | null) {
-    switch(isFavourite) {
+    switch (isFavourite) {
       case true: {
-        this.favouriteIconTarget.classList.add('active');
-        this.mobilePlayerFavouriteIconTarget.classList.add('active');
-        
-        this.favouriteIconTarget.classList.remove('hidden');
-        this.mobilePlayerFavouriteIconTarget.classList.remove('hidden');
+        if (this.hasFavouriteIconTarget) {
+          this.favouriteIconTarget.classList.add('active');
+          this.favouriteIconTarget.classList.remove('hidden');
+        }
+
+        if (this.hasMobileFavouriteIconTarget) {
+          this.mobilePlayerFavouriteIconTarget.classList.add('active');
+          this.mobilePlayerFavouriteIconTarget.classList.remove('hidden');
+        }
+
         break;
       }
 
       case false: {
-        this.favouriteIconTarget.classList.remove('active');
-        this.mobilePlayerFavouriteIconTarget.classList.remove('active');
-        
-        this.favouriteIconTarget.classList.remove('hidden');
-        this.mobilePlayerFavouriteIconTarget.classList.remove('hidden');
+        if (this.hasFavouriteIconTarget) {
+          this.favouriteIconTarget.classList.remove('active');
+          this.favouriteIconTarget.classList.remove('hidden');
+        }
+
+        if (this.hasMobileFavouriteIconTarget) {
+          this.mobilePlayerFavouriteIconTarget.classList.remove('active');
+          this.mobilePlayerFavouriteIconTarget.classList.remove('hidden');
+        }
+
         break;
       }
 
       case null: {
-        this.favouriteIconTarget.classList.add('hidden');
-        this.mobilePlayerFavouriteIconTarget.classList.add('hidden');
+        if (this.hasFavouriteIconTarget)
+          this.favouriteIconTarget.classList.add('hidden');
+
+        if (this.hasMobileFavouriteIconTarget)
+          this.mobilePlayerFavouriteIconTarget.classList.add('hidden');
+
         break;
       }
     }
@@ -279,45 +339,63 @@ export default class PlayerController extends Controller<HTMLElement> {
 
   setIsPlayingDisplay(isPlaying: boolean) {
     this.isPlayingTarget.checked = isPlaying;
-    this.isPlayingMobileTarget.checked = isPlaying;
-    this.mobilePlayerIsPlayingTarget.checked = isPlaying
+
+    if (this.hasIsPlayingMobileTarget)
+      this.isPlayingMobileTarget.checked = isPlaying;
+
+    if (this.hasMobilePlayerIsPlayingTarget)
+      this.mobilePlayerIsPlayingTarget.checked = isPlaying
   }
 
   setCurrentTime(time: string) {
     this.currentTimeTarget.textContent = time;
-    this.mobilePlayerCurrentTimeTarget.textContent = time;
+
+    if (this.hasMobilePlayerCurrentTimeTarget)
+      this.mobilePlayerCurrentTimeTarget.textContent = time;
   }
 
   setDuration(time: string) {
-    this.durationTarget.textContent = time;
-    this.mobilePlayerDurationTarget.textContent = time;
+    if (this.hasDurationTarget)
+      this.durationTarget.textContent = time;
+
+    if (this.hasMobilePlayerDurationTarget)
+      this.mobilePlayerDurationTarget.textContent = time;
   }
 
-  setProgressBar(value = null) {
-    if (!value) {
+  setProgressBar(value: number | null = null) {
+    if (value === null) {
       this.progressTarget.removeAttribute("value");
       this.progressTarget.classList.remove('progress-primary');
 
-      this.mobilePlayerProgressTarget.removeAttribute("value");
-      this.mobilePlayerProgressTarget.classList.remove('progress-primary');
-    }
-    else {
-      this.progressTarget.setAttribute("value", value);
+      if (this.hasMobilePlayerProgressTarget) {
+        this.mobilePlayerProgressTarget.removeAttribute("value");
+        this.mobilePlayerProgressTarget.classList.remove('progress-primary');
+      }
+    } else {
+      this.progressTarget.setAttribute("value", value.toString());
       this.progressTarget.classList.add('progress-primary');
 
-      this.mobilePlayerProgressTarget.setAttribute("value", value);
-      this.mobilePlayerProgressTarget.classList.add('progress-primary');
+      if (this.hasMobilePlayerProgressTarget) {
+        this.mobilePlayerProgressTarget.setAttribute("value", value.toString());
+        this.mobilePlayerProgressTarget.classList.add('progress-primary');
+      }
     }
   }
 
   setTrackTitle(title: string) {
-    this.trackTitleTarget.textContent = title;
-    this.mobilePlayerTrackTitleTarget.textContent = title;
+    if (this.hasTrackTitleTarget)
+      this.trackTitleTarget.textContent = title;
+
+    if (this.hasMobilePlayerTrackTitleTarget)
+      this.mobilePlayerTrackTitleTarget.textContent = title;
   }
 
   setTrackSubtitle(subtitle: string) {
-    this.trackSubtitleTarget.textContent = subtitle;
-    this.mobilePlayerTrackSubtitleTarget.textContent = subtitle;
+    if (this.hasTrackSubtitleTarget)
+      this.trackSubtitleTarget.textContent = subtitle;
+
+    if (this.hasMobilePlayerTrackSubtitleTarget)
+      this.mobilePlayerTrackSubtitleTarget.textContent = subtitle;
   }
 
   resetAll() {
@@ -340,17 +418,24 @@ export default class PlayerController extends Controller<HTMLElement> {
     this.setFavouriteIcon(null);
 
     // Invisible is used to prevent click events, opacity-0 is used for fade in/out
-    this.containerTarget.classList.add('invisible');
-    this.containerTarget.classList.add('opacity-0');
+    if (this.hasContainerTarget) {
+      this.containerTarget.classList.add('invisible');
+      this.containerTarget.classList.add('opacity-0');
+    }
 
     if (navigator.mediaSession)
-  	  navigator.mediaSession.metadata = null;
+      navigator.mediaSession.metadata = null;
   }
 
   setImageUrl(url: string) {
-    this.thumbnailTarget.src = url;
-    this.mobilePlayerThumbnailTarget.src = url;
-    this.mobilePlayerBackdropTarget.src = url;//.style.backgroundImage = `url(${url})`;
+    if (this.hasThumbnailTarget)
+      this.thumbnailTarget.src = url;
+
+    if (this.hasMobilePlayerThumbnailTarget)
+      this.mobilePlayerThumbnailTarget.src = url;
+
+    if (this.hasMobilePlayerBackdropTarget)
+      this.mobilePlayerBackdropTarget.src = url;//.style.backgroundImage = `url(${url})`;
   }
 
   getFormattedTime(seconds: number) {

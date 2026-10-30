@@ -58,6 +58,14 @@ class ShowsController < ApplicationController
       .count
   end
 
+  def embed
+    @show = Show.find_by(slug: params[:slug], is_active: true)
+
+    raise ActionController::RoutingError.new("Not Found") if @show.nil?
+
+    response.headers.delete("X-Frame-Options")
+  end
+
   # GET /:month
   def month
     @month_name = params[:month]
