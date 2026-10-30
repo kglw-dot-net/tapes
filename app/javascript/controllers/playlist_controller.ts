@@ -9,6 +9,7 @@ export default class extends Controller<HTMLElement> {
             // TODO: There's a stimulus way of doing this I'm sure
             id: this.element.dataset.playlistId,
             title: this.element.dataset.playlistTitle,
+            artist: this.element.dataset.playlistArtist,
             thumbnail: this.element.dataset.playlistThumbnail,
             url: window.location.href,
             tracks: [...this.element.querySelectorAll(`[data-action="playlist#playTrack"]`)].map((track: HTMLAnchorElement) => ({

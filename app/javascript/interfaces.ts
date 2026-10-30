@@ -10,6 +10,7 @@ export interface Track {
 export interface Playlist {
     id: string;
     title: string;
+    artist: string;
 
     thumbnail: string;
 

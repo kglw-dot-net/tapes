@@ -469,11 +469,11 @@ export default class PlayerController extends Controller<HTMLElement> {
     });
 
     if (navigator.mediaSession)
-			navigator.mediaSession.metadata = new MediaMetadata({
-				title: track.title,
-				artist: "King Gizzard and the Lizard Wizard",
-				album: this.playlist.title,
-				artwork: [{ src: this.playlist.thumbnail }]
-			});
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: track.title,
+        artist: this.playlist.artist,
+        album: this.playlist.title,
+        artwork: [{src: this.playlist.thumbnail}]
+      });
   }
 }
