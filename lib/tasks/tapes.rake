@@ -69,7 +69,7 @@ namespace :tapes do
     end
 
     desc "Add a specific recording manually"
-    task :addManual, [:identifier] => [ :environment ] do |_, args|
+    task :addManual, [ :identifier ] => [ :environment ] do |_, args|
       puts "Adding #{args[:identifier]}..."
 
       InternetArchive.updateRecording(args[:identifier], false)
