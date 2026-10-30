@@ -4,7 +4,9 @@ require "json"
 require "faraday"
 
 module InternetArchive
-  @@searchQuery = 'collection:KingGizzardAndTheLizardWizard OR creator:"King Gizzard & The Lizard Wizard" OR subject:"KGLW" OR subject:"kgatlw" OR subject:"king gizzard" OR subject:"king gizzard & the lizard wizard" OR creator:"Stu Mackenzie" OR creator:"Bullant"'
+  @@searchQuery = 'collection:KingGizzardAndTheLizardWizard OR creator:"King Gizzard & The Lizard Wizard" OR ' +
+                  'subject:"KGLW" OR subject:"kgatlw" OR subject:"king gizzard" OR ' +
+                  'subject:"king gizzard & the lizard wizard" OR creator:"Stu Mackenzie" OR creator:"Bullant"'
 
   def self.update(is_create_only)
     identifiers = getUploads
@@ -39,7 +41,9 @@ module InternetArchive
   end
 
   def self.getUploads
-    runInternetArchiveSearch(@@searchQuery).map { |x| x["identifier"] }
+    identifiers = runInternetArchiveSearch(@@searchQuery).map { |x| x["identifier"] }
+    identifiers.concat(Recording.where.not(id: @identifiers).pluck(:id))
+    identifiers.uniq
   end
 
   def self.updateRecording (identifier, is_create_only = false)

@@ -68,6 +68,15 @@ namespace :tapes do
       puts "Done!"
     end
 
+    desc "Add a specific recording manually"
+    task :addManual, [:identifier] => [ :environment ] do |_, args|
+      puts "Adding #{args[:identifier]}..."
+
+      InternetArchive.updateRecording(args[:identifier], false)
+
+      puts "Done!"
+    end
+
     desc "Update all Internet Archive data"
     task update: [ :environment ] do
       puts "Updating all Internet Archive data..."
@@ -78,7 +87,7 @@ namespace :tapes do
     end
 
     desc "Load archive_overrides.yml file from GT1"
-    task :loadOverrides, [ :path ] => [ :environment ] do |t, args|
+    task :loadOverrides, [ :path ] => [ :environment ] do |_, args|
       puts "Loading archive_overrides.yml file from GT1..."
 
       InternetArchive.loadOverrides(args[:path])
