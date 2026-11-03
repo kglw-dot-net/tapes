@@ -540,4 +540,106 @@ RSpec.describe 'API', type: :request do
       end
     end
   end
+
+  path '/api/v1/notables/curated.json' do
+    get 'Retrieves KGLW.net team curated notable performances of songs' do
+      tags 'Notables'
+
+      produces 'application/json'
+
+      response '200', 'curated notables found' do
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   song_name: { type: :string },
+                   position: { type: :integer },
+                   duration: { type: :float },
+                   footnote: { type: :string },
+                   is_notable: { type: :boolean },
+                   notable_description: { type: :string },
+                   is_reprise: { type: :boolean },
+                   is_verified: { type: :boolean },
+                   is_recommended: { type: :boolean },
+                   is_jam: { type: :boolean },
+                   transition_separator: { type: :string },
+                   upvotes: { type: :integer },
+
+                   show: {
+                     type: :object,
+                     properties: {
+                       id: { type: :string },
+                       date: { type: :string },
+                       venuename: { type: :string },
+                       artist_name: { type: :string },
+                       location: { type: :string },
+                       title: { type: :string },
+                       order: { type: :integer },
+                       poster_url: { type: :string },
+                       average_rating: { type: :number, format: :float },
+                       count_ratings: { type: :integer },
+                       weighted_rating: { type: :number, format: :float },
+                       tags: { type: :array, items: { type: :integer } }
+                     },
+                     required: %w[id date venuename location order]
+                   }
+                 },
+                 required: %w[song_name position is_notable is_reprise is_verified is_recommended is_jam upvotes show]
+               }
+
+        run_test!
+      end
+    end
+  end
+
+  path '/api/v1/notables/upvoted.json' do
+    get 'Retrieves KGLW.net user upvoted performances of songs' do
+      tags 'Notables'
+
+      produces 'application/json'
+
+      response '200', 'upvoted notables found' do
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   song_name: { type: :string },
+                   position: { type: :integer },
+                   duration: { type: :float },
+                   footnote: { type: :string },
+                   is_notable: { type: :boolean },
+                   notable_description: { type: :string },
+                   is_reprise: { type: :boolean },
+                   is_verified: { type: :boolean },
+                   is_recommended: { type: :boolean },
+                   is_jam: { type: :boolean },
+                   transition_separator: { type: :string },
+                   upvotes: { type: :integer },
+
+                   show: {
+                     type: :object,
+                     properties: {
+                       id: { type: :string },
+                       date: { type: :string },
+                       venuename: { type: :string },
+                       artist_name: { type: :string },
+                       location: { type: :string },
+                       title: { type: :string },
+                       order: { type: :integer },
+                       poster_url: { type: :string },
+                       average_rating: { type: :number, format: :float },
+                       count_ratings: { type: :integer },
+                       weighted_rating: { type: :number, format: :float },
+                       tags: { type: :array, items: { type: :integer } }
+                     },
+                     required: %w[id date venuename location order]
+                   }
+                 },
+                 required: %w[song_name position is_notable is_reprise is_verified is_recommended is_jam upvotes show]
+               }
+
+        run_test!
+      end
+    end
+  end
 end

@@ -155,6 +155,9 @@ Rails.application.routes.draw do
   get "api/v1/set_types.json" => "api#set_types"
   get "api/v1/show_tags.json" => "api#show_tags"
 
+  get "api/v1/notables/curated.json" => "api#curated"
+  get "api/v1/notables/upvoted.json" => "api#upvoted"
+
   get "api/v1/songs.json" => "api#songs"
   get "api/v1/songs/:slug.json" => "api#song"
   get "api/v1/albums.json" => "api#albums"

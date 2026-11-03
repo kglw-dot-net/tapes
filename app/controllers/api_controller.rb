@@ -17,7 +17,7 @@ class ApiController < ApplicationController
           date: show.date,
           venuename: show.venue.name,
           artist_name: show.artist&.name,
-          location: [ show.venue.city, show.venue.region, show.venue.country&.name ].reject { |s| s.blank? }.join(", "),
+          location: [show.venue.city, show.venue.region, show.venue.country&.name].reject { |s| s.blank? }.join(", "),
           title: show.title,
           order: show.order,
           poster_url: show.poster_url,
@@ -133,7 +133,7 @@ class ApiController < ApplicationController
         date: show.date,
         venuename: show.venue.name,
         artist_name: show.artist&.name,
-        location: [ show.venue.city, show.venue.region, show.venue.country&.name ].reject { |s| s.blank? }.join(", "),
+        location: [show.venue.city, show.venue.region, show.venue.country&.name].reject { |s| s.blank? }.join(", "),
         title: show.title,
         order: show.order,
         poster_url: show.poster_url,
@@ -214,11 +214,11 @@ class ApiController < ApplicationController
                              shows: { is_active: true }
                            )
                            .map do |recording|
-                            {
-                              id: recording.id,
-                              show_id: recording.show.id
-                            }
-                          end
+            {
+              id: recording.id,
+              show_id: recording.show.id
+            }
+          end
         }
       end
     end
@@ -351,6 +351,94 @@ class ApiController < ApplicationController
     end
 
     render json: show_tags
+  end
+
+  def curated
+    curated = Rails.cache.fetch("api/notables/curated.json", expires_in: 4.hours) do
+      SetSong
+        .includes(:song)
+        .includes(setlist: { show: { venue: :country } })
+        .where(setlist: { shows: { is_active: true } })
+        .where(is_jamchart: true)
+        .map do |set_song|
+        show = set_song.setlist.show
+        {
+          song_name: set_song.song.name,
+          position: set_song.position,
+          duration: set_song.duration,
+          footnote: set_song.footnote,
+          is_notable: set_song.is_jamchart,
+          notable_description: set_song.jamchart_notes,
+          is_reprise: set_song.is_reprise,
+          is_verified: set_song.is_verified,
+          is_recommended: set_song.is_recommended,
+          is_jam: set_song.is_jam,
+          transition_separator: set_song.transition&.separator,
+          upvotes: set_song.upvotes,
+
+          show: {
+            id: show.slug,
+            date: show.date,
+            venuename: show.venue.name,
+            artist_name: show.artist&.name,
+            location: [show.venue.city, show.venue.region, show.venue.country&.name].reject { |s| s.blank? }.join(", "),
+            title: show.title,
+            order: show.order,
+            poster_url: show.poster_url,
+            average_rating: show.average_rating,
+            count_ratings: show.count_ratings,
+            weighted_rating: show.bayesian_rating,
+            tags: show.show_tags.map(&:id)
+          }
+        }
+      end
+    end
+
+    render json: curated
+  end
+
+  def upvoted
+    upvoted = Rails.cache.fetch("api/notables/upvoted.json", expires_in: 4.hours) do
+      SetSong
+        .includes(setlist: { show: { venue: :country } })
+        .where(setlists: { shows: { is_active: true } })
+        .where("set_songs.upvotes > ?", 3)
+        .order("set_songs.upvotes DESC")
+        .map do |set_song|
+        show = set_song.setlist.show
+        {
+          song_name: set_song.song.name,
+          position: set_song.position,
+          duration: set_song.duration,
+          footnote: set_song.footnote,
+          is_notable: set_song.is_jamchart,
+          notable_description: set_song.jamchart_notes,
+          is_reprise: set_song.is_reprise,
+          is_verified: set_song.is_verified,
+          is_recommended: set_song.is_recommended,
+          is_jam: set_song.is_jam,
+          transition_separator: set_song.transition&.separator,
+          upvotes: set_song.upvotes,
+
+          show: {
+            id: show.slug,
+            date: show.date,
+            venuename: show.venue.name,
+            artist_name: show.artist&.name,
+            location: [show.venue.city, show.venue.region, show.venue.country&.name].reject { |s| s.blank? }.join(", "),
+            title: show.title,
+            order: show.order,
+            poster_url: show.poster_url,
+            average_rating: show.average_rating,
+            count_ratings: show.count_ratings,
+            weighted_rating: show.bayesian_rating,
+            tags: show.show_tags.map(&:id)
+          }
+        }
+      end
+    end
+
+    render json: upvoted
   end
 
   private
