@@ -22,7 +22,9 @@ RSpec.describe 'API', type: :request do
                    average_rating: { type: :number, format: :float },
                    count_ratings: { type: :integer },
                    weighted_rating: { type: :number, format: :float },
-                   tags: { type: :array, items: { type: :integer } }
+                   tags: { type: :array, items: { type: :integer } },
+                   recording_type_ids: { type: :array, items: { type: :integer } },
+                   is_incomplete_recordings_only: { type: :boolean }
                  },
                  required: %w[id date venuename location order]
                }
@@ -112,6 +114,7 @@ RSpec.describe 'API', type: :request do
                        taper: { type: :string },
                        taper_id: { type: :integer },
                        files_path_prefix: { type: :string },
+                       is_incomplete: { type: :boolean },
                        internet_archive: {
                          type: :object,
                          properties: {
@@ -215,7 +218,8 @@ RSpec.describe 'API', type: :request do
                    count_ratings: { type: :integer },
                    weighted_rating: { type: :number, format: :float },
                    tags: { type: :array, items: { type: :integer } },
-                   recording_type_ids: { type: :array, items: { type: :integer } }
+                   recording_type_ids: { type: :array, items: { type: :integer } },
+                   is_incomplete_recordings_only: { type: :boolean }
                  },
                  required: %w[id date venuename location order]
                }

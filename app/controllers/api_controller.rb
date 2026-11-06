@@ -24,7 +24,9 @@ class ApiController < ApplicationController
           average_rating: show.average_rating,
           count_ratings: show.count_ratings,
           weighted_rating: show.bayesian_rating,
-          tags: show.show_tags.map(&:id)
+          tags: show.show_tags.map(&:id),
+          recording_type_ids: show.recordings.where(is_active: true).map(&:recording_type_id).uniq,
+          is_incomplete_recordings_only: show.recordings.where(is_active: true).all?(&:is_incomplete)
         }
       end
     end
@@ -95,6 +97,8 @@ class ApiController < ApplicationController
             taper_id: recording.taper_id,
             files_path_prefix: "https://archive.org/download/" + recording.id + "/",
 
+            is_incomplete: recording.is_incomplete,
+
             internet_archive: {
               is_lma: recording.is_lma
             },
@@ -141,7 +145,8 @@ class ApiController < ApplicationController
         count_ratings: show.count_ratings,
         weighted_rating: show.bayesian_rating,
         tags: show.show_tags.map(&:id),
-        recording_type_ids: show.recordings.where(is_active: true).map(&:recording_type_id).uniq
+        recording_type_ids: show.recordings.where(is_active: true).map(&:recording_type_id).uniq,
+        is_incomplete_recordings_only: show.recordings.where(is_active: true).all?(&:is_incomplete)
       }
     end
 

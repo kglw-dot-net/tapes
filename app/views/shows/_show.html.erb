@@ -40,6 +40,13 @@
             </span>
     <% end %>
 
+    <% if show.recordings.where(is_active: true).all?(&:is_incomplete) %>
+      <div class="flex-grow"></div>
+      <span class="indicator-item badge badge-error bg-opacity-60 backdrop-blur shadow transform-none mr-3 top-auto bottom-0 mb-3">
+        Incomplete
+      </span>
+    <% end %>
+
     <img class="rounded-xl" src="<%= show.poster_url || (asset_path 'missing.png') %>"/>
   </div>
 

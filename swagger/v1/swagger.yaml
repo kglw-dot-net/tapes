@@ -47,6 +47,12 @@ paths:
                       type: array
                       items:
                         type: integer
+                    recording_type_ids:
+                      type: array
+                      items:
+                        type: integer
+                    is_incomplete_recordings_only:
+                      type: boolean
                   required:
                   - id
                   - date
@@ -183,6 +189,8 @@ paths:
                           type: integer
                         files_path_prefix:
                           type: string
+                        is_incomplete:
+                          type: boolean
                         internet_archive:
                           type: object
                           properties:
@@ -313,6 +321,8 @@ paths:
                       type: array
                       items:
                         type: integer
+                    is_incomplete_recordings_only:
+                      type: boolean
                   required:
                   - id
                   - date

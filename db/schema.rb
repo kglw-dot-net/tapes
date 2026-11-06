@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_03_150132) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_06_212521) do
   create_table "albums", force: :cascade do |t|
     t.string "title"
     t.string "cover_art_url"
@@ -82,6 +82,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_150132) do
     t.integer "show_id"
     t.integer "recording_type_id"
     t.integer "taper_id"
+    t.boolean "is_incomplete", default: false
     t.index ["recording_type_id"], name: "index_recordings_on_recording_type_id"
     t.index ["show_id"], name: "index_recordings_on_show_id"
     t.index ["taper_id"], name: "index_recordings_on_taper_id"

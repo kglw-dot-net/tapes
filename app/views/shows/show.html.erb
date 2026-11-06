@@ -173,7 +173,12 @@
                          end
               %>
               <span class="badge badge-<%= color %> mr-2"><%= recording.recording_type.name %><%= ' by ' + (taper&.name || 'unknown') unless recording.recording_type.name == 'SBD' %></span>
-              <span class="text-black dark:text-white opacity-60"><%= recording.id %></span>
+              <span class="text-black dark:text-white opacity-60">
+                <%= recording.id %>
+              </span>
+              <% if recording.is_incomplete %>
+                <span class="badge badge-error ml-2">Incomplete</span>
+              <% end %>
             <% else %>
               <select
                 class="select w-full"
@@ -188,8 +193,9 @@
                     value="<%= recording.id %>"
                     data-taper="<%= taper&.name %>"
                     data-type="<%= recording.recording_type.name %>"
+                    data-incomplete="<%= recording.is_incomplete ? 'true' : 'false' %>"
                   >
-                    <%= recording.recording_type.name + (recording.recording_type.name == 'SBD' ? '' : ' by ' + (taper&.name || 'unknown')) + ': ' + recording.id %>
+                    <%= recording.recording_type.name + (recording.recording_type.name == 'SBD' ? '' : ' by ' + (taper&.name || 'unknown'))%>: <%= recording.id %><%= ' (Incomplete)' if recording.is_incomplete %>
                   </option>
                 <% end %>
               </select>

@@ -37,11 +37,10 @@ export default class extends Controller {
 
     toggleNotes() {
         this.showNotesTarget.classList.toggle('line-clamp-5');
-        
-        if (this.showNotesTarget.classList.contains('line-clamp-5'))
-            this.showNotesMoreButtonTarget.innerText = 'Read more';
-        else
-            this.showNotesMoreButtonTarget.innerText = 'Read less';
+
+        this.showNotesMoreButtonTarget.innerText = this.showNotesTarget.classList.contains('line-clamp-5')
+          ? 'Read more'
+          : 'Read less';
     }
 
     selectRecordingFromPreferences() {
@@ -51,8 +50,18 @@ export default class extends Controller {
         settings.favouriteTapers = settings.favouriteTapers || [];
         
         let availableRecordings = [...this.recordingTarget.options]
-            .map((option) => ({ id: option.value, taper: option.dataset.taper, type: option.dataset.type }))
+            .map((option) =>
+              ({
+                  id: option.value,
+                  taper: option.dataset.taper,
+                  type: option.dataset.type,
+                  incomplete: option.dataset.incomplete === 'true'
+              })
+            )
             .sort((a, b) => {
+                if (a.incomplete !== b.incomplete)
+                    return Number(a.incomplete) - Number(b.incomplete);
+
                 let aRecType = settings.prefRecTypes.indexOf(a.type);
                 let bRecType = settings.prefRecTypes.indexOf(b.type);
     
