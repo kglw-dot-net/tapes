@@ -54,14 +54,25 @@
 	</div>
 	<div class="navbar-center hidden lg:flex">
 		<ul class="menu menu-horizontal px-1">
-			<li><a href="/years">Years</a></li>
-			<li><a href="/venues">Venues</a></li>
-			<li><a href="/songs">Songs</a></li>
-			<li><a href="/january">Dates</a></li>
+			<li>
+				<details class="z-10">
+					<summary>Shows</summary>
+					<ul class="p-2 shadow-xl top-8 w-64">
+						<li><%= link_to 'Top Shows', '/top' %></li>
+						<li><%= link_to 'Favourite Shows', '/favourites' %></li>
+						<li class="font-bold text-xs ml-4 my-3">All Shows</li>
+						<li><%= link_to 'By Date', '/january' %></li>
+						<li><%= link_to 'By Location', '/venues' %></li>
+						<li><%= link_to 'By Song', '/songs' %></li>
+						<li><%= link_to 'By Year', '/years' %></li>
+					</ul>
+				</details>
+			</li>
+
 			<li>
 				<details class="z-10">
 					<summary>Artists</summary>
-					<ul class="p-2 shadow-xl top-8">
+					<ul class="p-2 shadow-xl top-8 w-64">
 						<% @artists.each do |a| %>
 							<li><%= link_to a %></li>
 						<% end %>
@@ -71,7 +82,7 @@
 			<li>
 				<details class="z-10">
 					<summary>Show Tags</summary>
-					<ul class="p-2 shadow-xl top-8">
+					<ul class="p-2 shadow-xl top-8 w-64">
 						<% @show_tags.each do |tag| %>
 							<li><a href="/tags/<%= tag.slug %>"><%= tag.name %></a></li>
 						<% end %>
@@ -81,16 +92,13 @@
 			<li>
 				<details class="z-10">
 					<summary>Notable Tracks</summary>
-					<ul class="p-2">
+					<ul class="p-2 shadow-xl top-8 w-64">
 						<li><a href="/notables/20-minute-jams">20+ minute jams</a></li>
 						<li><a href="/notables/curated">KGLW.net team curated</a></li>
 						<li><a href="/notables/upvoted">KGLW.net user upvoted</a></li>
 					</ul>
 				</details>
 			</li>
-      <li><a href="/top">Top Shows</a></li>
-			<li><a href="/favourites">Favourite Shows</a></li>
-			<%# <li><a>Mixtapes</a></li> %>
 			<li><a href="/settings">Settings</a></li>
 			<li><a href="/about">About</a></li>
 		</ul>
