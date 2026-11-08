@@ -11,7 +11,7 @@
     "@types/leaflet.markercluster": "^1.5.6",
     "@types/node": "^25.9.1",
     "autoprefixer": "^10.6.2",
-    "daisyui": "^4.12.24",
+    "daisyui": "^5.7.50",
     "dexie": "^4.4.7",
     "howler": "^2.2.4",
     "leaflet": "^1.9.4",
