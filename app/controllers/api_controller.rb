@@ -17,7 +17,7 @@ class ApiController < ApplicationController
           date: show.date,
           venuename: show.venue.name,
           artist_name: show.artist&.name,
-          location: [show.venue.city, show.venue.region, show.venue.country&.name].reject { |s| s.blank? }.join(", "),
+          location: [ show.venue.city, show.venue.region, show.venue.country&.name ].reject { |s| s.blank? }.join(", "),
           title: show.title,
           order: show.order,
           poster_url: show.poster_url,
@@ -137,7 +137,7 @@ class ApiController < ApplicationController
         date: show.date,
         venuename: show.venue.name,
         artist_name: show.artist&.name,
-        location: [show.venue.city, show.venue.region, show.venue.country&.name].reject { |s| s.blank? }.join(", "),
+        location: [ show.venue.city, show.venue.region, show.venue.country&.name ].reject { |s| s.blank? }.join(", "),
         title: show.title,
         order: show.order,
         poster_url: show.poster_url,
@@ -162,19 +162,35 @@ class ApiController < ApplicationController
   end
 
   def venues
-    venues = Rails.cache.fetch("api/venues.json", expires_in: 4.hours) do
-      Venue
-        .joins(:shows)
-        .where(shows: { is_active: true })
-        .distinct
-        .map do |venue|
+    x = CGI.parse request.query_string
+
+    id = x["id"].present? ? x["id"].map(&:to_i).presence : nil
+    country_id = x["country_id"].present? ? x["country_id"].map(&:to_i).presence : nil
+
+    venues = Rails.cache.fetch([
+                                 "api/venues",
+                                 id&.sort&.uniq,
+                                 country_id&.sort&.uniq
+                               ], expires_in: 4.hours) do
+      data = Venue
+               .joins(:shows)
+               .where(shows: { is_active: true })
+
+      data = data.where(id: id) if id.present?
+      data = data.where(country_id: country_id) if country_id.present?
+
+      data.distinct.map do |venue|
         {
           id: venue.id,
-          slug: venue.slug,
+          slug: venue.country.name.downcase + "/" + venue.slug,
           name: venue.name,
           city: venue.city,
           region: venue.region,
+          region_name: venue.country.name == "USA" ? ISO3166::Country["US"].subdivisions[venue.region].name : nil,
           country_id: venue.country_id,
+          longitude: venue.longitude,
+          latitude: venue.latitude,
+          address: venue.address,
           show_count: venue.shows.where(is_active: true).count
         }
       end
@@ -386,7 +402,7 @@ class ApiController < ApplicationController
             date: show.date,
             venuename: show.venue.name,
             artist_name: show.artist&.name,
-            location: [show.venue.city, show.venue.region, show.venue.country&.name].reject { |s| s.blank? }.join(", "),
+            location: [ show.venue.city, show.venue.region, show.venue.country&.name ].reject { |s| s.blank? }.join(", "),
             title: show.title,
             order: show.order,
             poster_url: show.poster_url,
@@ -430,7 +446,7 @@ class ApiController < ApplicationController
             date: show.date,
             venuename: show.venue.name,
             artist_name: show.artist&.name,
-            location: [show.venue.city, show.venue.region, show.venue.country&.name].reject { |s| s.blank? }.join(", "),
+            location: [ show.venue.city, show.venue.region, show.venue.country&.name ].reject { |s| s.blank? }.join(", "),
             title: show.title,
             order: show.order,
             poster_url: show.poster_url,

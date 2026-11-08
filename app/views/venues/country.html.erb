@@ -15,6 +15,16 @@
     </div>
   </div>
 
+  <div
+    data-controller="map"
+    data-map-url-value="/api/v1/venues"
+    data-map-country-id-value="<%= @country.id %>"
+    class="mt-4 mb-8 aspect-video"
+  >
+    <div data-map-target="canvas" class="h-full">
+    </div>
+  </div>
+
   <% if regions.any? { |x, _| x&.strip&.presence } %>
     <div class="flex mb-8">
       <div class="bg-base-200 rounded-box w-full mx-4 md:mx-8 lg:w-auto lg:mx-auto">

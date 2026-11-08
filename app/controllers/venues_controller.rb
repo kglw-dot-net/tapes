@@ -2,16 +2,16 @@ class VenuesController < ApplicationController
   # GET /venues
   def index
     @venues_count = Venue
-      .joins(:shows)
-      .where(shows: { is_active: true })
-      .distinct
-      .count
+                      .joins(:shows)
+                      .where(shows: { is_active: true })
+                      .distinct
+                      .count
     @countries = Country
-      .joins(venues: :shows)
-      .where(shows: { is_active: true })
-      .distinct
-      .order(:name)
-      .all
+                   .joins(venues: :shows)
+                   .where(shows: { is_active: true })
+                   .distinct
+                   .order(:name)
+                   .all
   end
 
   # GET /venues/:country
@@ -21,11 +21,11 @@ class VenuesController < ApplicationController
     raise ActionController::RoutingError.new("Not Found") if @country.nil?
 
     @venues = Venue
-      .joins(:shows)
-      .where(country: @country, shows: { is_active: true })
-      .distinct
-      .order(:name)
-      .all
+                .joins(:shows)
+                .where(country: @country, shows: { is_active: true })
+                .distinct
+                .order(:name)
+                .all
   end
 
   # GET /venues/:country/:slug
@@ -35,10 +35,10 @@ class VenuesController < ApplicationController
     raise ActionController::RoutingError.new("Not Found") if @venue.nil?
 
     @shows = Show
-      .includes(:recordings)
-      .includes(venue: :country)
-      .where(venue: @venue, is_active: true)
-      .order(date: :desc)
-      .all
+               .includes(:recordings)
+               .includes(venue: :country)
+               .where(venue: @venue, is_active: true)
+               .order(date: :desc)
+               .all
   end
 end

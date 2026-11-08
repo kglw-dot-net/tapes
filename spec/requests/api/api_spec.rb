@@ -283,6 +283,18 @@ RSpec.describe 'API', type: :request do
 
       produces 'application/json'
 
+      parameter name: :id,
+                in: :query,
+                type: :array,
+                items: { type: :integer },
+                collectionFormat: :multi
+
+      parameter name: :country_id,
+                in: :query,
+                type: :array,
+                items: { type: :integer },
+                collectionFormat: :multi
+
       response '200', 'venues found' do
         schema type: :array,
                items: {
@@ -293,7 +305,11 @@ RSpec.describe 'API', type: :request do
                    name: { type: :string },
                    city: { type: :string },
                    region: { type: :string },
+                   region_name: { type: :string },
                    country_id: { type: :integer },
+                   longitude: { type: :string },
+                   latitude: { type: :string },
+                   address: { type: :string },
                    show_count: { type: :integer }
                  },
                  required: %w[id name show_count]

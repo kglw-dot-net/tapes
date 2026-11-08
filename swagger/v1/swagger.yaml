@@ -396,6 +396,21 @@ paths:
       summary: Retrieves venues
       tags:
       - Venues
+      parameters:
+      - name: id
+        in: query
+        items:
+          type: integer
+        collectionFormat: multi
+        schema:
+          type: array
+      - name: country_id
+        in: query
+        items:
+          type: integer
+        collectionFormat: multi
+        schema:
+          type: array
       responses:
         '200':
           description: venues found
@@ -416,8 +431,16 @@ paths:
                       type: string
                     region:
                       type: string
+                    region_name:
+                      type: string
                     country_id:
                       type: integer
+                    longitude:
+                      type: string
+                    latitude:
+                      type: string
+                    address:
+                      type: string
                     show_count:
                       type: integer
                   required:

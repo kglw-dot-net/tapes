@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
 
 @layer base {
     /* Global utilities */
@@ -132,5 +132,9 @@
         .hero .link-primary {
             color: var(--fallback-p, oklch(var(--p)));
         }
+    }
+
+    .leaflet-popup {
+        margin-bottom: 60px !important;
     }
 }

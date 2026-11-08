@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_06_212521) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_07_004318) do
   create_table "albums", force: :cascade do |t|
     t.string "title"
     t.string "cover_art_url"
@@ -207,6 +207,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_06_212521) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "country_id"
+    t.decimal "latitude", precision: 10, scale: 7
+    t.decimal "longitude", precision: 10, scale: 7
+    t.string "address"
     t.index ["country_id"], name: "index_venues_on_country_id"
   end
 

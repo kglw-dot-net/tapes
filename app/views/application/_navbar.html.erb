@@ -55,7 +55,7 @@
 	<div class="navbar-center hidden lg:flex">
 		<ul class="menu menu-horizontal px-1">
 			<li>
-				<details class="z-10">
+				<details class="z-[1000]">
 					<summary>Shows</summary>
 					<ul class="p-2 shadow-xl top-8 w-64">
 						<li><%= link_to 'Top Shows', '/top' %></li>
@@ -70,7 +70,7 @@
 			</li>
 
 			<li>
-				<details class="z-10">
+				<details class="z-[1000]">
 					<summary>Artists</summary>
 					<ul class="p-2 shadow-xl top-8 w-64">
 						<% @artists.each do |a| %>
@@ -80,7 +80,7 @@
 				</details>
 			</li>
 			<li>
-				<details class="z-10">
+				<details class="z-[1000]">
 					<summary>Show Tags</summary>
 					<ul class="p-2 shadow-xl top-8 w-64">
 						<% @show_tags.each do |tag| %>
@@ -90,7 +90,7 @@
 				</details>
 			</li>
 			<li>
-				<details class="z-10">
+				<details class="z-[1000]">
 					<summary>Notable Tracks</summary>
 					<ul class="p-2 shadow-xl top-8 w-64">
 						<li><a href="/notables/20-minute-jams">20+ minute jams</a></li>

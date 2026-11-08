@@ -30,6 +30,16 @@
     </div>
   </div>
 
+  <div
+    data-controller="map"
+    data-map-url-value="/api/v1/venues"
+    data-map-id-value="<%= @venue.id %>"
+    class="mt-4 mb-8 aspect-video"
+  >
+    <div data-map-target="canvas" class="h-full">
+    </div>
+  </div>
+
   <div class="card bg-base-100 shadow-xl mb-5">
     <div class="card-body py-5 px-3">
       <div class="responsive-grid">

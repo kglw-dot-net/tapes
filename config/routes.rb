@@ -146,6 +146,8 @@ Rails.application.routes.draw do
   get "api/v1/stats.json" => "api#stats"
 
   get "api/v1/venues.json" => "api#venues"
+  get "api/v1/venues" => "api#venues"
+
   get "api/v1/countries.json" => "api#countries"
 
   get "api/v1/artists.json" => "api#artists"

@@ -59,15 +59,31 @@ module Songfish
     songfish_venues.each do |songfish_venue|
       venue = Venue.find_or_create_by(songfishID: songfish_venue["venue_id"])
 
-      venue.name = songfish_venue["venuename"]
+      venue.name = CGI.unescapeHTML songfish_venue["venuename"]
+
+      puts "\t\tUpdating #{venue.name}..."
+
       venue.city = songfish_venue["city"]
       venue.region = songfish_venue["state"]
       venue.slug = songfish_venue["slug"]
 
       venue.country = Country.find_or_create_by(name: songfish_venue["country"])
 
+      url = URI.join(@@url, "/venues/#{venue.slug}")
+      page = Faraday.new.get(url).body
+
+      venue.latitude, venue.longitude = page.match(/L\.marker\(\[([\d.-]+),\s*([\d.-]+)\]/)&.captures&.map(&:to_f)
+      venue.longitude = normalize_longitude(venue.longitude) unless venue.longitude.nil?
+
+      venue.address = page.match(/var venueAddress = "([^"]+)"/)&.[](1)&.gsub(/\\u([0-9a-fA-F]{4})/) { [ $1.to_i(16) ].pack("U") }
+      venue.address = CGI.unescapeHTML venue.address unless venue.address.nil?
+
       venue.save
     end
+  end
+
+  def self.normalize_longitude(longitude)
+    ((longitude + 180) % 360 + 360) % 360 - 180
   end
 
   def self.updateSongs
