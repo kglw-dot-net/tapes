@@ -270,6 +270,11 @@ module Songfish
     end
 
     SetSong.where.not(songfishID: songfish_set_song_ids).destroy_all
+
+    Show.all.each do |show|
+      show.duration = show.setlists.map { |setlist| setlist.set_songs.sum(:duration) }.sum
+      show.save
+    end
   end
 
   def self.getUploads

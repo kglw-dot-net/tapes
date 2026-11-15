@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_07_004318) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_15_160350) do
   create_table "albums", force: :cascade do |t|
     t.string "title"
     t.string "cover_art_url"
@@ -158,6 +158,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_07_004318) do
     t.integer "count_ratings"
     t.float "bayesian_rating"
     t.integer "artist_id"
+    t.float "duration"
     t.index ["artist_id"], name: "index_shows_on_artist_id"
     t.index ["tour_id"], name: "index_shows_on_tour_id"
     t.index ["venue_id"], name: "index_shows_on_venue_id"

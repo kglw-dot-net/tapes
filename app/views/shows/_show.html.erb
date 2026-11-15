@@ -14,14 +14,12 @@
       tape<%= 's' unless show.recordings.where(is_active: true).count == 1 %>
     </span>
 
-    <% seconds = show.setlists.map { |setlist| setlist.set_songs.sum(:duration) }.sum %>
-
-    <% if seconds > 0 %>
+    <% if show.duration&.nonzero? %>
             <span
               class="indicator-item badge badge-neutral bg-opacity-60 backdrop-blur shadow transform-none mr-3"
               style="margin-top:calc(0.5rem + 1.25rem + 0.5rem) !important;"
             >
-              <% minutes = (seconds / 60).floor %>
+              <% minutes = (show.duration / 60).floor %>
               <% hours = (minutes / 60).floor %>
               <%= format('%01d', hours) %>hr<%= format('%02d', minutes % 60) %>
             </span>
@@ -30,7 +28,7 @@
     <% unless show.average_rating.nil? or show.count_ratings < 3 %>
             <span
               class="indicator-item badge badge-warning bg-opacity-60 backdrop-blur shadow transform-none mr-3"
-              <% if seconds > 0 %>
+              <% if show.duration&.nonzero? %>
               style="margin-top:calc(0.5rem + 1.25rem + 0.5rem + 1.25rem + 0.25rem) !important;"
               <% else %>
               style="margin-top:calc(0.5rem + 1.25rem + 0.5rem) !important;"
@@ -64,9 +62,10 @@
 
   <small>
 
-    <% if show.artist.present? && @artists.include?(show.artist) %>
-      <%= show.artist %> &bull;
+    <% if (artist = @artists.find { |a| a.id == show.artist_id }) %>
+      <%= artist.name %> &bull;
     <% end %>
+
     <%= CGI.unescapeHTML show.venue.name %> &bull;
     <%= CGI.unescapeHTML [show.venue.city, show.venue.region, show.venue.country.name].reject(&:blank?).join(', ') %>
   </small>
