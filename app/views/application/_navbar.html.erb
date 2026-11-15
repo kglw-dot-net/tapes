@@ -8,13 +8,21 @@
 				</svg>
 			</div>
 			<ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[10] mt-3 w-52 p-2 shadow">
-				<li><a href="/years">Years</a></li>
-				<li><a href="/venues">Venues</a></li>
-				<li><a href="/songs">Songs</a></li>
-				<li><a href="/january">Dates</a></li>
+				<li>
+					<strong>Shows</strong>
+					<ul class="p-2">
+						<li><%= link_to 'Top Shows', '/top' %></li>
+						<li><%= link_to 'Favourite Shows', '/favourites' %></li>
+						<li class="font-bold text-xs ml-2 my-3">All Shows</li>
+						<li><%= link_to 'By Date', '/january' %></li>
+						<li><%= link_to 'By Location', '/venues' %></li>
+						<li><%= link_to 'By Song', '/songs' %></li>
+						<li><%= link_to 'By Year', '/years' %></li>
+					</ul>
+				</li>
 
 				<li>
-					<a>Artists</a>
+					<strong>Artists</strong>
 					<ul class="p-2">
 						<% @artists.each do |a| %>
 							<li><%= link_to a %></li>
@@ -23,7 +31,7 @@
 				</li>
 
 				<li>
-					<a>Show Tags</a>
+					<strong>Show Tags</strong>
 					<ul class="p-2">
 						<% @show_tags.each do |tag| %>
 							<li><a href="/tags/<%= tag.slug %>"><%= tag.name %></a></li>
@@ -32,7 +40,7 @@
 				</li>
 
 				<li>
-					<a>Notable Tracks</a>
+					<strong>Notable Tracks</strong>
 					<ul class="p-2">
 						<li><a href="/notables/20-minute-jams">20+ minute jams</a></li>
 						<li><a href="/notables/curated">KGLW.net team curated</a></li>
@@ -40,9 +48,6 @@
 					</ul>
 				</li>
 
-        <li><a href="/top">Top Shows</a></li>
-        <li><a href="/favourites">Favourite Shows</a></li>
-				<%# <li><a>Mixtapes</a></li> %>
 				<li><a href="/settings">Settings</a></li>
 				<li><a href="/about">About</a></li>
 			</ul>
@@ -79,6 +84,7 @@
 					</ul>
 				</details>
 			</li>
+
 			<li>
 				<details class="z-[1000]">
 					<summary>Show Tags</summary>
@@ -89,6 +95,7 @@
 					</ul>
 				</details>
 			</li>
+
 			<li>
 				<details class="z-[1000]">
 					<summary>Notable Tracks</summary>
@@ -103,9 +110,8 @@
 			<li><a href="/about">About</a></li>
 		</ul>
 	</div>
-	<div class="navbar-end">
-		<%# <button type="button" class="btn" onclick="login_modal.showModal()">Login</button> %>
 
+	<div class="navbar-end">
 		<a href="/search" class="btn btn-ghost text-black dark:text-white font-normal">
 			<span class="hidden lg:block">Search</span>
 			<svg class="h-[1em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
